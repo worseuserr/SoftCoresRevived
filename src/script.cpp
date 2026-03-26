@@ -16,27 +16,6 @@ const char *const INI_FILE = "SoftCores.ini";
 
 Logger LOGGER(LOG_FILE);
 
-// math functions
-int bRound(float x)
-{
-	return BUILTIN::ROUND(x);
-}
-
-int bCeil(float x)
-{
-	return BUILTIN::CEIL(x);
-}
-
-int bFloor(float x)
-{
-	return BUILTIN::FLOOR(x);
-}
-
-float toFloat(int x)
-{
-	return BUILTIN::TO_FLOAT(x);
-}
-
 Hash key(const char* key)
 {
 	return MISC::GET_HASH_KEY(key);
@@ -58,7 +37,7 @@ enum class Core {
 
 int getCurrentHealthPercent(Entity entity)
 {
-	return bRound(ENTITY::GET_ENTITY_HEALTH(entity) * 100.0f / ENTITY::GET_ENTITY_MAX_HEALTH(entity, 0));
+	return Math::Round(ENTITY::GET_ENTITY_HEALTH(entity) * 100.0f / ENTITY::GET_ENTITY_MAX_HEALTH(entity, 0));
 }
 
 int getMaxPlayerPoint(Core coreIndex)
@@ -1299,7 +1278,7 @@ void main()
 					if (getGameTimer() > temperatureTimer) // penalty timer for player outfit in accordance to surrounding temperature, called every temperatureTimer
 					{
 						stringstream text;
-						int temperatureHpPercentageDrain = bCeil(fabsf(pointsDifferences)) * ENTITY::GET_ENTITY_MAX_HEALTH(playerPed, 0) / 100; // calculater hp drain, convert the pointsDifferences to positive first
+						int temperatureHpPercentageDrain = Math::Ceil(fabsf(pointsDifferences)) * ENTITY::GET_ENTITY_MAX_HEALTH(playerPed, 0) / 100; // calculater hp drain, convert the pointsDifferences to positive first
 
 						switch (outfitModifier)
 						{
@@ -1411,25 +1390,25 @@ void main()
 				if (!isPlayerIdle() && isPlayerInControl() && (!isPlayerActiveInScenario() || !isPlayerUsingAnyScenario())) // returns TRUE if player is not idle and in control and not active in scenario or using any
 				{
 					// PLAYER Cores
-					int playerHpDrain = (isPlayerCoreOverpowered(Core::Health)) ? 0 : bCeil(drainModifier * playerHpModifier);
-					int playerStDrain = (isPlayerCoreOverpowered(Core::Stamina)) ? 0 : bCeil(drainModifier * playerStModifier);
-					int playerDeDrain = (isPlayerCoreOverpowered(Core::DeadEye)) ? 0 : bCeil(drainModifier * playerDeModifier);
+					int playerHpDrain = (isPlayerCoreOverpowered(Core::Health)) ? 0 : Math::Ceil(drainModifier * playerHpModifier);
+					int playerStDrain = (isPlayerCoreOverpowered(Core::Stamina)) ? 0 : Math::Ceil(drainModifier * playerStModifier);
+					int playerDeDrain = (isPlayerCoreOverpowered(Core::DeadEye)) ? 0 : Math::Ceil(drainModifier * playerDeModifier);
 
 					// HORSE Cores
-					int horseHpDrain = (isHorseCoreOverpowered(Core::Health)) ? 0 : bCeil(drainModifier * horseHpModifier);
-					int horseStDrain = (isHorseCoreOverpowered(Core::Stamina)) ? 0 : bCeil(drainModifier * horseStModifier);
+					int horseHpDrain = (isHorseCoreOverpowered(Core::Health)) ? 0 : Math::Ceil(drainModifier * horseHpModifier);
+					int horseStDrain = (isHorseCoreOverpowered(Core::Stamina)) ? 0 : Math::Ceil(drainModifier * horseStModifier);
 
 					// if player on mount, all core drain slower by calculated above else, horse core drain slower
 					if (isPlayerOnMount())
 					{
-						playerHpDrain = bFloor(playerHpDrain * 0.5f);
-						playerStDrain = bFloor(playerStDrain * 0.5f);
-						playerDeDrain = bFloor(playerDeDrain * 0.5f);
+						playerHpDrain = Math::Floor(playerHpDrain * 0.5f);
+						playerStDrain = Math::Floor(playerStDrain * 0.5f);
+						playerDeDrain = Math::Floor(playerDeDrain * 0.5f);
 					}
 					else
 					{
-						horseHpDrain = bFloor(horseHpDrain * 0.5f);
-						horseStDrain = bFloor(horseStDrain * 0.5f);
+						horseHpDrain = Math::Floor(horseHpDrain * 0.5f);
+						horseStDrain = Math::Floor(horseStDrain * 0.5f);
 					}
 
 					if (temperatureCore) // if temperatureCore feature enabled in .ini configuration, apply temperature modifier to base main core drain effects
@@ -1442,7 +1421,7 @@ void main()
 						case 0: // cold
 							playerHealthRegen = 0.0f; // no hp regen at all
 							temperatureModifier = 1.0f + fabsf(pointsDifferences);
-							playerHpDrain = bCeil(playerHpDrain * temperatureModifier);
+							playerHpDrain = Math::Ceil(playerHpDrain * temperatureModifier);
 							depletionMs = GetPrivateProfileInt("TIMERS", "CORE_DEPLETION", 120000, ".\\SoftCores.ini") / 2; // if outfit is not warm, core depletionMs is faster by 50%
 							text << "hooked cold effect, next core drain occurence after " << depletionMs << " ms playerHpDrain: " << playerHpDrain << " playerStDrain: " << playerStDrain << " playerDeDrain: " << playerDeDrain;
 							LOGGER.Write(text.str().c_str());
@@ -1450,9 +1429,9 @@ void main()
 						case 1: // warm, all core drain slower by 10 %
 							playerHealthRegen = (isPlayerCoreOverpowered(Core::Health)) ? 1.0f : playerHealthRegen;
 							temperatureModifier = 0.9f;
-							playerHpDrain = bFloor(playerHpDrain * temperatureModifier);
-							playerStDrain = bFloor(playerStDrain * temperatureModifier);
-							playerDeDrain = bFloor(playerDeDrain * temperatureModifier);
+							playerHpDrain = Math::Floor(playerHpDrain * temperatureModifier);
+							playerStDrain = Math::Floor(playerStDrain * temperatureModifier);
+							playerDeDrain = Math::Floor(playerDeDrain * temperatureModifier);
 							depletionMs = GetPrivateProfileInt("TIMERS", "CORE_DEPLETION", 120000, ".\\SoftCores.ini"); // if outfit warm, core depletionMs is as set in .ini configuration file
 							text << "hooked warm effect, next core drain occurence after " << depletionMs << " ms playerHpDrain: " << playerHpDrain << " playerStDrain: " << playerStDrain << " playerDeDrain: " << playerDeDrain;
 							LOGGER.Write(text.str().c_str());
@@ -1460,8 +1439,8 @@ void main()
 						case 2: // hot
 							playerHealthRegen = playerHealthRegen * 0.2f; // slowed health outer core regen by 80%
 							temperatureModifier = 0.5f + pointsDifferences;
-							playerStDrain = bCeil(playerStDrain * temperatureModifier);
-							playerDeDrain = bCeil(playerDeDrain * temperatureModifier);
+							playerStDrain = Math::Ceil(playerStDrain * temperatureModifier);
+							playerDeDrain = Math::Ceil(playerDeDrain * temperatureModifier);
 							depletionMs = GetPrivateProfileInt("TIMERS", "CORE_DEPLETION", 120000, ".\\SoftCores.ini") / 2; // if outfit is not warm, core depletionMs is faster by 50%
 							text << "hooked hot effect, next core drain occurence after " << depletionMs << " ms playerHpDrain: " << playerHpDrain << " playerStDrain: " << playerStDrain << " playerDeDrain: " << playerDeDrain;
 							LOGGER.Write(text.str().c_str());
@@ -1768,7 +1747,7 @@ void main()
 								{
 									if ((ENTITY::GET_ENTITY_HEALTH(peds[i]) + (aiRegenMap[peds[i]] * 0.1f)) < ENTITY::GET_ENTITY_MAX_HEALTH(peds[i], 0))
 									{
-										ENTITY::_SET_ENTITY_HEALTH(peds[i], bFloor(ENTITY::GET_ENTITY_HEALTH(peds[i]) + (aiRegenMap[peds[i]] * 0.1f)), 0); // slowed regen for melee combat
+										ENTITY::_SET_ENTITY_HEALTH(peds[i], Math::Floor(ENTITY::GET_ENTITY_HEALTH(peds[i]) + (aiRegenMap[peds[i]] * 0.1f)), 0); // slowed regen for melee combat
 									}
 									else
 									{

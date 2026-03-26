@@ -32,4 +32,12 @@ public:
 	void	Write(const char *message);
 };
 
+namespace Math
+{
+	int Round(float x);
+	int Ceil(float x);
+	int Floor(float x);
+	float ToFloat(int x);
+}
+
 }
