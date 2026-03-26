@@ -5,49 +5,16 @@
 #include <sstream>
 #include <map>
 #include <ctime>
+#include <util.h>
 
 using namespace std;
+using namespace util;
 
 // logging functions
 const char* const LOG_FILE = "SoftCores.log";
+const char *const INI_FILE = "SoftCores.ini";
 
-ofstream file;
-
-void initializeLogger()
-{
-	file.open(LOG_FILE, std::ios_base::out);
-	file.close();
-}
-
-bool isFileExists(const char* fileName)
-{
-	std::ifstream infile(fileName);
-	return infile.good();
-}
-
-void writeLog(const char* msg)
-{
-	struct tm newtime;
-	time_t now = time(0);
-	localtime_s(&newtime, &now);
-	stringstream text;
-
-	file.open(LOG_FILE, ios_base::app);
-	if (file.is_open())
-	{
-		text << "[" << newtime.tm_mday << "/" << newtime.tm_mon + 1 << "/" << newtime.tm_year + 1900 << " " << newtime.tm_hour << ":" << newtime.tm_min << ":" << newtime.tm_sec << "] " << msg;
-		file << text.str().c_str() << "\n";
-		file.close();
-	}
-}
-
-void initialize()
-{
-	initializeLogger();
-	writeLog("### SoftCores Mod by opsedar ###");
-	writeLog("### Reworked by worseuserr ###");
-	(isFileExists(".\\SoftCores.ini")) ? writeLog("### SoftCores.ini found ###") : writeLog("### SoftCores.ini not found ###");
-}
+Logger LOGGER(LOG_FILE);
 
 // math functions
 int bRound(float x)
@@ -666,7 +633,12 @@ float getTemperaturePointsNeeded()
 void main()
 {
 	bool enableLogging = GetPrivateProfileInt("DEBUG", "ENABLE_LOGGING", 0, ".\\SoftCores.ini");
-	if(enableLogging) initialize();
+	if (enableLogging)
+	{
+		LOGGER.Write("### SoftCores Mod by opsedar ###");
+		LOGGER.Write("### Reworked by worseuserr ###");
+		LOGGER.Write(File::Exists(".\\SoftCores.ini") ? "### SoftCores.ini found ###" : "### SoftCores.ini not found ###");
+	}
 
 	// immersion
 	bool immersionFX = GetPrivateProfileInt("IMMERSION", "IMMERSION_FX", 1, ".\\SoftCores.ini");
@@ -938,7 +910,7 @@ void main()
 				isSleeping = true;
 				stringstream text;
 				text << "hooked player is sleeping while not in control, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
-				writeLog(text.str().c_str());
+				LOGGER.Write(text.str().c_str());
 			}
 			else if (!isNotinControl && isPlayerStartedSleepScenario() && !isSleeping) // once hooked the first entry point of scenario which is -1 while in control, stop hooking at all
 			{
@@ -948,7 +920,7 @@ void main()
 				lastDeadEyeCore = getPlayerCore(Core::DeadEye);
 				stringstream text;
 				text << "hooked player is sleeping while in control, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
-				writeLog(text.str().c_str());
+				LOGGER.Write(text.str().c_str());
 			}
 			else if (isRaining() && PED::_IS_PED_USING_SCENARIO_HASH(playerPed, key("PROP_PLAYER_SLEEP_TENT_A_FRAME")) && !isSleeping) // if player sets camp when its raining, will go directly to tent, hence not initiating -1 scenario point i reckon
 			{
@@ -957,7 +929,7 @@ void main()
 				lastDeadEyeCore = getPlayerCore(Core::DeadEye);
 				stringstream text;
 				text << "hooked player is sleeping while raining, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
-				writeLog(text.str().c_str());
+				LOGGER.Write(text.str().c_str());
 			}
 
 			if (isSleeping) // keep setting player last health, deadeye until player starts moving or using campfire scenario
@@ -982,7 +954,7 @@ void main()
 				isBathing = true;
 				stringstream text;
 				text << "hooked player is bathing, lastHealthCore: " << lastHealthCore << " lastStaminaCore: " << lastStaminaCore;
-				writeLog(text.str().c_str());
+				LOGGER.Write(text.str().c_str());
 			}
 
 			if (isBathing) // keep setting player last health, stamina until player starts moving
@@ -1050,12 +1022,12 @@ void main()
 		if (isPlayerPlaying() && !isPlaying)
 		{
 			isPlaying = true;
-			writeLog("hooked player is playing");
+			LOGGER.Write("hooked player is playing");
 		}
 		else if (!isPlayerPlaying() && isPlaying)
 		{
 			isPlaying = false;
-			writeLog("hooked player is not playing");
+			LOGGER.Write("hooked player is not playing");
 		}
 		
 		bool isStoryPostFX;
@@ -1063,12 +1035,12 @@ void main()
 		if (isStoryFXPlaying() && !isStoryPostFX)
 		{
 			isStoryPostFX = true;
-			writeLog("hooked isStoryPostFX running");
+			LOGGER.Write("hooked isStoryPostFX running");
 		}
 		else if (!isStoryFXPlaying() && isStoryPostFX)
 		{
 			isStoryPostFX = false;
-			writeLog("hooked isStoryPostFX stopped");
+			LOGGER.Write("hooked isStoryPostFX stopped");
 		}
 
 		if ((isPlaying && !isStoryPostFX) || (ENTITY::DOES_ENTITY_EXIST(horsePed) && !ENTITY::IS_ENTITY_DEAD(horsePed))) // do this first else will crash on new game, also disable the core part of the mod while in storyPostFX
@@ -1100,12 +1072,12 @@ void main()
 						isNearFireModifier = true;
 						stringstream text;
 						text << "hooked player near fire, fireModifer: " << fireModifier << " positive points (hotness)";
-						writeLog(text.str().c_str());
+						LOGGER.Write(text.str().c_str());
 					}
 					else if (MISC::GET_DISTANCE_BETWEEN_COORDS(playerPos.x, playerPos.y, playerPos.z, nearestFire.x, nearestFire.y, nearestFire.z, true) > 4.0f && isNearFireModifier)
 					{
 						isNearFireModifier = false;
-						writeLog("hooked player far from fire");
+						LOGGER.Write("hooked player far from fire");
 					}
 				}
 
@@ -1122,12 +1094,12 @@ void main()
 					isCampfireModifier = true;
 					stringstream text;
 					text << "hooked player started campfire scenario, campFireModifier: " << campFireModifier << " positive points (hotness)";
-					writeLog(text.str().c_str());
+					LOGGER.Write(text.str().c_str());
 				}
 				else if (isPlayerInControl() && isPlayerMoving() && !isPlayerStartedCampScenario() && isCampfireModifier)
 				{
 					isCampfireModifier = false;
-					writeLog("hooked player stopped campfire scenario");
+					LOGGER.Write("hooked player stopped campfire scenario");
 				}
 
 				if (isCampfireModifier) pointsModifier = pointsModifier + campFireModifier; // positive point value for hotness
@@ -1144,12 +1116,12 @@ void main()
 
 					stringstream text;
 					text << "hooked player is indoor, indoorModifier: " << indoorModifier << " positive points (hotness)";
-					writeLog(text.str().c_str());
+					LOGGER.Write(text.str().c_str());
 				}
 				else if (!isPlayerIndoor() && isIndoorModifier)
 				{
 					isIndoorModifier = false;
-					writeLog("hooked player is outdoor");
+					LOGGER.Write("hooked player is outdoor");
 				}
 
 				if (isIndoorModifier) pointsModifier = pointsModifier + indoorModifier; // positive point value for hotness
@@ -1166,12 +1138,12 @@ void main()
 					submergedModifier = submergedModifier + ENTITY::GET_ENTITY_SUBMERGED_LEVEL(playerPed);
 					stringstream text;
 					text << "hooked player is submerged, submergedModifier: " << submergedModifier << " negative points (coldness)";
-					writeLog(text.str().c_str());
+					LOGGER.Write(text.str().c_str());
 				}
 				else if (!isSubmerged() && isSubmergedModifier)
 				{
 					isSubmergedModifier = false;
-					writeLog("hooked player is no longer submerged");
+					LOGGER.Write("hooked player is no longer submerged");
 				}
 
 				if (isSubmergedModifier) pointsModifier = pointsModifier - submergedModifier; // negative point value for coldness
@@ -1190,12 +1162,12 @@ void main()
 						rainingModifier = rainingModifier + MISC::GET_RAIN_LEVEL();
 						stringstream text;
 						text << "hooked is raining, rainingModifier: " << rainingModifier << " negative points (coldness)";
-						writeLog(text.str().c_str());
+						LOGGER.Write(text.str().c_str());
 					}
 					else if (!isRaining() && isRainingModifier)
 					{
 						isRainingModifier = false;
-						writeLog("hooked is no longer raining");
+						LOGGER.Write("hooked is no longer raining");
 					}
 
 					if (isRainingModifier) pointsModifier = pointsModifier - rainingModifier; // negative point value for coldness
@@ -1212,12 +1184,12 @@ void main()
 						snowingModifier = snowingModifier + MISC::GET_SNOW_LEVEL();
 						stringstream text;
 						text << "hooked is snowing, snowingModifier: " << snowingModifier << " negative points (coldness)";
-						writeLog(text.str().c_str());
+						LOGGER.Write(text.str().c_str());
 					}
 					else if (!isSnowing() && isSnowingModifier)
 					{
 						isSnowingModifier = false;
-						writeLog("hooked is no longer snowing");
+						LOGGER.Write("hooked is no longer snowing");
 					}
 
 					if (isSnowingModifier) pointsModifier = pointsModifier - snowingModifier;  // negative point value for coldness
@@ -1263,7 +1235,7 @@ void main()
 
 						stringstream text;
 						text << "hooked player is showing sprite, spriteModifier: " << spriteModifier << " overall clothing points: " << getPlayerClothesPoint() << " needs: " << getTemperaturePointsNeeded() + pointsModifier;
-						writeLog(text.str().c_str());
+						LOGGER.Write(text.str().c_str());
 					}
 
 					if (drawSprite)
@@ -1296,7 +1268,7 @@ void main()
 				if (HUD::_UIPROMPT_HAS_STANDARD_MODE_COMPLETED(hatPrompt, 0))
 				{
 					unequipClothes(Clothes::Hats);
-					writeLog("hooked player unequips hat");
+					LOGGER.Write("hooked player unequips hat");
 					togglePrompt(hatPrompt, false, false);
 				}
 
@@ -1312,7 +1284,7 @@ void main()
 				if (HUD::_UIPROMPT_HAS_STANDARD_MODE_COMPLETED(glovePrompt, 0))
 				{
 					unequipClothes(Clothes::Gloves);
-					writeLog("hooked player unequips gloves");
+					LOGGER.Write("hooked player unequips gloves");
 					togglePrompt(glovePrompt, false, false);
 				}
 
@@ -1339,12 +1311,12 @@ void main()
 								TASK::TASK_KNOCKED_OUT(playerPed, 0.0f, false);
 								knockedOut = true;
 								text << "hooked cold effect with health less that 10%, knockedOut, next occurence after " << temperatureMs * 2 << " ms";
-								writeLog(text.str().c_str());
+								LOGGER.Write(text.str().c_str());
 							}
 							else
 							{
 								text << "hooked cold effect, next occurence after " << temperatureMs << " ms";
-								writeLog(text.str().c_str());
+								LOGGER.Write(text.str().c_str());
 								knockedOut = false;
 							}
 							break;
@@ -1353,7 +1325,7 @@ void main()
 						case 2: // hot
 							if (temperatureCoreFx) GRAPHICS::ANIMPOSTFX_PLAY("PlayerHonorLevelGood"); // reddish tint, seems suitable enough to show player is hot
 							text << "hooked hot effect, next occurence after " << temperatureMs * 2 << " ms";
-							writeLog(text.str().c_str());
+							LOGGER.Write(text.str().c_str());
 							break;
 						default:
 							break;
@@ -1473,7 +1445,7 @@ void main()
 							playerHpDrain = bCeil(playerHpDrain * temperatureModifier);
 							depletionMs = GetPrivateProfileInt("TIMERS", "CORE_DEPLETION", 120000, ".\\SoftCores.ini") / 2; // if outfit is not warm, core depletionMs is faster by 50%
 							text << "hooked cold effect, next core drain occurence after " << depletionMs << " ms playerHpDrain: " << playerHpDrain << " playerStDrain: " << playerStDrain << " playerDeDrain: " << playerDeDrain;
-							writeLog(text.str().c_str());
+							LOGGER.Write(text.str().c_str());
 							break;
 						case 1: // warm, all core drain slower by 10 %
 							playerHealthRegen = (isPlayerCoreOverpowered(Core::Health)) ? 1.0f : playerHealthRegen;
@@ -1483,7 +1455,7 @@ void main()
 							playerDeDrain = bFloor(playerDeDrain * temperatureModifier);
 							depletionMs = GetPrivateProfileInt("TIMERS", "CORE_DEPLETION", 120000, ".\\SoftCores.ini"); // if outfit warm, core depletionMs is as set in .ini configuration file
 							text << "hooked warm effect, next core drain occurence after " << depletionMs << " ms playerHpDrain: " << playerHpDrain << " playerStDrain: " << playerStDrain << " playerDeDrain: " << playerDeDrain;
-							writeLog(text.str().c_str());
+							LOGGER.Write(text.str().c_str());
 							break;
 						case 2: // hot
 							playerHealthRegen = playerHealthRegen * 0.2f; // slowed health outer core regen by 80%
@@ -1492,7 +1464,7 @@ void main()
 							playerDeDrain = bCeil(playerDeDrain * temperatureModifier);
 							depletionMs = GetPrivateProfileInt("TIMERS", "CORE_DEPLETION", 120000, ".\\SoftCores.ini") / 2; // if outfit is not warm, core depletionMs is faster by 50%
 							text << "hooked hot effect, next core drain occurence after " << depletionMs << " ms playerHpDrain: " << playerHpDrain << " playerStDrain: " << playerStDrain << " playerDeDrain: " << playerDeDrain;
-							writeLog(text.str().c_str());
+							LOGGER.Write(text.str().c_str());
 							break;
 						default:
 							break;
@@ -1502,7 +1474,7 @@ void main()
 					{
 						stringstream text;
 						text << "hooked core drain effect, next core drain occurence after " << depletionMs << " ms playerHpDrain: " << playerHpDrain << " playerStDrain: " << playerStDrain << " playerDeDrain: " << playerDeDrain;
-						writeLog(text.str().c_str());
+						LOGGER.Write(text.str().c_str());
 						playerHealthRegen = (isPlayerCoreOverpowered(Core::Health)) ? 1.0f : playerHealthRegen;
 					}
 
@@ -1546,13 +1518,13 @@ void main()
 			// START OF DEATH PENALTY +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			if (isPlayerInMission() && !isInMission)
 			{
-				writeLog("hooked player is in mission, penalty on death disabled");
+				LOGGER.Write("hooked player is in mission, penalty on death disabled");
 				isInMission = true;
 			}
 			else if (!isPlayerInMission() && isInMission)
 			{
 				isInMission = false;
-				writeLog("hooked player is not in mission, penalty on death enabled");
+				LOGGER.Write("hooked player is not in mission, penalty on death enabled");
 			}
 			
 			if (penaltyOnDeath && !isInMission)
@@ -1565,7 +1537,7 @@ void main()
 				{
 					deathTime = PED::GET_PED_TIME_OF_DEATH(playerPed);
 					coresPenalty = true;
-					writeLog("hooked player is not moving, just died, not playing and !coresPenalty");
+					LOGGER.Write("hooked player is not moving, just died, not playing and !coresPenalty");
 				}
 				
 				if (coresPenalty && !deathPenalty)
@@ -1587,7 +1559,7 @@ void main()
 										{
 											stringstream text;
 											text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo: " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
-											writeLog(text.str().c_str());
+											LOGGER.Write(text.str().c_str());
 											WEAPON::_REMOVE_AMMO_FROM_PED_BY_TYPE(playerPed, WEAPON::GET_PED_AMMO_TYPE_FROM_WEAPON(playerPed, weaponHash), WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash), 0x2188E0A3);
 											WEAPON::REMOVE_WEAPON_FROM_PED(playerPed, weaponHash, true, NULL);
 										}
@@ -1596,7 +1568,7 @@ void main()
 									{
 										stringstream text;
 										text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo: " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
-										writeLog(text.str().c_str());
+										LOGGER.Write(text.str().c_str());
 										WEAPON::_REMOVE_AMMO_FROM_PED_BY_TYPE(playerPed, WEAPON::GET_PED_AMMO_TYPE_FROM_WEAPON(playerPed, weaponHash), WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash), 0x2188E0A3);
 										WEAPON::REMOVE_WEAPON_FROM_PED(playerPed, weaponHash, true, NULL);
 									}
@@ -1626,7 +1598,7 @@ void main()
 												{
 													stringstream text;
 													text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo: " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
-													writeLog(text.str().c_str());
+													LOGGER.Write(text.str().c_str());
 													WEAPON::_REMOVE_AMMO_FROM_PED_BY_TYPE(playerPed, WEAPON::GET_PED_AMMO_TYPE_FROM_WEAPON(playerPed, weaponHash), WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash), 0x2188E0A3);
 													WEAPON::REMOVE_WEAPON_FROM_PED(playerPed, weaponHash, true, NULL);
 												}
@@ -1635,7 +1607,7 @@ void main()
 											{
 												stringstream text;
 												text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo: " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
-												writeLog(text.str().c_str());
+												LOGGER.Write(text.str().c_str());
 												WEAPON::_REMOVE_AMMO_FROM_PED_BY_TYPE(playerPed, WEAPON::GET_PED_AMMO_TYPE_FROM_WEAPON(playerPed, weaponHash), WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash), 0x2188E0A3);
 												WEAPON::REMOVE_WEAPON_FROM_PED(playerPed, weaponHash, true, NULL);
 											}
@@ -1649,7 +1621,7 @@ void main()
 											{
 												stringstream text;
 												text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
-												writeLog(text.str().c_str());
+												LOGGER.Write(text.str().c_str());
 												WEAPON::_REMOVE_AMMO_FROM_PED_BY_TYPE(playerPed, WEAPON::GET_PED_AMMO_TYPE_FROM_WEAPON(playerPed, weaponHash), WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash), 0x2188E0A3);
 												WEAPON::REMOVE_WEAPON_FROM_PED(playerPed, weaponHash, true, NULL);
 											}
@@ -1658,7 +1630,7 @@ void main()
 										{
 											stringstream text;
 											text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
-											writeLog(text.str().c_str());
+											LOGGER.Write(text.str().c_str());
 											WEAPON::_REMOVE_AMMO_FROM_PED_BY_TYPE(playerPed, WEAPON::GET_PED_AMMO_TYPE_FROM_WEAPON(playerPed, weaponHash), WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash), 0x2188E0A3);
 											WEAPON::REMOVE_WEAPON_FROM_PED(playerPed, weaponHash, true, NULL);
 										}
@@ -1675,9 +1647,9 @@ void main()
 						MONEY::_MONEY_DECREMENT_CASH_BALANCE(finalMoney);
 						stringstream text;
 						text << "percentage of money to lose: " << rngInt << " % finalMoney: " << finalMoney;
-						writeLog(text.str().c_str());
+						LOGGER.Write(text.str().c_str());
 					}
-					writeLog("hooked death penalty to player weapons, ammo and money applied");
+					LOGGER.Write("hooked death penalty to player weapons, ammo and money applied");
 					deathPenalty = true;
 				}
 
@@ -1698,7 +1670,7 @@ void main()
 					setPlayerPoint(Core::Stamina, getMaxPlayerPoint(Core::Stamina)); // restore outer core stamina until max
 					setPlayerPoint(Core::DeadEye, getMaxPlayerPoint(Core::DeadEye)); // restore outer core  deadeye until max
 					deathPenalty = false;
-					writeLog("hooked stopped applying death penalty to player cores");
+					LOGGER.Write("hooked stopped applying death penalty to player cores");
 				}
 			}
 			// END OF DEATH PENALTY +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

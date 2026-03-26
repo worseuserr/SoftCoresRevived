@@ -16,11 +16,15 @@
     <ClInclude Include="sdk\inc\nativeCaller.h" />
     <ClInclude Include="sdk\inc\natives.h" />
     <ClInclude Include="sdk\inc\types.h" />
+    <ClInclude Include="include\util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\script.cpp" />
+    <ClCompile Include="src\util\logger.cpp" />
+    <ClCompile Include="src\util\math.cpp" />
+    <ClCompile Include="src\util\file.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
