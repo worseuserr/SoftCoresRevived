@@ -1,29 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="keyboard.cpp" />
-    <ClCompile Include="script.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="script.h" />
-    <ClInclude Include="..\..\inc\types.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\inc\enums.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\inc\natives.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="keyboard.h" />
-    <ClInclude Include="..\..\inc\main.h">
-      <Filter>include</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="include">
       <UniqueIdentifier>{fe82bd4a-2d14-486a-8be5-8bf6b50a2414}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{baf66391-8a61-45f5-a977-c9ca653d967f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\keyboard.h" />
+    <ClInclude Include="include\script.h" />
+    <ClInclude Include="sdk\inc\enums.h" />
+    <ClInclude Include="sdk\inc\main.h" />
+    <ClInclude Include="sdk\inc\nativeCaller.h" />
+    <ClInclude Include="sdk\inc\natives.h" />
+    <ClInclude Include="sdk\inc\types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\keyboard.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\script.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="sdk\lib\ScriptHookRDR2.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="config\SoftCores.ini" />
   </ItemGroup>
 </Project>
