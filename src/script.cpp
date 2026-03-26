@@ -16,11 +16,6 @@ const char *const INI_FILE = "SoftCores.ini";
 
 Logger LOGGER(LOG_FILE);
 
-Hash key(const char* key)
-{
-	return MISC::GET_HASH_KEY(key);
-}
-
 void showSubtitle(const char* text)
 {
 	UILOG::_UILOG_SET_CACHED_OBJECTIVE((const char*)MISC::_CREATE_VAR_STRING(10, "LITERAL_STRING", text)); //
@@ -199,7 +194,7 @@ bool isPedFriendly(Ped ped)
 
 	for (const char* friendlyPed: friendlyPeds)
 	{
-		if (PED::IS_PED_MODEL(ped, key(friendlyPed)))
+		if (PED::IS_PED_MODEL(ped, Key(friendlyPed)))
 		{
 			return true;
 			break;
@@ -394,10 +389,10 @@ bool isWeaponMelee(Hash weapon)
 
 bool isDeadEyeActivated()
 {
-	return PAD::IS_CONTROL_JUST_PRESSED(0, key("INPUT_SPECIAL_ABILITY")) 
-		|| PAD::IS_CONTROL_PRESSED(0, key("INPUT_SPECIAL_ABILITY")) 
-		|| PAD::IS_CONTROL_JUST_PRESSED(0, key("INPUT_SPECIAL_ABILITY_PC")) 
-		|| PAD::IS_CONTROL_PRESSED(0, key("INPUT_SPECIAL_ABILITY_PC"));
+	return PAD::IS_CONTROL_JUST_PRESSED(0, Key("INPUT_SPECIAL_ABILITY")) 
+		|| PAD::IS_CONTROL_PRESSED(0, Key("INPUT_SPECIAL_ABILITY")) 
+		|| PAD::IS_CONTROL_JUST_PRESSED(0, Key("INPUT_SPECIAL_ABILITY_PC")) 
+		|| PAD::IS_CONTROL_PRESSED(0, Key("INPUT_SPECIAL_ABILITY_PC"));
 }
 
 bool isPlayerIndoor()
@@ -456,7 +451,7 @@ bool isPlayerStartedCampScenario()
 
 	for (const char* campScenario : campScenarios)
 	{
-		if (PED::_IS_PED_USING_SCENARIO_HASH(PLAYER::PLAYER_PED_ID(), key(campScenario)) && TASK::_GET_SCENARIO_POINT_PED_IS_USING(PLAYER::PLAYER_PED_ID(), 1) == -1)
+		if (PED::_IS_PED_USING_SCENARIO_HASH(PLAYER::PLAYER_PED_ID(), Key(campScenario)) && TASK::_GET_SCENARIO_POINT_PED_IS_USING(PLAYER::PLAYER_PED_ID(), 1) == -1)
 		{
 			return true;
 			break;
@@ -483,7 +478,7 @@ bool isPlayerStartedSleepScenario()
 
 	for (const char* sleepScenario : sleepScenarios)
 	{
-		if (PED::_IS_PED_USING_SCENARIO_HASH(PLAYER::PLAYER_PED_ID(), key(sleepScenario)) && TASK::_GET_SCENARIO_POINT_PED_IS_USING(PLAYER::PLAYER_PED_ID(), 1) == -1)
+		if (PED::_IS_PED_USING_SCENARIO_HASH(PLAYER::PLAYER_PED_ID(), Key(sleepScenario)) && TASK::_GET_SCENARIO_POINT_PED_IS_USING(PLAYER::PLAYER_PED_ID(), 1) == -1)
 		{
 			return true;
 			break;
@@ -757,8 +752,8 @@ void main()
 	// prompt creation here
 	int radarPromptGroup = 704572841;
 	int hatPrompt = HUD::_UIPROMPT_REGISTER_BEGIN();
-	if (PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(hatPrompt, key("INPUT_INTERACT_OPTION2"));
-	else if (!PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(hatPrompt, key("INPUT_SPRINT"));
+	if (PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(hatPrompt, Key("INPUT_INTERACT_OPTION2"));
+	else if (!PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(hatPrompt, Key("INPUT_SPRINT"));
 	HUD::_UIPROMPT_SET_TEXT(hatPrompt, MISC::_CREATE_VAR_STRING(10, "LITERAL_STRING", "unequip hat"));
 	HUD::_UIPROMPT_SET_STANDARD_MODE(hatPrompt, 1);
 	HUD::_UIPROMPT_REGISTER_END(hatPrompt);
@@ -766,8 +761,8 @@ void main()
 	togglePrompt(hatPrompt, false, false);
 
 	int glovePrompt = HUD::_UIPROMPT_REGISTER_BEGIN(); // prompt for cinematic camera
-	if (PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(glovePrompt, key("INPUT_INTERACT_OPTION1"));
-	else if (!PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(glovePrompt, key("INPUT_LOOK_BEHIND"));
+	if (PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(glovePrompt, Key("INPUT_INTERACT_OPTION1"));
+	else if (!PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(glovePrompt, Key("INPUT_LOOK_BEHIND"));
 	HUD::_UIPROMPT_SET_TEXT(glovePrompt, MISC::_CREATE_VAR_STRING(10, "LITERAL_STRING", "unequip gloves"));
 	HUD::_UIPROMPT_SET_STANDARD_MODE(glovePrompt, 1);
 	HUD::_UIPROMPT_REGISTER_END(glovePrompt);
@@ -830,13 +825,13 @@ void main()
 
 							if (PED::IS_TRACKED_PED_VISIBLE(ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(hostilePed[i]))) // within player fov
 							{
-								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE_IN"));
-								MAP::_BLIP_SET_STYLE(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE"));
+								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE_IN"));
+								MAP::_BLIP_SET_STYLE(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE"));
 							}
 							else if (!PED::IS_TRACKED_PED_VISIBLE(ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(hostilePed[i]))) // not within player fov
 							{
-								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE"));
-								MAP::_BLIP_SET_STYLE(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE_OUT_SLOW"));
+								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE"));
+								MAP::_BLIP_SET_STYLE(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE_OUT_SLOW"));
 							}
 						}
 					}
@@ -852,13 +847,13 @@ void main()
 
 							if (PED::IS_TRACKED_PED_VISIBLE(ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(hostilePed[i]))) // within player fov
 							{
-								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE"));
-								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE_IN"));
+								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE"));
+								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE_IN"));
 							}
 							else if (!PED::IS_TRACKED_PED_VISIBLE(ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(hostilePed[i]))) // not within player fov
 							{
-								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE"));
-								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], key("BLIP_MODIFIER_FADE_OUT_SLOW"));
+								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE"));
+								MAP::_BLIP_SET_MODIFIER(hostileBlipMap[hostilePed[i]], Key("BLIP_MODIFIER_FADE_OUT_SLOW"));
 							}
 						}
 					}
@@ -901,7 +896,7 @@ void main()
 				text << "hooked player is sleeping while in control, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
 				LOGGER.Write(text.str().c_str());
 			}
-			else if (isRaining() && PED::_IS_PED_USING_SCENARIO_HASH(playerPed, key("PROP_PLAYER_SLEEP_TENT_A_FRAME")) && !isSleeping) // if player sets camp when its raining, will go directly to tent, hence not initiating -1 scenario point i reckon
+			else if (isRaining() && PED::_IS_PED_USING_SCENARIO_HASH(playerPed, Key("PROP_PLAYER_SLEEP_TENT_A_FRAME")) && !isSleeping) // if player sets camp when its raining, will go directly to tent, hence not initiating -1 scenario point i reckon
 			{
 				isSleeping = true;
 				lastHealthCore = getPlayerCore(Core::Health);
@@ -1207,7 +1202,7 @@ void main()
 					int drawTimer;
 					bool drawSprite;
 
-					if (PAD::IS_CONTROL_JUST_PRESSED(0, key("INPUT_REVEAL_HUD")) && !PAD::IS_CONTROL_PRESSED(0, key("INPUT_OPEN_WHEEL_MENU")) && !HUD::IS_HUD_HIDDEN() && !isPlayerActiveInScenario() && !isBathing && !drawSprite)
+					if (PAD::IS_CONTROL_JUST_PRESSED(0, Key("INPUT_REVEAL_HUD")) && !PAD::IS_CONTROL_PRESSED(0, Key("INPUT_OPEN_WHEEL_MENU")) && !HUD::IS_HUD_HIDDEN() && !isPlayerActiveInScenario() && !isBathing && !drawSprite)
 					{
 						drawTimer = getGameTimer();
 						drawSprite = true;
@@ -1219,11 +1214,11 @@ void main()
 
 					if (drawSprite)
 					{
-						if (!TXD::_HAS_STREAMED_TXD_LOADED(key("RPG_TEXTURES")))
+						if (!TXD::_HAS_STREAMED_TXD_LOADED(Key("RPG_TEXTURES")))
 						{
 							TXD::REQUEST_STREAMED_TEXTURE_DICT("RPG_TEXTURES", false);
 						}
-						else if (TXD::_HAS_STREAMED_TXD_LOADED(key("RPG_TEXTURES")) && spriteModifier != "RPG_WARM")
+						else if (TXD::_HAS_STREAMED_TXD_LOADED(Key("RPG_TEXTURES")) && spriteModifier != "RPG_WARM")
 						{
 							GRAPHICS::DRAW_SPRITE("RPG_TEXTURES", spriteModifier, 0.25f, 0.9f, 0.045f, 0.07f, 0.0f, 240, 240, 240, 180, false);
 						}
@@ -1235,7 +1230,7 @@ void main()
 				// Hat & Gloves prompts ***********************************************************************************************************
 				// Show prompts for removal when away from horse and got 'em currently equipped
 
-				if (PAD::IS_CONTROL_PRESSED(0, key("INPUT_SELECT_RADAR_MODE")) && isPlayerWearing(Clothes::Hats) && !isPlayerActiveInScenario() && !isBathing)
+				if (PAD::IS_CONTROL_PRESSED(0, Key("INPUT_SELECT_RADAR_MODE")) && isPlayerWearing(Clothes::Hats) && !isPlayerActiveInScenario() && !isBathing)
 				{
 					togglePrompt(hatPrompt, true, true);
 				}
@@ -1251,7 +1246,7 @@ void main()
 					togglePrompt(hatPrompt, false, false);
 				}
 
-				if (PAD::IS_CONTROL_PRESSED(0, key("INPUT_SELECT_RADAR_MODE")) && isPlayerWearing(Clothes::Gloves) && !isPlayerActiveInScenario() && !isBathing)
+				if (PAD::IS_CONTROL_PRESSED(0, Key("INPUT_SELECT_RADAR_MODE")) && isPlayerWearing(Clothes::Gloves) && !isPlayerActiveInScenario() && !isBathing)
 				{
 					togglePrompt(glovePrompt, true, true);
 				}
@@ -1324,7 +1319,7 @@ void main()
 				int deAimingPenalty = GetPrivateProfileInt("CORE_MODIFIER", "DEADEYE_AIMING_PENALTY", 8, ".\\SoftCores.ini") * getMaxPlayerPoint(Core::DeadEye) / 100;
 				bool isAimingAir = false;
 
-				if (PAD::IS_CONTROL_JUST_PRESSED(0, key("INPUT_AIM_IN_AIR")) || PAD::IS_CONTROL_PRESSED(0, key("INPUT_AIM_IN_AIR"))) isAimingAir = !isAimingAir;
+				if (PAD::IS_CONTROL_JUST_PRESSED(0, Key("INPUT_AIM_IN_AIR")) || PAD::IS_CONTROL_PRESSED(0, Key("INPUT_AIM_IN_AIR"))) isAimingAir = !isAimingAir;
 				
 				if (getGameTimer() > aimTimer)
 				{

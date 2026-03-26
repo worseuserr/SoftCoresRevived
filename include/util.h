@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+#include "natives.h"
 
 namespace util
 {
@@ -38,6 +39,11 @@ namespace Math
 	int Ceil(float x);
 	int Floor(float x);
 	float ToFloat(int x);
+}
+
+inline static Hash Key(const char* key)
+{
+	return MISC::GET_HASH_KEY(key);
 }
 
 }
