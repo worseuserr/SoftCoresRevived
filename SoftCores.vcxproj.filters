@@ -11,20 +11,27 @@
   <ItemGroup>
     <ClInclude Include="include\keyboard.h" />
     <ClInclude Include="include\script.h" />
-    <ClInclude Include="sdk\inc\enums.h" />
     <ClInclude Include="sdk\inc\main.h" />
     <ClInclude Include="sdk\inc\nativeCaller.h" />
     <ClInclude Include="sdk\inc\natives.h" />
     <ClInclude Include="sdk\inc\types.h" />
-    <ClInclude Include="include\util.h" />
+    <ClInclude Include="include\SoftCores\enums.h" />
+    <ClInclude Include="include\SoftCores\logger.h" />
+    <ClInclude Include="include\SoftCores\plr.h" />
+    <ClInclude Include="include\SoftCores\mathutil.h" />
+    <ClInclude Include="include\SoftCores\keys.h" />
+    <ClInclude Include="sdk\inc\enums.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\script.cpp" />
-    <ClCompile Include="src\util\logger.cpp" />
-    <ClCompile Include="src\util\math.cpp" />
-    <ClCompile Include="src\util\file.cpp" />
+    <ClCompile Include="include\SoftCores\file.h" />
+    <ClCompile Include="src\SoftCores\file.cpp" />
+    <ClCompile Include="src\SoftCores\logger.cpp" />
+    <ClCompile Include="src\SoftCores\mathutil.cpp" />
+    <ClCompile Include="src\SoftCores\plr.cpp" />
+    <ClCompile Include="src\SoftCores\keys.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

@@ -9,7 +9,12 @@
   <ItemGroup>
     <ClInclude Include="include\keyboard.h" />
     <ClInclude Include="include\script.h" />
-    <ClInclude Include="include\util.h" />
+    <ClInclude Include="include\SoftCores\enums.h" />
+    <ClInclude Include="include\SoftCores\keys.h" />
+    <ClInclude Include="include\SoftCores\logger.h" />
+    <ClInclude Include="include\SoftCores\mathutil.h" />
+    <ClInclude Include="include\SoftCores\plr.h" />
+	<ClInclude Include="include\SoftCores\file.h" />
     <ClInclude Include="sdk\inc\enums.h" />
     <ClInclude Include="sdk\inc\main.h" />
     <ClInclude Include="sdk\inc\nativeCaller.h" />
@@ -17,12 +22,14 @@
     <ClInclude Include="sdk\inc\types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\util\file.cpp" />
-    <ClCompile Include="src\util\logger.cpp" />
+    <ClCompile Include="src\SoftCores\file.cpp" />
+    <ClCompile Include="src\SoftCores\keys.cpp" />
+    <ClCompile Include="src\SoftCores\logger.cpp" />
+    <ClCompile Include="src\SoftCores\mathutil.cpp" />
+    <ClCompile Include="src\SoftCores\plr.cpp" />
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\script.cpp" />
-    <ClCompile Include="src\util\math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -63,7 +70,7 @@
     <TargetExt>.asi</TargetExt>
     <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>tmp\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)sdk\inc</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)include\SoftCores;$(ProjectDir)sdk\inc</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
