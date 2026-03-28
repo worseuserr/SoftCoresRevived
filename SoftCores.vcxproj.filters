@@ -24,6 +24,7 @@
     <ClInclude Include="include\SoftCores\file.h" />
     <ClInclude Include="include\SoftCores\weapons.h" />
     <ClInclude Include="include\SoftCores\world.h" />
+    <ClInclude Include="include\SoftCores\ui.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\keyboard.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="src\SoftCores\keys.cpp" />
     <ClCompile Include="src\SoftCores\weapons.cpp" />
     <ClCompile Include="src\SoftCores\world.cpp" />
+    <ClCompile Include="src\SoftCores\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

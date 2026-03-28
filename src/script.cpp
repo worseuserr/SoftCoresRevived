@@ -16,6 +16,7 @@
 #include "mathutil.h"
 #include "file.h"
 #include "world.h"
+#include "ui.h"
 
 using namespace std;
 using namespace SoftCores;
@@ -36,11 +37,7 @@ static Plr		PLR;
 //}
 
 // prompt functions
-void togglePrompt(int prompt, bool visible, bool disable)
-{
-	HUD::_UIPROMPT_SET_VISIBLE(prompt, visible);
-	HUD::_UIPROMPT_SET_ENABLED(prompt, disable);
-}
+
 
 float getTimeOfDayModifier()
 {
@@ -258,7 +255,7 @@ int main()
 	HUD::_UIPROMPT_SET_STANDARD_MODE(hatPrompt, 1);
 	HUD::_UIPROMPT_REGISTER_END(hatPrompt);
 	HUD::_UIPROMPT_SET_GROUP(hatPrompt, radarPromptGroup, 0);
-	togglePrompt(hatPrompt, false, false);
+	UI::TogglePrompt(hatPrompt, false, false);
 
 	int glovePrompt = HUD::_UIPROMPT_REGISTER_BEGIN(); // prompt for cinematic camera
 	if (PAD::_IS_USING_KEYBOARD(0)) HUD::_UIPROMPT_SET_CONTROL_ACTION(glovePrompt, Keys::GetHash("INPUT_INTERACT_OPTION1"));
@@ -267,7 +264,7 @@ int main()
 	HUD::_UIPROMPT_SET_STANDARD_MODE(glovePrompt, 1);
 	HUD::_UIPROMPT_REGISTER_END(glovePrompt);
 	HUD::_UIPROMPT_SET_GROUP(glovePrompt, radarPromptGroup, 0);
-	togglePrompt(glovePrompt, false, false);
+	UI::TogglePrompt(glovePrompt, false, false);
 
 	while (true)
 	{
@@ -732,34 +729,34 @@ int main()
 
 				if (PAD::IS_CONTROL_PRESSED(0, Keys::GetHash("INPUT_SELECT_RADAR_MODE")) && PLR.IsWearing(ClothingType::Hats) && !PLR.IsActiveInScenario() && !isBathing)
 				{
-					togglePrompt(hatPrompt, true, true);
+					UI::TogglePrompt(hatPrompt, true, true);
 				}
 				else
 				{
-					togglePrompt(hatPrompt, false, false);
+					UI::TogglePrompt(hatPrompt, false, false);
 				}
 
 				if (HUD::_UIPROMPT_HAS_STANDARD_MODE_COMPLETED(hatPrompt, 0))
 				{
 					PLR.UnequipClothes(ClothingType::Hats);
 					LOGGER.Write("hooked player unequips hat");
-					togglePrompt(hatPrompt, false, false);
+					UI::TogglePrompt(hatPrompt, false, false);
 				}
 
 				if (PAD::IS_CONTROL_PRESSED(0, Keys::GetHash("INPUT_SELECT_RADAR_MODE")) && PLR.IsWearing(ClothingType::Gloves) && !PLR.IsActiveInScenario() && !isBathing)
 				{
-					togglePrompt(glovePrompt, true, true);
+					UI::TogglePrompt(glovePrompt, true, true);
 				}
 				else
 				{
-					togglePrompt(glovePrompt, false, false);
+					UI::TogglePrompt(glovePrompt, false, false);
 				}
 
 				if (HUD::_UIPROMPT_HAS_STANDARD_MODE_COMPLETED(glovePrompt, 0))
 				{
 					PLR.UnequipClothes(ClothingType::Gloves);
 					LOGGER.Write("hooked player unequips gloves");
-					togglePrompt(glovePrompt, false, false);
+					UI::TogglePrompt(glovePrompt, false, false);
 				}
 
 				(outfitModifier == 2) ? PED::SET_PED_RESET_FLAG(playerPed, 139, true) : PED::SET_PED_RESET_FLAG(playerPed, 139, false); // if outfit is hot, no stamina regen
