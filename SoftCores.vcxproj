@@ -15,6 +15,7 @@
     <ClInclude Include="include\SoftCores\mathutil.h" />
     <ClInclude Include="include\SoftCores\plr.h" />
     <ClInclude Include="include\SoftCores\file.h" />
+    <ClInclude Include="include\SoftCores\temperature.h" />
     <ClInclude Include="include\SoftCores\ui.h" />
     <ClInclude Include="include\SoftCores\weapons.h" />
     <ClInclude Include="include\SoftCores\world.h" />
@@ -25,6 +26,7 @@
     <ClInclude Include="sdk\inc\types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\SoftCores\temperature.cpp" />
     <ClCompile Include="src\SoftCores\ui.cpp" />
     <ClCompile Include="src\SoftCores\weapons.cpp" />
     <ClCompile Include="src\SoftCores\file.cpp" />
