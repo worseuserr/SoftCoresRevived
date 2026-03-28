@@ -8,6 +8,14 @@
 #include "mathutil.h"
 #include "file.h"
 #include <keys.h>
+#include <string.h>
+#include <Windows.h>
+#include <cmath>
+#include <cstdlib>
+#include <enums.h>
+#include <main.h>
+#include <natives.h>
+#include <types.h>
 
 using namespace std;
 using namespace SoftCores;
@@ -273,7 +281,7 @@ float getTemperaturePointsNeeded()
 	else return 0.0f;
 }
 
-void main()
+int main()
 {
 	bool enableLogging = GetPrivateProfileInt("DEBUG", "ENABLE_LOGGING", 0, ".\\SoftCores.ini");
 	if (enableLogging)
@@ -395,7 +403,7 @@ void main()
 	// ai combat modifier variables
 	bool aiTweaks = GetPrivateProfileInt("AI_COMBAT_MODIFIER", "AI_TWEAKS", 1, ".\\SoftCores.ini");
 	bool aiRegen = GetPrivateProfileInt("AI_COMBAT_MODIFIER", "AI_REGEN", 1, ".\\SoftCores.ini");
-	int aiHighestRegen = GetPrivateProfileInt("AI_COMBAT_MODIFIER", "HIGHEST_HEALTH_REGEN", 80, ".\\SoftCores.ini");
+	//int aiHighestRegen = GetPrivateProfileInt("AI_COMBAT_MODIFIER", "HIGHEST_HEALTH_REGEN", 80, ".\\SoftCores.ini");
 	int aiHighRegen = GetPrivateProfileInt("AI_COMBAT_MODIFIER", "HIGH_HEALTH_REGEN", 60, ".\\SoftCores.ini");
 	int aiMediumRegen = GetPrivateProfileInt("AI_COMBAT_MODIFIER", "MEDIUM_HEALTH_REGEN", 40, ".\\SoftCores.ini");
 	int aiLowRegen = GetPrivateProfileInt("AI_COMBAT_MODIFIER", "LOW_HEALTH_REGEN", 20, ".\\SoftCores.ini");
@@ -507,7 +515,7 @@ void main()
 				}
 				else if (hostileBlipOnMission)
 				{
-					if (PLR.IsPedHostileAndNearby(hostilePed[i]) || PLR.IsInCombat() || PLR.IsPursued() && !PLR.IsInMission()) // returns TRUE whenever hostile is nearby/player in combat, being pursued/wanted and not in mission (hopefully works for stealth missions)
+					if (PLR.IsPedHostileAndNearby(hostilePed[i]) || PLR.IsInCombat() || (PLR.IsPursued() && !PLR.IsInMission())) // returns TRUE whenever hostile is nearby/player in combat, being pursued/wanted and not in mission (hopefully works for stealth missions)
 					{
 						if (hostilePed[i] != playerPed && hostilePed[i] != horsePed && !isPedFriendly(hostilePed[i]) && ENTITY::IS_ENTITY_A_PED(hostilePed[i]) && !PED::IS_PED_DEAD_OR_DYING(hostilePed[i], true)) // not playerPed, horsePed, friendlyPed, a ped & not dead
 						{
@@ -537,6 +545,8 @@ void main()
 			bool isNotinControl;
 			bool isSleeping;
 
+			isSleeping = false;
+			isNotinControl = false;
 			if (!PLR.IsInControl() && !isNotinControl) // get last health and deadeye core values when player is no longer in control (when using campfire from wheel or start of most scenario)
 			{
 				isNotinControl = true;
@@ -558,7 +568,6 @@ void main()
 			else if (!isNotinControl && PLR.IsInSleepScenario() && !isSleeping) // once hooked the first entry point of scenario which is -1 while in control, stop hooking at all
 			{
 				isSleeping = true;
-				isNotinControl = true;
 				lastHealthCore = PLR.GetCore(Core::Health);
 				lastDeadEyeCore = PLR.GetCore(Core::DeadEye);
 				stringstream text;
@@ -579,8 +588,6 @@ void main()
 			{
 				PLR.SetCore(Core::Health, lastHealthCore);
 				PLR.SetCore(Core::DeadEye, lastDeadEyeCore);
-
-				isSleeping = (PLR.IsMoving() || PLR.IsInCampScenario()) ? false : true;
 			}
 		}
 		// END OF SLEEP STAMINA ONLY PART +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -588,24 +595,18 @@ void main()
 		// START OF BATH DEADEYE ONLY PART ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (bathDeadEyeOnly)
 		{
-			bool isBathing;
-
-			if (PLR.IsBathing() && !isBathing) // hook bath here & get last health, stamina core
+			if (!PLR.IsBathing()) // hook bath here & get last health, stamina core
 			{
 				lastHealthCore = PLR.GetCore(Core::Health);
 				lastStaminaCore = PLR.GetCore(Core::Stamina);
-				isBathing = true;
 				stringstream text;
 				text << "hooked player is bathing, lastHealthCore: " << lastHealthCore << " lastStaminaCore: " << lastStaminaCore;
 				LOGGER.Write(text.str().c_str());
 			}
-
-			if (isBathing) // keep setting player last health, stamina until player starts moving
+			else // keep setting player last health, stamina until player starts moving
 			{
 				PLR.SetCore(Core::Health, lastHealthCore);
 				PLR.SetCore(Core::Stamina, lastStaminaCore);
-
-				isBathing = (PLR.IsMoving()) ? false : true;
 			}
 		}
 		// END OF BATH DEADEYE ONLY PART ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -675,12 +676,13 @@ void main()
 		
 		bool isStoryPostFX;
 
-		if (isStoryFXPlaying() && !isStoryPostFX)
+
+		if (isStoryFXPlaying())
 		{
 			isStoryPostFX = true;
 			LOGGER.Write("hooked isStoryPostFX running");
 		}
-		else if (!isStoryFXPlaying() && isStoryPostFX)
+		else if (!isStoryFXPlaying())
 		{
 			isStoryPostFX = false;
 			LOGGER.Write("hooked isStoryPostFX stopped");
@@ -703,6 +705,8 @@ void main()
 				// isNearFireModifier ***********************************************************************************************************
 
 				bool isNearFireModifier;
+				isNearFireModifier = false;
+
 				Vector3 nearestFire;
 				Vector3 playerPos = ENTITY::GET_ENTITY_COORDS(playerPed, true, true);
 
@@ -729,6 +733,7 @@ void main()
 				// isCampfireModifier ***********************************************************************************************************
 
 				bool isCampfireModifier;
+				isCampfireModifier = false;
 
 				float campFireModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "CAMPFIRE_MODIFIER", 50, ".\\SoftCores.ini") / 100.0f;
 
@@ -750,6 +755,7 @@ void main()
 				// isNotOutsideModifier ***********************************************************************************************************
 
 				bool isIndoorModifier;
+				isIndoorModifier = false;
 				
 				float indoorModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "INDOOR_MODIFIER", 100, ".\\SoftCores.ini") / 100.0f;
 
@@ -772,6 +778,7 @@ void main()
 				// isSubmergedModifier ***********************************************************************************************************
 
 				bool isSubmergedModifier;
+				isSubmergedModifier = false;
 
 				float submergedModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "SUBMERGED_MODIFIER", 100, ".\\SoftCores.ini") / 100.0f;
 
@@ -796,6 +803,7 @@ void main()
 					// isRainingModifier ***********************************************************************************************************
 
 					bool isRainingModifier;
+					isRainingModifier = false;
 					
 					float rainingModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "RAINING_MODIFIER", 50, ".\\SoftCores.ini") / 100.0f;
 
@@ -818,6 +826,7 @@ void main()
 					// isSnowingModifier ***********************************************************************************************************
 
 					bool isSnowingModifier;
+					isSnowingModifier = false;
 
 					float snowingModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "SNOWING_MODIFIER", 100, ".\\SoftCores.ini") / 100.0f;
 
@@ -845,6 +854,7 @@ void main()
 				float coldThreshold = -1.0f * (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "COLD_THRESHOLD", 150, ".\\SoftCores.ini") / 100.0f; // this is negative points
 				float hotThreshold = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "HOT_THRESHOLD", 400, ".\\SoftCores.ini") / 100.0f;
 
+				outfitModifier = 1;
 				if (pointsDifferences < coldThreshold) // simulate cold if pointDifferences is less than -1.5, say player is wearing 6.0 points of clothing vs 8.0 points of temperature, outfitModifier is cold
 				{
 					outfitModifier = 0;
@@ -863,17 +873,17 @@ void main()
 
 				bool isBathing;
 
-				if (PLR.IsBathing() && !isBathing) isBathing = true; // this can only be entered during inital bathing moment
-				else if (!PLR.IsBathing() && isBathing) isBathing = (PLR.IsMoving()) ? false : true; // set to false when player starts moving
+				isBathing = false;
+				if (PLR.IsBathing()) isBathing = true; // this can only be entered during inital bathing moment
+				else if (!PLR.IsBathing()) isBathing = (PLR.IsMoving()) ? false : true; // set to false when player starts moving
 
 				if (temperatureCoreSprite) // only show sprite when true on ini configuration file
 				{
-					int drawTimer;
 					bool drawSprite;
 
-					if (PAD::IS_CONTROL_JUST_PRESSED(0, Keys::GetHash("INPUT_REVEAL_HUD")) && !PAD::IS_CONTROL_PRESSED(0, Keys::GetHash("INPUT_OPEN_WHEEL_MENU")) && !HUD::IS_HUD_HIDDEN() && !PLR.IsActiveInScenario() && !isBathing && !drawSprite)
+					drawSprite = false;
+					if (PAD::IS_CONTROL_JUST_PRESSED(0, Keys::GetHash("INPUT_REVEAL_HUD")) && !PAD::IS_CONTROL_PRESSED(0, Keys::GetHash("INPUT_OPEN_WHEEL_MENU")) && !HUD::IS_HUD_HIDDEN() && !PLR.IsActiveInScenario() && !isBathing)
 					{
-						drawTimer = getGameTimer();
 						drawSprite = true;
 
 						stringstream text;
@@ -887,13 +897,11 @@ void main()
 						{
 							TXD::REQUEST_STREAMED_TEXTURE_DICT("RPG_TEXTURES", false);
 						}
-						else if (TXD::_HAS_STREAMED_TXD_LOADED(Keys::GetHash("RPG_TEXTURES")) && spriteModifier != "RPG_WARM")
+						else if (TXD::_HAS_STREAMED_TXD_LOADED(Keys::GetHash("RPG_TEXTURES")) && strcmp(spriteModifier, "RPG_WARM"))
 						{
 							GRAPHICS::DRAW_SPRITE("RPG_TEXTURES", spriteModifier, 0.25f, 0.9f, 0.045f, 0.07f, 0.0f, 240, 240, 240, 180, false);
 						}
 					}
-
-					if (getGameTimer() - drawTimer > 3000) drawSprite = false; // only show for 3 seconds
 				}
 
 				// Hat & Gloves prompts ***********************************************************************************************************
@@ -935,6 +943,7 @@ void main()
 				
 				bool knockedOut;
 
+				knockedOut = false;
 				temperatureMs = (outfitModifier == 2 || knockedOut) ? (GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini") * 2) : GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini"); // if outfit is hot/knockedOut previously, temperatureMs is doubled 
 
 				if (PLR.IsInControl() && !isBathing) // returns TRUE if player is in control && not bathing
@@ -1176,6 +1185,8 @@ void main()
 				bool deathPenalty;
 				int deathTime;
 
+				deathPenalty = false;
+				coresPenalty = false;
 				if (!PLR.IsMoving() && !PLR.IsAlive() && !PLR.IsPlaying() && !coresPenalty)
 				{
 					deathTime = PED::GET_PED_TIME_OF_DEATH(playerPed);
@@ -1312,7 +1323,6 @@ void main()
 				{
 					PLR.SetOuterCore(Core::Stamina, PLR.GetMaxOuterCore(Core::Stamina)); // restore outer core stamina until max
 					PLR.SetOuterCore(Core::DeadEye, PLR.GetMaxOuterCore(Core::DeadEye)); // restore outer core  deadeye until max
-					deathPenalty = false;
 					LOGGER.Write("hooked stopped applying death penalty to player cores");
 				}
 			}
@@ -1444,6 +1454,7 @@ void main()
 
 		WAIT(0);
 	}
+	return (0);
 }
 
 void ScriptMain()
