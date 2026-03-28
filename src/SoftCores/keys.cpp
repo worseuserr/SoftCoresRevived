@@ -8,6 +8,11 @@ Key::Key(std::string str)
 	keyString = str;
 }
 
+Key::Key(const char *str)
+{
+	keyString = std::string(str);
+}
+
 Hash Key::Hash()
 {
 	return (MISC::GET_HASH_KEY(ToCString()));
