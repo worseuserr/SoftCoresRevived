@@ -1,12 +1,5 @@
-#include "script.h"
-
 #include <sstream>
 #include <map>
-#include <ctime>
-#include "logger.h"
-#include "plr.h"
-#include "mathutil.h"
-#include "file.h"
 #include <keys.h>
 #include <string.h>
 #include <Windows.h>
@@ -16,6 +9,12 @@
 #include <main.h>
 #include <natives.h>
 #include <types.h>
+#include "script.h"
+#include "weapons.h"
+#include "logger.h"
+#include "plr.h"
+#include "mathutil.h"
+#include "file.h"
 
 using namespace std;
 using namespace SoftCores;
@@ -35,10 +34,6 @@ static Plr		PLR;
 //	UILOG::_UILOG_CLEAR_CACHED_OBJECTIVE(); //
 //}
 
-static int getCurrentHealthPercent(Entity entity)
-{
-	return Math::Round(ENTITY::GET_ENTITY_HEALTH(entity) * 100.0f / ENTITY::GET_ENTITY_MAX_HEALTH(entity, 0));
-}
 
 float getTimeOfDayModifier()
 {
@@ -71,121 +66,6 @@ bool isPedFriendly(Ped ped)
 		}
 	}
 	return (false);
-}
-
-// items that is categorized as weapon but is actually not
-bool isWeaponItem(Hash weapon)
-{
-	const char* itemWeapons[] = {
-		"WEAPON_UNARMED",
-		"WEAPON_MELEE_LANTERN",
-		"WEAPON_MELEE_DAVY_LANTERN",
-		"WEAPON_MELEE_LANTERN_ELECTRIC",
-		"WEAPON_KIT_BINOCULARS",
-		"WEAPON_KIT_CAMERA",
-		"WEAPON_KIT_DETECTOR",
-		"WEAPON_BOW_CHARLES",
-		"WEAPON_BOW",
-		"WEAPON_FISHINGROD",
-		"WEAPON_LASSO",
-		"WEAPON_KIT_CAMERA_ADVANCED",
-		"WEAPON_BOW_IMPROVED",
-		"WEAPON_LASSO_REINFORCED",
-		"WEAPON_KIT_BINOCULARS_IMPROVED",
-		"WEAPON_MOONSHINEJUG_MP"
-	};
-
-	for (const char* itemWeapon: itemWeapons)
-	{
-		if (MISC::ARE_STRINGS_EQUAL(WEAPON::_GET_WEAPON_NAME(weapon), itemWeapon))
-		{
-			return true;
-			break;
-		}
-	}
-	return false;
-}
-
-bool isWeaponExotic(Hash weapon)
-{
-	const char* exoticWeapons[] = {
-		"WEAPON_REVOLVER_DOUBLEACTION_GAMBLER",
-		"WEAPON_REVOLVER_CATTLEMAN_MEXICAN",
-		"WEAPON_REVOLVER_CATTLEMAN_PIG",
-		"WEAPON_REVOLVER_DOUBLEACTION_EXOTIC",
-		"WEAPON_REVOLVER_SCHOFIELD_GOLDEN",
-		"WEAPON_PISTOL_MAUSER_DRUNK",
-		"WEAPON_SHOTGUN_DOUBLEBARREL_EXOTIC",
-		"WEAPON_SNIPERRIFLE_ROLLINGBLOCK_EXOTIC",
-		"WEAPON_REVOLVER_CATTLEMAN_JOHN",
-		"WEAPON_REVOLVER_DOUBLEACTION_MICAH",
-		"WEAPON_REVOLVER_SCHOFIELD_CALLOWAY"
-	};
-
-	for (const char* exoticWeapon : exoticWeapons)
-	{
-		if (MISC::ARE_STRINGS_EQUAL(WEAPON::_GET_WEAPON_NAME(weapon), exoticWeapon))
-		{
-			return true;
-			break;
-		}
-	}
-	return false;
-}
-
-// weapon that is exclusively thrown only
-bool isWeaponThrowableOnly(Hash weapon) 
-{
-	const char* throwableWeapons[] = {
-		"WEAPON_THROWN_DYNAMITE",
-		"WEAPON_THROWN_MOLOTOV",
-		"WEAPON_THROWN_THROWING_KNIVES_JAVIER",
-		"WEAPON_THROWN_THROWING_KNIVES",
-		"WEAPON_THROWN_TOMAHAWK",
-		"WEAPON_THROWN_TOMAHAWK_ANCIENT",
-		"WEAPON_THROWN_BOLAS",
-		"WEAPON_THROWN_POISONBOTTLE"
-	};
-
-	for (const char* throwableWeapon: throwableWeapons)
-	{
-		if (MISC::ARE_STRINGS_EQUAL(WEAPON::_GET_WEAPON_NAME(weapon), throwableWeapon))
-		{
-			return true;
-			break;
-		}
-	}
-	return false;
-}
-
-// weapon that can be used as melee or can be thrown
-bool isWeaponMelee(Hash weapon)
-{
-	const char* meleeWeapons[] = {
-		"WEAPON_MELEE_HATCHET_MELEEONLY",
-		"WEAPON_MELEE_KNIFE",
-		"WEAPON_MELEE_KNIFE_CIVIL_WAR",
-		"WEAPON_MELEE_BROKEN_SWORD",
-		"WEAPON_MELEE_HATCHET",
-		"WEAPON_MELEE_HATCHET_HEWING",
-		"WEAPON_MELEE_ANCIENT_HATCHET",
-		"WEAPON_MELEE_HATCHET_HUNTER",
-		"WEAPON_MELEE_HATCHET_VIKING",
-		"WEAPON_MELEE_HATCHET_DOUBLE_BIT_RUSTED",
-		"WEAPON_MELEE_HATCHET_DOUBLE_BIT",
-		"WEAPON_MELEE_HATCHET_HUNTER_RUSTED",
-		"WEAPON_MELEE_CLEAVER"
-	};
-
-	for (const char* meleeWeapon: meleeWeapons)
-	{
-		if (MISC::ARE_STRINGS_EQUAL(WEAPON::_GET_WEAPON_NAME(weapon), meleeWeapon))
-		{
-			return true;
-			break;
-		}
-	}
-	return false;
 }
 
 bool isStoryFXPlaying()
@@ -958,7 +838,7 @@ int main()
 						case 0: // cold
 							if(temperatureCoreFx) GRAPHICS::ANIMPOSTFX_PLAY("PlayerHonorLevelBad"); // grayish tint, seems suitable enough to show player is cold
 							(ENTITY::GET_ENTITY_HEALTH(playerPed) - temperatureHpPercentageDrain <= 1) ? ENTITY::_SET_ENTITY_HEALTH(playerPed, 1, 1) : ENTITY::_SET_ENTITY_HEALTH(playerPed, (ENTITY::GET_ENTITY_HEALTH(playerPed) - temperatureHpPercentageDrain), 0); // hp outer core drain
-							if (PLR.GetCore(Core::Health) < 10 && getCurrentHealthPercent(playerPed) < 10 && !PLR.IsCoreOverpowered(Core::Health) && !PLR.IsOuterCoreOverpowered(Core::Health) && !knockedOut) // when reached this threshold, knock player out
+							if (PLR.GetCore(Core::Health) < 10 && Math::HealthAsPercentage(playerPed) < 10 && !PLR.IsCoreOverpowered(Core::Health) && !PLR.IsOuterCoreOverpowered(Core::Health) && !knockedOut) // when reached this threshold, knock player out
 							{
 								TASK::TASK_KNOCKED_OUT(playerPed, 0.0f, false);
 								knockedOut = true;
@@ -1009,7 +889,7 @@ int main()
 						Hash aimedWeapon;
 						if (WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &aimedWeapon, false, 0, true))
 						{
-							if (!isWeaponItem(aimedWeapon) && !isWeaponThrowableOnly(aimedWeapon) && !isWeaponMelee(aimedWeapon)) // if not unique and not throwable
+							if (!Weapons::IsItem(aimedWeapon) && !Weapons::IsThrowableOnly(aimedWeapon) && !Weapons::IsMelee(aimedWeapon)) // if not unique and not throwable
 							{
 								PED::SET_PED_RESET_FLAG(playerPed, 139, true); // disable stamina outer core regen
 
@@ -1205,11 +1085,11 @@ int main()
 							Hash weaponHash;
 							if (WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &weaponHash, false, weaponAttachPoint, true))
 							{
-								if (!isWeaponItem(weaponHash) && !isWeaponMelee(weaponHash)) // check first for weapon is item or melee
+								if (!Weapons::IsItem(weaponHash) && !Weapons::IsMelee(weaponHash)) // check first for weapon is item or melee
 								{
 									if (!loseExoticWeapon)
 									{
-										if (!isWeaponExotic(weaponHash)) // check for exotic if loseExoticWeapon is set to false
+										if (!Weapons::IsExotic(weaponHash)) // check for exotic if loseExoticWeapon is set to false
 										{
 											stringstream text;
 											text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo: " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
@@ -1240,15 +1120,15 @@ int main()
 							Hash weaponHash;
 							if (WEAPON::GET_CURRENT_PED_WEAPON(playerPed, &weaponHash, false, weaponAttachPoint, true))
 							{
-								if (!isWeaponItem(weaponHash) && !isWeaponMelee(weaponHash)) // check first for weapon is item or melee
+								if (!Weapons::IsItem(weaponHash) && !Weapons::IsMelee(weaponHash)) // check first for weapon is item or melee
 								{
 									if (weaponAttachPoint == 6)
 									{
-										if (isWeaponThrowableOnly(weaponHash)) // check thrower slot and ensure throwably exclusive only
+										if (Weapons::IsThrowableOnly(weaponHash)) // check thrower slot and ensure throwably exclusive only
 										{
 											if (!loseExoticWeapon)
 											{
-												if (!isWeaponExotic(weaponHash)) // check for exotic if loseExoticWeapon is set to false
+												if (!Weapons::IsExotic(weaponHash)) // check for exotic if loseExoticWeapon is set to false
 												{
 													stringstream text;
 													text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo: " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
@@ -1271,7 +1151,7 @@ int main()
 									{
 										if (!loseExoticWeapon)
 										{
-											if (!isWeaponExotic(weaponHash)) // check for exotic if loseExoticWeapon is set to false
+											if (!Weapons::IsExotic(weaponHash)) // check for exotic if loseExoticWeapon is set to false
 											{
 												stringstream text;
 												text << WEAPON::_GET_WEAPON_NAME(weaponHash) << " removed with ammo " << WEAPON::GET_AMMO_IN_PED_WEAPON(playerPed, weaponHash);
@@ -1333,27 +1213,27 @@ int main()
 		// START DAMAGE AND NPC MODIFIER ========================================================================================================
 		if (damageTweaks) // set damage modifier base on player health, basically the more health you got, the higher damager you take, the lower damage you give
 		{
-			if (getCurrentHealthPercent(playerPed) > 80 && getCurrentHealthPercent(playerPed) <= 100)
+			if (Math::HealthAsPercentage(playerPed) > 80 && Math::HealthAsPercentage(playerPed) <= 100)
 			{
 				setAIDamageModifer(aiDamageHighest * 0.5f, aiDamageHighest);
 				PLR.SetDamageModifier(playerDamageLowest * 0.5f, playerDamageLowest);
 			}
-			else if (getCurrentHealthPercent(playerPed) > 60 && getCurrentHealthPercent(playerPed) <= 80)
+			else if (Math::HealthAsPercentage(playerPed) > 60 && Math::HealthAsPercentage(playerPed) <= 80)
 			{
 				setAIDamageModifer(aiDamageHigh * 0.5f, aiDamageHigh);
 				PLR.SetDamageModifier(playerDamageLow * 0.5f, playerDamageLow);
 			}
-			else if (getCurrentHealthPercent(playerPed) > 40 && getCurrentHealthPercent(playerPed) <= 60)
+			else if (Math::HealthAsPercentage(playerPed) > 40 && Math::HealthAsPercentage(playerPed) <= 60)
 			{
 				setAIDamageModifer(aiDamageMedium * 0.5f, aiDamageMedium);
 				PLR.SetDamageModifier(playerDamageMedium * 0.5f, playerDamageMedium);
 			}
-			else if (getCurrentHealthPercent(playerPed) > 20 && getCurrentHealthPercent(playerPed) <= 40)
+			else if (Math::HealthAsPercentage(playerPed) > 20 && Math::HealthAsPercentage(playerPed) <= 40)
 			{
 				setAIDamageModifer(aiDamageLow * 0.5f, aiDamageLow);
 				PLR.SetDamageModifier(playerDamageHigh * 0.5f, playerDamageHigh);
 			}
-			else if (getCurrentHealthPercent(playerPed) > 0 && getCurrentHealthPercent(playerPed) <= 20)
+			else if (Math::HealthAsPercentage(playerPed) > 0 && Math::HealthAsPercentage(playerPed) <= 20)
 			{
 				setAIDamageModifer(aiDamageLowest * 0.5f, aiDamageLowest);
 				PLR.SetDamageModifier(playerDamageHighest * 0.5f, playerDamageHighest);
@@ -1378,31 +1258,31 @@ int main()
 			{
 				if (peds[i] != playerPed && PED::IS_PED_HUMAN(peds[i]) && !PED::IS_PED_DEAD_OR_DYING(peds[i], true) && ENTITY::DOES_ENTITY_EXIST(peds[i]))
 				{
-					if (getCurrentHealthPercent(peds[i]) > 80 && getCurrentHealthPercent(peds[i]) <= 100)
+					if (Math::HealthAsPercentage(peds[i]) > 80 && Math::HealthAsPercentage(peds[i]) <= 100)
 					{
 						if (aiAccuracy) PED::SET_PED_ACCURACY(peds[i], aiHighestAccuracy); // accuracy
 						if (aiShootRate) PED::SET_PED_SHOOT_RATE(peds[i], aiHighestShootRate); // shoot rate
 						if (aiRegen) aiRegenMap[peds[i]] = aiLowestRegen * 100 / ENTITY::GET_ENTITY_MAX_HEALTH(peds[i], 0);
 					}
-					else if (getCurrentHealthPercent(peds[i]) > 60 && getCurrentHealthPercent(peds[i]) <= 80)
+					else if (Math::HealthAsPercentage(peds[i]) > 60 && Math::HealthAsPercentage(peds[i]) <= 80)
 					{
 						if (aiAccuracy) PED::SET_PED_ACCURACY(peds[i], aiHighAccuracy);
 						if (aiShootRate) PED::SET_PED_SHOOT_RATE(peds[i], aiHighShootRate);
 						if (aiRegen) aiRegenMap[peds[i]] = aiLowRegen * 100 / ENTITY::GET_ENTITY_MAX_HEALTH(peds[i], 0);
 					}
-					else if (getCurrentHealthPercent(peds[i]) > 40 && getCurrentHealthPercent(peds[i]) <= 60)
+					else if (Math::HealthAsPercentage(peds[i]) > 40 && Math::HealthAsPercentage(peds[i]) <= 60)
 					{
 						if (aiAccuracy) PED::SET_PED_ACCURACY(peds[i], aiMediumAccuracy);
 						if (aiShootRate) PED::SET_PED_SHOOT_RATE(peds[i], aiMediumShootRate);
 						if (aiRegen) aiRegenMap[peds[i]] = aiMediumRegen * 100 / ENTITY::GET_ENTITY_MAX_HEALTH(peds[i], 0);
 					}
-					else if (getCurrentHealthPercent(peds[i]) > 20 && getCurrentHealthPercent(peds[i]) <= 40)
+					else if (Math::HealthAsPercentage(peds[i]) > 20 && Math::HealthAsPercentage(peds[i]) <= 40)
 					{
 						if (aiAccuracy) PED::SET_PED_ACCURACY(peds[i], aiLowAccuracy);
 						if (aiShootRate) PED::SET_PED_SHOOT_RATE(peds[i], aiLowShootRate);
 						if (aiRegen) aiRegenMap[peds[i]] = aiHighRegen * 100 / ENTITY::GET_ENTITY_MAX_HEALTH(peds[i], 0);
 					}
-					else if (getCurrentHealthPercent(peds[i]) > 0 && getCurrentHealthPercent(peds[i]) <= 20)
+					else if (Math::HealthAsPercentage(peds[i]) > 0 && Math::HealthAsPercentage(peds[i]) <= 20)
 					{
 						if (aiAccuracy) PED::SET_PED_ACCURACY(peds[i], aiLowestAccuracy);
 						if (aiShootRate) PED::SET_PED_SHOOT_RATE(peds[i], aiLowestShootRate);

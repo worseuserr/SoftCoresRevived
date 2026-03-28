@@ -21,17 +21,20 @@
     <ClInclude Include="include\SoftCores\mathutil.h" />
     <ClInclude Include="include\SoftCores\keys.h" />
     <ClInclude Include="sdk\inc\enums.h" />
+    <ClInclude Include="include\SoftCores\file.h" />
+    <ClInclude Include="include\SoftCores\world.h" />
+    <ClInclude Include="include\SoftCores\weapons.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\script.cpp" />
-    <ClCompile Include="include\SoftCores\file.h" />
     <ClCompile Include="src\SoftCores\file.cpp" />
     <ClCompile Include="src\SoftCores\logger.cpp" />
     <ClCompile Include="src\SoftCores\mathutil.cpp" />
     <ClCompile Include="src\SoftCores\plr.cpp" />
     <ClCompile Include="src\SoftCores\keys.cpp" />
+    <ClCompile Include="src\SoftCores\weapons.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

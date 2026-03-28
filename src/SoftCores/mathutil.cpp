@@ -28,3 +28,8 @@ float Math::CelciusToFarenheit(float temperature)
 {
 	return ((temperature * 1.8f) + 32.0f);
 }
+
+int Math::HealthAsPercentage(Entity entity)
+{
+	return (Math::Round(ENTITY::GET_ENTITY_HEALTH(entity) * 100.0f / ENTITY::GET_ENTITY_MAX_HEALTH(entity, 0)));
+}

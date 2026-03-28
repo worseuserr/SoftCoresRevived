@@ -1,6 +1,7 @@
 #include "plr.h"
 #include "keys.h"
 #include "mathutil.h"
+#include "natives.h"
 
 using namespace SoftCores;
 using namespace Keys;

@@ -14,7 +14,9 @@
     <ClInclude Include="include\SoftCores\logger.h" />
     <ClInclude Include="include\SoftCores\mathutil.h" />
     <ClInclude Include="include\SoftCores\plr.h" />
-	<ClInclude Include="include\SoftCores\file.h" />
+    <ClInclude Include="include\SoftCores\file.h" />
+    <ClInclude Include="include\SoftCores\weapons.h" />
+    <ClInclude Include="include\SoftCores\world.h" />
     <ClInclude Include="sdk\inc\enums.h" />
     <ClInclude Include="sdk\inc\main.h" />
     <ClInclude Include="sdk\inc\nativeCaller.h" />
@@ -22,6 +24,7 @@
     <ClInclude Include="sdk\inc\types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\SoftCores\weapons.cpp" />
     <ClCompile Include="src\SoftCores\file.cpp" />
     <ClCompile Include="src\SoftCores\keys.cpp" />
     <ClCompile Include="src\SoftCores\logger.cpp" />
@@ -49,12 +52,13 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>HardCores</RootNamespace>
     <ProjectName>SoftCores</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>ClangCL</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -72,6 +76,7 @@
     <IntDir>tmp\$(Configuration)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)include\SoftCores;$(ProjectDir)sdk\inc</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <ClangTidyExtraArgs>-Wno-pragma-once-outside-header;-Wno-unused-function</ClangTidyExtraArgs>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
