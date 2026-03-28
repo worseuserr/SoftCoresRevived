@@ -33,6 +33,7 @@
     <ClCompile Include="src\keyboard.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\script.cpp" />
+    <ClCompile Include="src\SoftCores\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

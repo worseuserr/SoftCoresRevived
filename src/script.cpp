@@ -15,6 +15,7 @@
 #include "plr.h"
 #include "mathutil.h"
 #include "file.h"
+#include "world.h"
 
 using namespace std;
 using namespace SoftCores;
@@ -34,6 +35,12 @@ static Plr		PLR;
 //	UILOG::_UILOG_CLEAR_CACHED_OBJECTIVE(); //
 //}
 
+// prompt functions
+void togglePrompt(int prompt, bool visible, bool disable)
+{
+	HUD::_UIPROMPT_SET_VISIBLE(prompt, visible);
+	HUD::_UIPROMPT_SET_ENABLED(prompt, disable);
+}
 
 float getTimeOfDayModifier()
 {
@@ -48,70 +55,6 @@ float getTimeOfDayModifier()
 	else if (CLOCK::GET_CLOCK_HOURS() >= 23 && CLOCK::GET_CLOCK_HOURS() < 5)
 		return 2.5f;
 	else return 0.0f;
-}
-
-void setAIDamageModifer(float melee, float weapon)
-{
-	PED::SET_AI_MELEE_WEAPON_DAMAGE_MODIFIER(melee);
-	PED::SET_AI_WEAPON_DAMAGE_MODIFIER(weapon);
-}
-
-bool isPedFriendly(Ped ped)
-{
-	for (Keys::Key key : Keys::FriendlyPeds)
-	{
-		if (PED::IS_PED_MODEL(ped, key.Hash()))
-		{
-			return (true);
-		}
-	}
-	return (false);
-}
-
-bool isStoryFXPlaying()
-{
-	const char* storyPostFXs[] = {
-				"ODR3_Injured01Loop",
-				"ODR3_Injured02Loop",
-				"ODR3_Injured03Loop",
-				"PlayerHealthPoorGuarma",
-				"PlayerSickDoctorsOpinion",
-				"PlayerSickDoctorsOpinionOutBad",
-				"PlayerSickDoctorsOpinionOutGood",
-				"PlayerWakeUpInterrogation"
-	};
-
-	for (const char* storyPostFX : storyPostFXs)
-	{
-		if (GRAPHICS::ANIMPOSTFX_IS_RUNNING(storyPostFX))
-		{
-			return true;
-			break;
-		}
-	}
-	return false;
-}
-
-int getGameTimer()
-{
-	return MISC::GET_GAME_TIMER();
-}
-
-// prompt functions
-void togglePrompt(int prompt, bool visible, bool disable)
-{
-	HUD::_UIPROMPT_SET_VISIBLE(prompt, visible);
-	HUD::_UIPROMPT_SET_ENABLED(prompt, disable);
-}
-
-bool isRaining()
-{
-	return MISC::GET_RAIN_LEVEL() > 0.0f;
-}
-
-bool isSnowing()
-{
-	return MISC::GET_SNOW_LEVEL() > 0.0f;
 }
 
 // arbitrary values for temperature points needed for player clothing to match
@@ -224,10 +167,10 @@ int main()
 	int aiHealMs = GetPrivateProfileInt("TIMERS", "AI_HEALTH_REGEN", 5000, ".\\SoftCores.ini");
 	int aimMs = GetPrivateProfileInt("TIMERS", "AIMING_DEPLETION", 500, ".\\SoftCores.ini");
 
-	int depletionTimer = getGameTimer() + depletionMs;
-	int healthTimer = getGameTimer() + healthMs;
-	int temperatureTimer = getGameTimer() + temperatureMs;
-	int aimTimer = getGameTimer() + aimMs;
+	int depletionTimer = World::GetGameTimer() + depletionMs;
+	int healthTimer = World::GetGameTimer() + healthMs;
+	int temperatureTimer = World::GetGameTimer() + temperatureMs;
+	int aimTimer = World::GetGameTimer() + aimMs;
 
 	// core modifiers
 	bool isPlaying{};
@@ -375,7 +318,7 @@ int main()
 				{
 					if (PLR.IsPedHostileAndNearby(hostilePed[i]) || PLR.IsInCombat() || PLR.IsPursued() || PLR.IsInMission()) // returns TRUE whenever hostile is nearby/player in combat, being pursued/wanted or in mission (hopefully works for stealth missions)
 					{
-						if (hostilePed[i] != playerPed && hostilePed[i] != horsePed && !isPedFriendly(hostilePed[i]) && ENTITY::IS_ENTITY_A_PED(hostilePed[i]) && !PED::IS_PED_DEAD_OR_DYING(hostilePed[i], true)) // not playerPed, horsePed, friendlyPed, a ped & not dead
+						if (hostilePed[i] != playerPed && hostilePed[i] != horsePed && !World::IsPedFriendly(hostilePed[i]) && ENTITY::IS_ENTITY_A_PED(hostilePed[i]) && !PED::IS_PED_DEAD_OR_DYING(hostilePed[i], true)) // not playerPed, horsePed, friendlyPed, a ped & not dead
 						{
 							PED::REQUEST_PED_VISIBILITY_TRACKING(ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(hostilePed[i])); // track these hostile peds if all is true
 							hostileBlipMap[hostilePed[i]] = MAP::GET_BLIP_FROM_ENTITY(hostilePed[i]); // save em in a Ped <-> Blip Map
@@ -397,7 +340,7 @@ int main()
 				{
 					if (PLR.IsPedHostileAndNearby(hostilePed[i]) || PLR.IsInCombat() || (PLR.IsPursued() && !PLR.IsInMission())) // returns TRUE whenever hostile is nearby/player in combat, being pursued/wanted and not in mission (hopefully works for stealth missions)
 					{
-						if (hostilePed[i] != playerPed && hostilePed[i] != horsePed && !isPedFriendly(hostilePed[i]) && ENTITY::IS_ENTITY_A_PED(hostilePed[i]) && !PED::IS_PED_DEAD_OR_DYING(hostilePed[i], true)) // not playerPed, horsePed, friendlyPed, a ped & not dead
+						if (hostilePed[i] != playerPed && hostilePed[i] != horsePed && !World::IsPedFriendly(hostilePed[i]) && ENTITY::IS_ENTITY_A_PED(hostilePed[i]) && !PED::IS_PED_DEAD_OR_DYING(hostilePed[i], true)) // not playerPed, horsePed, friendlyPed, a ped & not dead
 						{
 							PED::REQUEST_PED_VISIBILITY_TRACKING(ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(hostilePed[i])); // track these hostile peds if all is true
 							hostileBlipMap[hostilePed[i]] = MAP::GET_BLIP_FROM_ENTITY(hostilePed[i]); // save em in a Ped <-> Blip Map
@@ -454,7 +397,7 @@ int main()
 				text << "hooked player is sleeping while in control, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
 				LOGGER.Write(text.str().c_str());
 			}
-			else if (isRaining() && PED::_IS_PED_USING_SCENARIO_HASH(playerPed, Keys::GetHash("PROP_PLAYER_SLEEP_TENT_A_FRAME")) && !isSleeping) // if player sets camp when its raining, will go directly to tent, hence not initiating -1 scenario point i reckon
+			else if (World::IsRaining() && PED::_IS_PED_USING_SCENARIO_HASH(playerPed, Keys::GetHash("PROP_PLAYER_SLEEP_TENT_A_FRAME")) && !isSleeping) // if player sets camp when its raining, will go directly to tent, hence not initiating -1 scenario point i reckon
 			{
 				isSleeping = true;
 				lastHealthCore = PLR.GetCore(Core::Health);
@@ -553,16 +496,16 @@ int main()
 			isPlaying = false;
 			LOGGER.Write("hooked player is not playing");
 		}
-		
+
 		bool isStoryPostFX;
 
 
-		if (isStoryFXPlaying())
+		if (World::IsStoryFXPlaying())
 		{
 			isStoryPostFX = true;
 			LOGGER.Write("hooked isStoryPostFX running");
 		}
-		else if (!isStoryFXPlaying())
+		else if (!World::IsStoryFXPlaying())
 		{
 			isStoryPostFX = false;
 			LOGGER.Write("hooked isStoryPostFX stopped");
@@ -573,7 +516,7 @@ int main()
 			float playerHealthRegen = (float)GetPrivateProfileInt("CORE_MODIFIER", "PLAYER_HEALTH_REGEN", 50, ".\\SoftCores.ini") / 100.0f;
 			int playerHpPercentageDrain = GetPrivateProfileInt("CORE_MODIFIER", "PLAYER_HEALTH_PENALTY", 4, ".\\SoftCores.ini") * ENTITY::GET_ENTITY_MAX_HEALTH(playerPed, 0) / 100;
 			int horseHpPercentageDrain = GetPrivateProfileInt("CORE_MODIFIER", "HORSE_HEALTH_PENALTY", 4, ".\\SoftCores.ini") * ENTITY::GET_ENTITY_MAX_HEALTH(horsePed, 0) / 100;
-			
+
 			// START TEMPERATURE CORE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			float pointsDifferences;
 			int outfitModifier;
@@ -581,7 +524,7 @@ int main()
 			if (temperatureCore) // this on to be called every tick
 			{
 				float pointsModifier = 0.0f; // default no points modifier, just uses surrounding temperature as base value to determine clothes points needed
-				
+
 				// isNearFireModifier ***********************************************************************************************************
 
 				bool isNearFireModifier;
@@ -636,7 +579,7 @@ int main()
 
 				bool isIndoorModifier;
 				isIndoorModifier = false;
-				
+
 				float indoorModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "INDOOR_MODIFIER", 100, ".\\SoftCores.ini") / 100.0f;
 
 				if (PLR.IsIndoors() && !isIndoorModifier)
@@ -684,10 +627,10 @@ int main()
 
 					bool isRainingModifier;
 					isRainingModifier = false;
-					
+
 					float rainingModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "RAINING_MODIFIER", 50, ".\\SoftCores.ini") / 100.0f;
 
-					if (isRaining() && !isRainingModifier)
+					if (World::IsRaining() && !isRainingModifier)
 					{
 						isRainingModifier = true;
 						rainingModifier = rainingModifier + MISC::GET_RAIN_LEVEL();
@@ -695,7 +638,7 @@ int main()
 						text << "hooked is raining, rainingModifier: " << rainingModifier << " negative points (coldness)";
 						LOGGER.Write(text.str().c_str());
 					}
-					else if (!isRaining() && isRainingModifier)
+					else if (!World::IsRaining() && isRainingModifier)
 					{
 						isRainingModifier = false;
 						LOGGER.Write("hooked is no longer raining");
@@ -710,7 +653,7 @@ int main()
 
 					float snowingModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "SNOWING_MODIFIER", 100, ".\\SoftCores.ini") / 100.0f;
 
-					if (isSnowing() && !isSnowingModifier)
+					if (World::IsSnowing() && !isSnowingModifier)
 					{
 						isSnowingModifier = true;
 						snowingModifier = snowingModifier + MISC::GET_SNOW_LEVEL();
@@ -718,7 +661,7 @@ int main()
 						text << "hooked is snowing, snowingModifier: " << snowingModifier << " negative points (coldness)";
 						LOGGER.Write(text.str().c_str());
 					}
-					else if (!isSnowing() && isSnowingModifier)
+					else if (!World::IsSnowing() && isSnowingModifier)
 					{
 						isSnowingModifier = false;
 						LOGGER.Write("hooked is no longer snowing");
@@ -820,15 +763,15 @@ int main()
 				}
 
 				(outfitModifier == 2) ? PED::SET_PED_RESET_FLAG(playerPed, 139, true) : PED::SET_PED_RESET_FLAG(playerPed, 139, false); // if outfit is hot, no stamina regen
-				
+
 				bool knockedOut;
 
 				knockedOut = false;
-				temperatureMs = (outfitModifier == 2 || knockedOut) ? (GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini") * 2) : GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini"); // if outfit is hot/knockedOut previously, temperatureMs is doubled 
+				temperatureMs = (outfitModifier == 2 || knockedOut) ? (GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini") * 2) : GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini"); // if outfit is hot/knockedOut previously, temperatureMs is doubled
 
 				if (PLR.IsInControl() && !isBathing) // returns TRUE if player is in control && not bathing
 				{
-					if (getGameTimer() > temperatureTimer) // penalty timer for player outfit in accordance to surrounding temperature, called every temperatureTimer
+					if (World::GetGameTimer() > temperatureTimer) // penalty timer for player outfit in accordance to surrounding temperature, called every temperatureTimer
 					{
 						stringstream text;
 						int temperatureHpPercentageDrain = Math::Ceil(fabsf(pointsDifferences)) * ENTITY::GET_ENTITY_MAX_HEALTH(playerPed, 0) / 100; // calculater hp drain, convert the pointsDifferences to positive first
@@ -863,8 +806,8 @@ int main()
 							break;
 						}
 
-						temperatureMs = (outfitModifier == 2 || knockedOut) ? (GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini") * 2) : GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini"); // if outfit is hot/knockedOut previously, temperatureMs is doubled 
-						temperatureTimer = getGameTimer() + temperatureMs; // if knocked out previously, the next timer will be longer to allow recovery period
+						temperatureMs = (outfitModifier == 2 || knockedOut) ? (GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini") * 2) : GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini"); // if outfit is hot/knockedOut previously, temperatureMs is doubled
+						temperatureTimer = World::GetGameTimer() + temperatureMs; // if knocked out previously, the next timer will be longer to allow recovery period
 					}
 				}
 			}
@@ -878,8 +821,8 @@ int main()
 				bool isAimingAir = false;
 
 				if (PAD::IS_CONTROL_JUST_PRESSED(0, Keys::GetHash("INPUT_AIM_IN_AIR")) || PAD::IS_CONTROL_PRESSED(0, Keys::GetHash("INPUT_AIM_IN_AIR"))) isAimingAir = !isAimingAir;
-				
-				if (getGameTimer() > aimTimer)
+
+				if (World::GetGameTimer() > aimTimer)
 				{
 					stAimingPenalty = (PLR.IsOuterCoreOverpowered(Core::Stamina)) ? 0 : stAimingPenalty;
 					deAimingPenalty = (PLR.IsOuterCoreOverpowered(Core::DeadEye)) ? 0 : deAimingPenalty;
@@ -903,7 +846,7 @@ int main()
 									(PLR.GetOuterCore(Core::DeadEye) - deAimingPenalty <= 0) ? PLR.SetOuterCore(Core::DeadEye, 0) : PLR.SetOuterCore(Core::DeadEye, PLR.GetOuterCore(Core::DeadEye) - deAimingPenalty); // drain outer deadeye core until empty
 								}
 
-								if (PLR.GetOuterCore(Core::Stamina) == 0) // if stamina outer core is empty 
+								if (PLR.GetOuterCore(Core::Stamina) == 0) // if stamina outer core is empty
 								{
 									if (!PLR.IsCoreOverpowered(Core::Stamina)) // and main core is not overpowered
 									{
@@ -911,7 +854,7 @@ int main()
 									}
 								}
 
-								if (PLR.GetOuterCore(Core::DeadEye) == 0) // if stamina outer core is empty 
+								if (PLR.GetOuterCore(Core::DeadEye) == 0) // if stamina outer core is empty
 								{
 									if (!PLR.IsCoreOverpowered(Core::DeadEye)) // and main core is not overpowered
 									{
@@ -929,13 +872,13 @@ int main()
 						PED::SET_PED_RESET_FLAG(playerPed, 139, false); // enable stamina outer core regen
 					}
 
-					aimTimer = getGameTimer() + aimMs;
+					aimTimer = World::GetGameTimer() + aimMs;
 				}
 			}
 			// END AIMING PENALTY +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 			// START CORE DRAIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			if (getGameTimer() > depletionTimer) // every time game timer has pass the timeMs mark, set main core drain values accordingly, called every depletionTimer
+			if (World::GetGameTimer() > depletionTimer) // every time game timer has pass the timeMs mark, set main core drain values accordingly, called every depletionTimer
 			{
 				// dynamic drain values according to time of day
 				float drainModifier = getTimeOfDayModifier();
@@ -1019,10 +962,10 @@ int main()
 					(PLR.GetHorseCore(Core::Stamina) - horseStDrain <= 0) ? PLR.SetHorseCore(Core::Stamina, 0) : PLR.SetHorseCore(Core::Stamina, PLR.GetHorseCore(Core::Stamina) - horseStDrain);
 				}
 
-				depletionTimer = getGameTimer() + depletionMs;
+				depletionTimer = World::GetGameTimer() + depletionMs;
 			}
 
-			if (getGameTimer() > healthTimer) // every time game timer has pass the healthMs mark, set outer core drain values accordingly, called every healthTimer
+			if (World::GetGameTimer() > healthTimer) // every time game timer has pass the healthMs mark, set outer core drain values accordingly, called every healthTimer
 			{
 				if (!PLR.IsIdle() && PLR.IsInControl() && (!PLR.IsActiveInScenario() || !PLR.IsUsingAnyScenario())) // returns TRUE if player is not idle and in control and not active in scenario or using any
 				{
@@ -1031,19 +974,19 @@ int main()
 						playerHealthRegen = 0.0f;
 						(ENTITY::GET_ENTITY_HEALTH(playerPed) - playerHpPercentageDrain <= 1) ? ENTITY::_SET_ENTITY_HEALTH(playerPed, 1, 1) : ENTITY::_SET_ENTITY_HEALTH(playerPed, (ENTITY::GET_ENTITY_HEALTH(playerPed) - playerHpPercentageDrain), 0); // health outer core penalty for main core being empty
 					}
-					 
+
 					if (PLR.IsMounted() && PLR.GetHorseCore(Core::Health) <= 0 && !PLR.IsHorseCoreOverpowered(Core::Health)) // only if player is on mount
 					{
 						(ENTITY::GET_ENTITY_HEALTH(horsePed) - horseHpPercentageDrain <= 1) ? ENTITY::_SET_ENTITY_HEALTH(horsePed, 1, 1) : ENTITY::_SET_ENTITY_HEALTH(horsePed, (ENTITY::GET_ENTITY_HEALTH(horsePed) - horseHpPercentageDrain), 0);
 					}
 				}
-				healthTimer = getGameTimer() + healthMs;
+				healthTimer = World::GetGameTimer() + healthMs;
 			}
 
 			(PLR.GetCore(Core::Stamina) <= 0) ? PED::SET_PED_RESET_FLAG(playerPed, 139, true) : PED::SET_PED_RESET_FLAG(playerPed, 139, false); // if main stamina core is empty, no stamina regen
 
 			(PLR.IsCoreOverpowered(Core::DeadEye) || PLR.IsOuterCoreOverpowered(Core::DeadEye)) ? PED::SET_PED_ACCURACY(playerPed, 100) : PED::SET_PED_ACCURACY(playerPed, PLR.GetCore(Core::DeadEye)); // if deadeye main or outer core is overpowered, accuracy is 100%, else, ties to deadeye main core value
-			
+
 			(PLR.IsInCombat() && (!PLR.IsMounted() || !PLR.IsInCover())) ? PLR.SetHealthRegen(0.0f) : PLR.SetHealthRegen(playerHealthRegen); // no regen in combat unless on mount or in cover
 			// END CORE DRAIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1058,7 +1001,7 @@ int main()
 				isInMission = false;
 				LOGGER.Write("hooked player is not in mission, penalty on death enabled");
 			}
-			
+
 			if (penaltyOnDeath && !isInMission)
 			{
 				bool coresPenalty;
@@ -1073,7 +1016,7 @@ int main()
 					coresPenalty = true;
 					LOGGER.Write("hooked player is not moving, just died, not playing and !coresPenalty");
 				}
-				
+
 				if (coresPenalty && !deathPenalty)
 				{
 					if (loseHandWeapon) // lose weapon on hand
@@ -1196,7 +1139,7 @@ int main()
 					ENTITY::_SET_ENTITY_HEALTH(playerPed, 1, 0);
 					PLR.SetOuterCore(Core::Stamina, 1);
 					PLR.SetOuterCore(Core::DeadEye, 1);
-					coresPenalty = (getGameTimer() - deathTime > 15000) ? false : true;
+					coresPenalty = (World::GetGameTimer() - deathTime > 15000) ? false : true;
 				}
 
 				if (PLR.IsMoving() && PLR.IsAlive() && PLR.IsPlaying() && !coresPenalty && deathPenalty)
@@ -1215,27 +1158,27 @@ int main()
 		{
 			if (Math::HealthAsPercentage(playerPed) > 80 && Math::HealthAsPercentage(playerPed) <= 100)
 			{
-				setAIDamageModifer(aiDamageHighest * 0.5f, aiDamageHighest);
+				World::SetAIDamageModifier(aiDamageHighest * 0.5f, aiDamageHighest);
 				PLR.SetDamageModifier(playerDamageLowest * 0.5f, playerDamageLowest);
 			}
 			else if (Math::HealthAsPercentage(playerPed) > 60 && Math::HealthAsPercentage(playerPed) <= 80)
 			{
-				setAIDamageModifer(aiDamageHigh * 0.5f, aiDamageHigh);
+				World::SetAIDamageModifier(aiDamageHigh * 0.5f, aiDamageHigh);
 				PLR.SetDamageModifier(playerDamageLow * 0.5f, playerDamageLow);
 			}
 			else if (Math::HealthAsPercentage(playerPed) > 40 && Math::HealthAsPercentage(playerPed) <= 60)
 			{
-				setAIDamageModifer(aiDamageMedium * 0.5f, aiDamageMedium);
+				World::SetAIDamageModifier(aiDamageMedium * 0.5f, aiDamageMedium);
 				PLR.SetDamageModifier(playerDamageMedium * 0.5f, playerDamageMedium);
 			}
 			else if (Math::HealthAsPercentage(playerPed) > 20 && Math::HealthAsPercentage(playerPed) <= 40)
 			{
-				setAIDamageModifer(aiDamageLow * 0.5f, aiDamageLow);
+				World::SetAIDamageModifier(aiDamageLow * 0.5f, aiDamageLow);
 				PLR.SetDamageModifier(playerDamageHigh * 0.5f, playerDamageHigh);
 			}
 			else if (Math::HealthAsPercentage(playerPed) > 0 && Math::HealthAsPercentage(playerPed) <= 20)
 			{
-				setAIDamageModifer(aiDamageLowest * 0.5f, aiDamageLowest);
+				World::SetAIDamageModifier(aiDamageLowest * 0.5f, aiDamageLowest);
 				PLR.SetDamageModifier(playerDamageHighest * 0.5f, playerDamageHighest);
 			}
 		}
@@ -1293,9 +1236,9 @@ int main()
 					{
 						if (ENTITY::HAS_ENTITY_BEEN_DAMAGED_BY_ANY_PED(peds[i]) || ENTITY::HAS_ENTITY_BEEN_DAMAGED_BY_ANY_OBJECT(peds[i]))
 						{
-							aiHealMap[peds[i]] = getGameTimer() + aiHealMs; // time ai is damaged
+							aiHealMap[peds[i]] = World::GetGameTimer() + aiHealMs; // time ai is damaged
 
-							if (getGameTimer() - aiHealMap[peds[i]] >= aiHealMs) // current game time minus time ai is damaged more than aiHealMs
+							if (World::GetGameTimer() - aiHealMap[peds[i]] >= aiHealMs) // current game time minus time ai is damaged more than aiHealMs
 							{
 								if (PED::IS_PED_IN_MELEE_COMBAT(peds[i])) // melee combat check so they can actually be taken down, still heal tho
 								{
