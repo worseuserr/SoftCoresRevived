@@ -48,6 +48,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <None Include="config\oldconfig.ini" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>

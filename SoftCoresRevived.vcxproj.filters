@@ -46,6 +46,7 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="README.md" />
+    <None Include="config\oldconfig.ini" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="sdk\lib\ScriptHookRDR2.lib" />
