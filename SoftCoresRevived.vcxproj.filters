@@ -26,6 +26,7 @@
     <ClInclude Include="include\SoftCores\world.h" />
     <ClInclude Include="include\SoftCores\ui.h" />
     <ClInclude Include="include\SoftCores\temperature.h" />
+    <ClInclude Include="include\SoftCores\config.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\keyboard.cpp" />
@@ -50,6 +51,6 @@
     <Library Include="sdk\lib\ScriptHookRDR2.lib" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="config\SoftCores.ini" />
+    <CopyFileToFolders Include="config\SoftCoresRevived.ini" />
   </ItemGroup>
 </Project>

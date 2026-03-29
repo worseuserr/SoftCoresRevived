@@ -17,17 +17,19 @@
 #include "file.h"
 #include "world.h"
 #include "ui.h"
+#include "config.h"
 #include "temperature.h"
 
 using namespace std;
 using namespace SoftCores;
 
 // logging functions
-const char* const LOG_FILE = "SoftCores.log";
-const char *const INI_FILE = "SoftCores.ini";
+const char *const LOG_FILE = "SoftCoresRevived.log";
+const char *const INI_FILE = "SoftCoresRevived.ini";
 
 static Logger	LOGGER(LOG_FILE);
 static Plr		PLR;
+static Config	CONFIG(INI_FILE);
 
 // currently unused
 //static void showSubtitle(const char* text)
