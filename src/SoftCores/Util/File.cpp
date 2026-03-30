@@ -24,3 +24,10 @@ bool File::Exists(const char *filename)
 	std::ifstream infile(filename);
 	return (infile.good());
 }
+
+template<typename T>
+File& File::operator<<(const T& data)
+{
+	file_ << data;
+	return (*this);
+}

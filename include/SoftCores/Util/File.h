@@ -12,11 +12,7 @@ namespace SoftCores::Util
 		void		Close();
 		bool		IsOpen();
 		static bool	Exists(const char *filename);
-		template <typename T>
-		File& operator<<(const T& data)
-		{
-			file_ << data;
-			return *this;
-		}
+		template	<typename T>
+		File&		operator<<(const T& data);
 	};
 }
