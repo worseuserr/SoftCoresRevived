@@ -131,8 +131,6 @@ namespace SoftCores
 		// Toggles for additional immersive mod features.
 		ImmersionConfig				Immersion;
 
-		// Feature specific configs.
-
 		// Config for player core depletion.
 		CoreDepletionConfig			PlayerDepletion;
 

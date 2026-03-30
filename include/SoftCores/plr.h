@@ -1,5 +1,5 @@
 #pragma once
-#include "enums.h"
+#include <SoftCores/Enums.h>
 
 namespace SoftCores
 {

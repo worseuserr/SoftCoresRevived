@@ -1,6 +1,6 @@
-#include "weapons.h"
-#include "natives.h"
-#include <keys.h>
+#include <SoftCores/Weapons.h>
+#include <Sdk/natives.h>
+#include <SoftCores/Keys.h>
 
 using namespace SoftCores;
 

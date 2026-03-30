@@ -7,19 +7,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\keyboard.h" />
-    <ClInclude Include="include\script.h" />
-    <ClInclude Include="include\SoftCores\config.h" />
-    <ClInclude Include="include\SoftCores\enums.h" />
-    <ClInclude Include="include\SoftCores\keys.h" />
-    <ClInclude Include="include\SoftCores\logger.h" />
-    <ClInclude Include="include\SoftCores\mathutil.h" />
-    <ClInclude Include="include\SoftCores\plr.h" />
-    <ClInclude Include="include\SoftCores\file.h" />
-    <ClInclude Include="include\SoftCores\temperature.h" />
-    <ClInclude Include="include\SoftCores\ui.h" />
-    <ClInclude Include="include\SoftCores\weapons.h" />
-    <ClInclude Include="include\SoftCores\world.h" />
+    <ClInclude Include="include\Keyboard.h" />
+    <ClInclude Include="include\Script.h" />
+    <ClInclude Include="include\SoftCores\Config.h" />
+    <ClInclude Include="include\SoftCores\Enums.h" />
+    <ClInclude Include="include\SoftCores\Keys.h" />
+    <ClInclude Include="include\SoftCores\Util\Logger.h" />
+    <ClInclude Include="include\SoftCores\Util\Math.h" />
+    <ClInclude Include="include\SoftCores\Plr.h" />
+    <ClInclude Include="include\SoftCores\Util\File.h" />
+    <ClInclude Include="include\SoftCores\Temperature.h" />
+    <ClInclude Include="include\SoftCores\UI.h" />
+    <ClInclude Include="include\SoftCores\Weapons.h" />
+    <ClInclude Include="include\SoftCores\World.h" />
     <ClInclude Include="sdk\inc\enums.h" />
     <ClInclude Include="sdk\inc\main.h" />
     <ClInclude Include="sdk\inc\nativeCaller.h" />
@@ -27,18 +27,18 @@
     <ClInclude Include="sdk\inc\types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\SoftCores\temperature.cpp" />
-    <ClCompile Include="src\SoftCores\ui.cpp" />
-    <ClCompile Include="src\SoftCores\weapons.cpp" />
-    <ClCompile Include="src\SoftCores\file.cpp" />
-    <ClCompile Include="src\SoftCores\keys.cpp" />
-    <ClCompile Include="src\SoftCores\logger.cpp" />
-    <ClCompile Include="src\SoftCores\mathutil.cpp" />
-    <ClCompile Include="src\SoftCores\plr.cpp" />
-    <ClCompile Include="src\keyboard.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\script.cpp" />
-    <ClCompile Include="src\SoftCores\world.cpp" />
+    <ClCompile Include="src\SoftCores\Temperature.cpp" />
+    <ClCompile Include="src\SoftCores\UI.cpp" />
+    <ClCompile Include="src\SoftCores\Weapon.cpp" />
+    <ClCompile Include="src\SoftCores\Util\File.cpp" />
+    <ClCompile Include="src\SoftCores\Keys.cpp" />
+    <ClCompile Include="src\SoftCores\Util\Logger.cpp" />
+    <ClCompile Include="src\SoftCores\Util\Math.cpp" />
+    <ClCompile Include="src\SoftCores\Plr.cpp" />
+    <ClCompile Include="src\Keyboard.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Script.cpp" />
+    <ClCompile Include="src\SoftCores\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -81,7 +81,7 @@
     <TargetExt>.asi</TargetExt>
     <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>tmp\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)include\SoftCores;$(ProjectDir)sdk\inc</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <ClangTidyExtraArgs>-Wno-pragma-once-outside-header;-Wno-unused-function</ClangTidyExtraArgs>
   </PropertyGroup>
@@ -93,9 +93,11 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;NativeTrainer_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)sdk\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

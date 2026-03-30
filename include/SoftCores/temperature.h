@@ -1,13 +1,10 @@
 #pragma once
-#include <plr.h>
+#include <SoftCores/Plr.h>
 
-namespace SoftCores
+// Temperature functions.
+namespace SoftCores::Temp
 {
-	// Temperature.
-	namespace Temp
-	{
-		float GetTimeOfDayModifier();
-		float GetClothingTemperaturePointsRequired(Plr plr);
-		// arbitrary values for temperature points needed for player clothing to match
-	}
+	float GetTimeOfDayModifier();
+	float GetClothingTemperaturePointsRequired(Plr plr);
+	// arbitrary values for temperature points needed for player clothing to match
 }

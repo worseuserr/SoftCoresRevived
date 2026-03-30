@@ -1,7 +1,7 @@
-#include "mathutil.h"
-#include "natives.h"
+#include <SoftCores/Util/Math.h>
+#include <Sdk/natives.h>
 
-using namespace SoftCores;
+using namespace SoftCores::Util;
 
 
 int Math::Round(float x)

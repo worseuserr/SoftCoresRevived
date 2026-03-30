@@ -1,27 +1,27 @@
 #include <sstream>
 #include <map>
-#include <keys.h>
+#include <SoftCores/Keys.h>
 #include <string.h>
 #include <Windows.h>
 #include <cmath>
 #include <cstdlib>
-#include <enums.h>
-#include <main.h>
-#include <natives.h>
-#include <types.h>
-#include "script.h"
-#include "weapons.h"
-#include "logger.h"
-#include "plr.h"
-#include "mathutil.h"
-#include "file.h"
-#include "world.h"
-#include "ui.h"
-#include "config.h"
-#include "temperature.h"
+#include <Sdk/main.h>
+#include <Sdk/natives.h>
+#include <Sdk/types.h>
+#include "Script.h"
+#include "SoftCores/Weapons.h"
+#include <SoftCores/Util/Logger.h>
+#include <SoftCores/Plr.h>
+#include <SoftCores/Util/Math.h>
+#include <SoftCores/Util/File.h>
+#include <SoftCores/World.h>
+#include <SoftCores/UI.h>
+#include <SoftCores/Config.h>
+#include <SoftCores/Temperature.h>
 
 using namespace std;
 using namespace SoftCores;
+using namespace SoftCores::Util;
 
 // logging functions
 const char *const LOG_FILE = "SoftCoresRevived.log";
@@ -29,7 +29,7 @@ const char *const INI_FILE = "SoftCoresRevived.ini";
 
 static Logger	LOGGER(LOG_FILE);
 static Plr		PLR;
-static Config	CONFIG(INI_FILE);
+//static Config	CONFIG(INI_FILE);
 
 // currently unused
 //static void showSubtitle(const char* text)
@@ -40,7 +40,6 @@ static Config	CONFIG(INI_FILE);
 //}
 
 // prompt functions
-
 
 int main()
 {
@@ -356,18 +355,24 @@ int main()
 		// START OF BATH DEADEYE ONLY PART ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		if (bathDeadEyeOnly)
 		{
-			if (!PLR.IsBathing()) // hook bath here & get last health, stamina core
+			static bool isBathing = false;
+
+			if (PLR.IsBathing() && !isBathing) // hook bath here & get last health, stamina core
 			{
 				lastHealthCore = PLR.GetCore(Core::Health);
 				lastStaminaCore = PLR.GetCore(Core::Stamina);
+				isBathing = true;
 				stringstream text;
 				text << "hooked player is bathing, lastHealthCore: " << lastHealthCore << " lastStaminaCore: " << lastStaminaCore;
 				LOGGER.Write(text.str().c_str());
 			}
-			else // keep setting player last health, stamina until player starts moving
+
+			if (isBathing) // keep setting player last health, stamina until player starts moving
 			{
 				PLR.SetCore(Core::Health, lastHealthCore);
 				PLR.SetCore(Core::Stamina, lastStaminaCore);
+
+				isBathing = (PLR.IsMoving()) ? false : true;
 			}
 		}
 		// END OF BATH DEADEYE ONLY PART ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -435,15 +440,14 @@ int main()
 			LOGGER.Write("hooked player is not playing");
 		}
 
-		bool isStoryPostFX;
+		static bool isStoryPostFX = false;
 
-
-		if (World::IsStoryFXPlaying())
+		if (World::IsStoryFXPlaying() && !isStoryPostFX)
 		{
 			isStoryPostFX = true;
 			LOGGER.Write("hooked isStoryPostFX running");
 		}
-		else if (!World::IsStoryFXPlaying())
+		else if (!World::IsStoryFXPlaying() && isStoryPostFX)
 		{
 			isStoryPostFX = false;
 			LOGGER.Write("hooked isStoryPostFX stopped");

@@ -1,5 +1,5 @@
-#include "keys.h"
-#include "natives.h"
+#include <SoftCores/Keys.h>
+#include <Sdk/natives.h>
 
 using namespace SoftCores::Keys;
 

@@ -1,5 +1,5 @@
-#include "ui.h"
-#include <natives.h>
+#include <SoftCores/UI.h>
+#include <Sdk/natives.h>
 
 using namespace SoftCores;
 

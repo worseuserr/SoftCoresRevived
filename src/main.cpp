@@ -4,9 +4,9 @@
 			(C) Alexander Blade 2019
 */
 
-#include "main.h"
-#include "script.h"
-#include "keyboard.h"
+#include <Sdk/main.h>
+#include <Script.h>
+#include <Keyboard.h>
 
 BOOL APIENTRY DllMain(HMODULE hInstance, DWORD reason, LPVOID lpReserved)
 {

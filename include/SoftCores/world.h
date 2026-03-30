@@ -1,15 +1,12 @@
 #pragma once
-#include <types.h>
+#include <Sdk/types.h>
 
-namespace SoftCores
+namespace SoftCores::World
 {
-	namespace World
-	{
-		float	IsRaining();
-		float	IsSnowing();
-		void	SetAIDamageModifier(float melee, float weapon);
-		bool	IsPedFriendly(Ped ped);
-		bool	IsStoryFXPlaying();
-		int		GetGameTimer();
-	}
+	float	IsRaining();
+	float	IsSnowing();
+	void	SetAIDamageModifier(float melee, float weapon);
+	bool	IsPedFriendly(Ped ped);
+	bool	IsStoryFXPlaying();
+	int		GetGameTimer();
 }

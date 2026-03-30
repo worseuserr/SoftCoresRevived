@@ -1,8 +1,9 @@
-#include "temperature.h"
-#include <natives.h>
-#include "mathutil.h"
+#include <SoftCores/Temperature.h>
+#include <Sdk/natives.h>
+#include <SoftCores/Util/Math.h>
 
 using namespace SoftCores;
+using namespace SoftCores::Util;
 
 float Temp::GetTimeOfDayModifier()
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include <types.h>
+#include <Sdk/types.h>
 
 namespace SoftCores {
 	enum class Core {

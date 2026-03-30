@@ -1,9 +1,10 @@
-#include "plr.h"
-#include "keys.h"
-#include "mathutil.h"
-#include "natives.h"
+#include <SoftCores/Plr.h>
+#include <SoftCores/Keys.h>
+#include <SoftCores/Util/Math.h>
+#include <Sdk/natives.h>
 
 using namespace SoftCores;
+using namespace SoftCores::Util;
 using namespace Keys;
 
 int Plr::GetMaxOuterCore(Core core)

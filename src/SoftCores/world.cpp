@@ -1,6 +1,6 @@
-#include "world.h"
-#include <keys.h>
-#include <natives.h>
+#include <SoftCores/World.h>
+#include <SoftCores/Keys.h>
+#include <Sdk/natives.h>
 
 using namespace SoftCores;
 

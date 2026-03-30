@@ -1,8 +1,8 @@
-#include "file.h"
-#include "logger.h"
+#include <SoftCores/Util/File.h>
+#include <SoftCores/Util/Logger.h>
 #include <sstream>
 
-using namespace SoftCores;
+using namespace SoftCores::Util;
 
 Logger::Logger(const char *outputFilename)
 {

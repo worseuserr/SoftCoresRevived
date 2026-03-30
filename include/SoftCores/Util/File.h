@@ -1,7 +1,7 @@
 #pragma once
 #include <fstream>
 
-namespace SoftCores
+namespace SoftCores::Util
 {
 	class File
 	{

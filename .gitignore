@@ -341,3 +341,6 @@ healthchecksdb
 
 # Script hook SDK
 sdk/
+
+# Filters and user file
+*.vcxproj.*

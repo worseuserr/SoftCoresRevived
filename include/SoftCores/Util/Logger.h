@@ -1,7 +1,7 @@
 #pragma once
-#include "file.h"
+#include <SoftCores/Util/File.h>
 
-namespace SoftCores
+namespace SoftCores::Util
 {
 	class Logger
 	{

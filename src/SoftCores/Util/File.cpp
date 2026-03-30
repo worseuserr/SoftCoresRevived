@@ -1,7 +1,7 @@
-#include "file.h"
+#include <SoftCores/Util/File.h>
 #include <fstream>
 
-using namespace SoftCores;
+using namespace SoftCores::Util;
 
 
 void File::Open(const char *filename, std::ios_base::openmode mode)

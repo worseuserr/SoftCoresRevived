@@ -4,7 +4,7 @@
 			(C) Alexander Blade 2019
 */
 
-#include "keyboard.h"
+#include <Keyboard.h>
 
 const int KEYS_SIZE = 255;
 
