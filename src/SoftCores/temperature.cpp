@@ -21,22 +21,21 @@ float Temp::GetTimeOfDayModifier()
 }
 
 // arbitrary values for temperature points needed for player clothing to match
-float Temp::GetClothingTemperaturePointsRequired(Plr plr)
+float Temp::GetClothingTemperaturePointsRequired()
 {
 	float temperaturePoints[] = { -20.0f, -16.0f, -12.0f, -8.0f, -4.0f, 0.0f, 4.0f, 8.0f, 12.0f, 16.0f, 20.0f, 24.0f, 28.0f }; // based on a climate/temperature map by hopper on reddit https://i.redd.it/p6f6etiw7by11.jpg in celcius
-	int size = sizeof(temperaturePoints) / sizeof(temperaturePoints[0]);
 	float temp;
 
 	if (!MISC::_SHOULD_USE_METRIC_TEMPERATURE())
 	{
-		for (int i = 0; i < size; i++)
+		for (float & temperaturePoint : temperaturePoints)
 		{
-			temperaturePoints[i] = Math::CelciusToFarenheit(temperaturePoints[i]);
+			temperaturePoint = Math::CelciusToFarenheit(temperaturePoint);
 		}
 	}
 
-	temp = plr.GetSurroundingTemperature();
-	if (plr.GetSurroundingTemperature() < temperaturePoints[0]) // coldest
+	temp = Plr::GetSurroundingTemperature();
+	if (Plr::GetSurroundingTemperature() < temperaturePoints[0]) // coldest
 		return 9.0f;
 	else if (temp >= temperaturePoints[0] && temp < temperaturePoints[1])
 		return 8.5f;
@@ -66,4 +65,3 @@ float Temp::GetClothingTemperaturePointsRequired(Plr plr)
 		return 2.5f;
 	else return 0.0f;
 }
-

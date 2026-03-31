@@ -3,8 +3,8 @@
 
 namespace SoftCores::World
 {
-	float	IsRaining();
-	float	IsSnowing();
+	bool	IsRaining();
+	bool	IsSnowing();
 	void	SetAIDamageModifier(float melee, float weapon);
 	bool	IsPedFriendly(Ped ped);
 	bool	IsStoryFXPlaying();

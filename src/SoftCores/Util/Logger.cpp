@@ -13,13 +13,13 @@ Logger::Logger(const char *outputFilename)
 
 void Logger::Write(const char *message)
 {
-	tm					newtime;
+	tm					newtime{};
 	time_t				now;
 	std::stringstream	text;
 
 	now = time(nullptr);
 	if (localtime_s(&newtime, &now) != 0)
-		throw 1;
+		throw (std::exception());
 	file_.Open(outputFile_, std::ios_base::app);
 	if (file_.IsOpen())
 	{

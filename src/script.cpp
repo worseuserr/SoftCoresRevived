@@ -1,7 +1,7 @@
 #include <sstream>
 #include <map>
 #include <SoftCores/Keys.h>
-#include <string.h>
+#include <string>
 #include <Windows.h>
 #include <cmath>
 #include <cstdlib>
@@ -18,18 +18,19 @@
 #include <SoftCores/UI.h>
 #include <SoftCores/Config.h>
 #include <SoftCores/Temperature.h>
+#include <memory>
 
 using namespace std;
 using namespace SoftCores;
 using namespace SoftCores::Util;
 
-// logging functions
-const char *const LOG_FILE = "SoftCoresRevived.log";
-const char *const INI_FILE = "SoftCoresRevived.ini";
+const char *const	LOG_FILE = "SoftCoresRevived.log";
+const char *const	INI_FILE = "SoftCoresRevived.ini";
 
-static Logger	LOGGER(LOG_FILE);
-static Plr		PLR;
-//static Config	CONFIG(INI_FILE);
+static Logger				LOGGER(LOG_FILE);
+static Plr					PLR;
+// static unique_ptr<Config>	CONFIG = make_unique<Config>(INI_FILE);
+// TODO: error handling
 
 // currently unused
 //static void showSubtitle(const char* text)
@@ -100,13 +101,13 @@ int main()
 	// timers
 	int depletionMs = GetPrivateProfileInt("TIMERS", "CORE_DEPLETION", 120000, ".\\SoftCores.ini");
 	int healthMs = GetPrivateProfileInt("TIMERS", "HEALTH_PENALTY", 8000, ".\\SoftCores.ini");
-	int temperatureMs = GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini");
+	unsigned int temperatureMs = GetPrivateProfileInt("TIMERS", "TEMPERATURE_PENALTY", 8000, ".\\SoftCores.ini");
 	int aiHealMs = GetPrivateProfileInt("TIMERS", "AI_HEALTH_REGEN", 5000, ".\\SoftCores.ini");
 	int aimMs = GetPrivateProfileInt("TIMERS", "AIMING_DEPLETION", 500, ".\\SoftCores.ini");
 
 	int depletionTimer = World::GetGameTimer() + depletionMs;
 	int healthTimer = World::GetGameTimer() + healthMs;
-	int temperatureTimer = World::GetGameTimer() + temperatureMs;
+	unsigned int temperatureTimer = World::GetGameTimer() + temperatureMs;
 	int aimTimer = World::GetGameTimer() + aimMs;
 
 	// core modifiers
@@ -455,7 +456,7 @@ int main()
 
 		if ((isPlaying && !isStoryPostFX) || (ENTITY::DOES_ENTITY_EXIST(horsePed) && !ENTITY::IS_ENTITY_DEAD(horsePed))) // do this first else will crash on new game, also disable the core part of the mod while in storyPostFX
 		{
-			float playerHealthRegen = (float)GetPrivateProfileInt("CORE_MODIFIER", "PLAYER_HEALTH_REGEN", 50, ".\\SoftCores.ini") / 100.0f;
+			float playerHealthRegen = static_cast<float>(GetPrivateProfileInt("CORE_MODIFIER", "PLAYER_HEALTH_REGEN", 50, ".\\SoftCores.ini")) / 100.0f;
 			int playerHpPercentageDrain = GetPrivateProfileInt("CORE_MODIFIER", "PLAYER_HEALTH_PENALTY", 4, ".\\SoftCores.ini") * ENTITY::GET_ENTITY_MAX_HEALTH(playerPed, 0) / 100;
 			int horseHpPercentageDrain = GetPrivateProfileInt("CORE_MODIFIER", "HORSE_HEALTH_PENALTY", 4, ".\\SoftCores.ini") * ENTITY::GET_ENTITY_MAX_HEALTH(horsePed, 0) / 100;
 
@@ -472,10 +473,10 @@ int main()
 				bool isNearFireModifier;
 				isNearFireModifier = false;
 
-				Vector3 nearestFire;
+				Vector3 nearestFire = Vector3();
 				Vector3 playerPos = ENTITY::GET_ENTITY_COORDS(playerPed, true, true);
 
-				float fireModifier = (float)GetPrivateProfileInt("TEMPERATURE_MODIFIER", "FIRE_MODIFIER", 50, ".\\SoftCores.ini") / 100.0f;
+				float fireModifier = static_cast<float>(GetPrivateProfileInt("TEMPERATURE_MODIFIER", "FIRE_MODIFIER", 50, ".\\SoftCores.ini")) / 100.0f;
 
 				if (FIRE::GET_CLOSEST_FIRE_POS(&nearestFire, playerPos.x, playerPos.y, playerPos.z))
 				{
@@ -612,7 +613,7 @@ int main()
 					if (isSnowingModifier) pointsModifier = pointsModifier - snowingModifier;  // negative point value for coldness
 				}
 
-				pointsDifferences = PLR.GetClothingTemperaturePoints() - Temp::GetClothingTemperaturePointsRequired(PLR) + pointsModifier; // stack with pointsModifer which accumulates +ve points for hotness and -ve points for coldness
+				pointsDifferences = PLR.GetClothingTemperaturePoints() - Temp::GetClothingTemperaturePointsRequired() + pointsModifier; // stack with pointsModifer which accumulates +ve points for hotness and -ve points for coldness
 
 				const char* spriteModifier;
 
@@ -652,7 +653,7 @@ int main()
 						drawSprite = true;
 
 						stringstream text;
-						text << "hooked player is showing sprite, spriteModifier: " << spriteModifier << " overall clothing points: " << PLR.GetClothingTemperaturePoints() << " needs: " << Temp::GetClothingTemperaturePointsRequired(PLR) + pointsModifier;
+						text << "hooked player is showing sprite, spriteModifier: " << spriteModifier << " overall clothing points: " << PLR.GetClothingTemperaturePoints() << " needs: " << Temp::GetClothingTemperaturePointsRequired() + pointsModifier;
 						LOGGER.Write(text.str().c_str());
 					}
 
@@ -662,7 +663,7 @@ int main()
 						{
 							TXD::REQUEST_STREAMED_TEXTURE_DICT("RPG_TEXTURES", false);
 						}
-						else if (TXD::_HAS_STREAMED_TXD_LOADED(Keys::GetHash("RPG_TEXTURES")) && strcmp(spriteModifier, "RPG_WARM"))
+						else if (TXD::_HAS_STREAMED_TXD_LOADED(Keys::GetHash("RPG_TEXTURES")) && strcmp(spriteModifier, "RPG_WARM") != 0)
 						{
 							GRAPHICS::DRAW_SPRITE("RPG_TEXTURES", spriteModifier, 0.25f, 0.9f, 0.045f, 0.07f, 0.0f, 240, 240, 240, 180, false);
 						}

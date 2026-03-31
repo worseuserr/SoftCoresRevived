@@ -4,12 +4,12 @@
 
 using namespace SoftCores;
 
-float	World::IsRaining()
+bool	World::IsRaining()
 {
 	return (MISC::GET_RAIN_LEVEL() > 0.0f);
 }
 
-float	World::IsSnowing()
+bool	World::IsSnowing()
 {
 	return (MISC::GET_SNOW_LEVEL() > 0.0f);
 }

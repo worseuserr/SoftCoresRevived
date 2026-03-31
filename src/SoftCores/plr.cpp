@@ -202,11 +202,10 @@ bool Plr::IsInSleepScenario()
 	{
 		if (PED::_IS_PED_USING_SCENARIO_HASH(PLAYER::PLAYER_PED_ID(), scenario.Hash()) && TASK::_GET_SCENARIO_POINT_PED_IS_USING(PLAYER::PLAYER_PED_ID(), 1) == -1)
 		{
-			return true;
-			break;
+			return (true);
 		}
 	}
-	return false;
+	return (false);
 }
 
 float Plr::GetClothingTemperaturePoints()
@@ -240,4 +239,3 @@ float Plr::GetSurroundingTemperature()
 
 	return (MISC::_SHOULD_USE_METRIC_TEMPERATURE()) ? temperature: Math::CelciusToFarenheit(temperature);
 }
-

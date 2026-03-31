@@ -11,10 +11,10 @@ namespace SoftCores::Keys
 	public:
 		std::string	keyString;
 
-		Key(std::string str);
+		Key(const std::string &str);
 		Key(const char *str);
-		Hash		Hash();
-		const char	*ToCString();
+		Hash		Hash() const;
+		const char	*ToCString() const;
 	};
 
 	Hash	GetHash(const char *str);

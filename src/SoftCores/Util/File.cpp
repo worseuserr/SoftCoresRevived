@@ -14,20 +14,13 @@ void File::Close()
 	file_.close();
 }
 
-bool File::IsOpen()
+bool File::IsOpen() const
 {
 	return (file_.is_open());
 }
 
 bool File::Exists(const char *filename)
 {
-	std::ifstream infile(filename);
-	return (infile.good());
-}
-
-template<typename T>
-File& File::operator<<(const T& data)
-{
-	file_ << data;
-	return (*this);
+	const std::ifstream	input(filename);
+	return (input.good());
 }

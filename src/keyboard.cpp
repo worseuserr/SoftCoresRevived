@@ -1,12 +1,12 @@
 /*
-	THIS FILE IS A PART OF RDR 2 SCRIPT HOOK SDK
+THIS FILE IS A PART OF RDR 2 SCRIPT HOOK SDK
 				http://dev-c.com
 			(C) Alexander Blade 2019
 */
 
 #include <Keyboard.h>
 
-const int KEYS_SIZE = 255;
+constexpr int KEYS_SIZE = 255;
 
 struct {
 	DWORD time;
@@ -26,7 +26,7 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 	}
 }
 
-const int NOW_PERIOD = 100, MAX_DOWN = 5000, MAX_DOWN_LONG = 30000; // ms
+constexpr int NOW_PERIOD = 100, MAX_DOWN = 5000, MAX_DOWN_LONG = 30000; // ms
 
 bool IsKeyDown(DWORD key)
 {

@@ -1,6 +1,7 @@
 #include <SoftCores/Weapons.h>
 #include <Sdk/natives.h>
 #include <SoftCores/Keys.h>
+#include <Sdk/types.h>
 
 using namespace SoftCores;
 
