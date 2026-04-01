@@ -1,5 +1,6 @@
 #include "SoftCores/Config.h"
 #include "SoftCores/Enums.h"
+#include <cwctype>
 
 using namespace SoftCores;
 
@@ -47,12 +48,15 @@ bool Config::GetConfigBool(const std::wstring &section, const std::wstring &key,
 {
 	constexpr unsigned char	buffSize = 32;
 	wchar_t					buff[buffSize]{};
+	unsigned char			i;
 
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
 	LOGGER->Write((std::wstring(
 		L"INI value for key \'") + key + L"\' = [" + buff + L"]"
 		).c_str());
-	return (std::wstring(buff) == L"true" || std::wstring(buff) == L"True");
+	for (i = 0; i <= buffSize || !buff[i]; i++)
+		buff[i] = std::towlower(buff[i]);
+	return (std::wstring(buff) == L"true");
 }
 
 Config::Config(const std::wstring &filename, Util::Logger &logger)
