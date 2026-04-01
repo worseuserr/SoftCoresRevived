@@ -9,9 +9,9 @@ unsigned int Config::GetConfigUInt(const std::wstring &section, const std::wstri
 	wchar_t					buff[buffSize]{};
 
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
-	LOGGER->Write(L"INI value");
-	LOGGER->Write(key.c_str());
-	LOGGER->Write(buff);
+	LOGGER->Write((std::wstring(
+		L"INI value for key \'") + key + L"\' = [" + buff + L"]"
+		).c_str());
 	try
 	{
 		return (static_cast<unsigned int>(std::stol(buff)));
@@ -29,9 +29,9 @@ float Config::GetConfigFloat(const std::wstring &section, const std::wstring &ke
 	wchar_t					buff[buffSize]{};
 
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
-	LOGGER->Write(L"INI value");
-	LOGGER->Write(key.c_str());
-	LOGGER->Write(buff);
+	LOGGER->Write((std::wstring(
+		L"INI value for key \'") + key + L"\' = [" + buff + L"]"
+		).c_str());
 	try
 	{
 		return (stof(std::wstring(buff)));
@@ -49,10 +49,10 @@ bool Config::GetConfigBool(const std::wstring &section, const std::wstring &key,
 	wchar_t					buff[buffSize]{};
 
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
-	LOGGER->Write(L"INI value");
-	LOGGER->Write(key.c_str());
-	LOGGER->Write(buff);
-	return (std::wstring(buff) == L"true");
+	LOGGER->Write((std::wstring(
+		L"INI value for key \'") + key + L"\' = [" + buff + L"]"
+		).c_str());
+	return (std::wstring(buff) == L"true" || std::wstring(buff) == L"True");
 }
 
 Config::Config(const std::wstring &filename, Util::Logger &logger)
