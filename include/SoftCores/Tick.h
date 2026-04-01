@@ -8,13 +8,12 @@ namespace SoftCores
 {
 	class	Tick
 	{
-	private:
 		static bool	LoopActive;
 		static void	Loop();
 	public:
 		// value: deltaTime
-		static Event<Tick, float>	OnTick;
-		static void					StartLoop();
-		static void					StopLoop();
+		static Event<NO_SENDER, float>	OnTick;
+		static void						StartLoop();
+		static void						StopLoop();
 	};
 }
