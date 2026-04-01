@@ -1,4 +1,3 @@
-#include <iostream>
 #include "SoftCores/Config.h"
 #include "SoftCores/Enums.h"
 
@@ -7,9 +6,8 @@ using namespace SoftCores;
 unsigned int Config::GetConfigUInt(const std::wstring &section, const std::wstring &key, const std::wstring &def) const
 {
 	constexpr unsigned char	buffSize = 32;
-	static wchar_t			buff[buffSize];
+	wchar_t					buff[buffSize]{};
 
-	memset(&buff, L'\0', sizeof(buff));
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
 	LOGGER->Write(L"INI value");
 	LOGGER->Write(key.c_str());
@@ -28,9 +26,8 @@ unsigned int Config::GetConfigUInt(const std::wstring &section, const std::wstri
 float Config::GetConfigFloat(const std::wstring &section, const std::wstring &key, const std::wstring &def) const
 {
 	constexpr unsigned char	buffSize = 32;
-	static wchar_t			buff[buffSize];
+	wchar_t					buff[buffSize]{};
 
-	memset(&buff, L'\0', sizeof(buff));
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
 	LOGGER->Write(L"INI value");
 	LOGGER->Write(key.c_str());
@@ -49,9 +46,8 @@ float Config::GetConfigFloat(const std::wstring &section, const std::wstring &ke
 bool Config::GetConfigBool(const std::wstring &section, const std::wstring &key, const std::wstring &def) const
 {
 	constexpr unsigned char	buffSize = 32;
-	static wchar_t			buff[buffSize];
+	wchar_t					buff[buffSize]{};
 
-	memset(&buff, L'\0', sizeof(buff));
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
 	LOGGER->Write(L"INI value");
 	LOGGER->Write(key.c_str());
@@ -73,6 +69,7 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 
 	LOGGER = &logger;
 	File = filename;
+	// Default floats only have 1 decimal to identify them in the log.
 	AdvancedLoggingEnabled = GetConfigBool(DebugSect, L"DebugAdvancedLogging", L"false");
 	FX = {
 		.Enabled =		GetConfigBool(FXSect, L"FXOverrideEnabled", L"true"),
@@ -100,29 +97,34 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	};
 
 	PlayerDepletion = {
-		.Enabled =				GetConfigBool(CoreDepSect, L"CoreDepletion", L"true"),
-		.NaturalEnabled =		GetConfigBool(CoreDepSect, L"NaturalCoreDepletionEnabled", L"true"),
-		.TemperatureEnabled =	GetConfigBool(CoreDepSect, L"TemperatureMechanics", L"true"),
-		.BleedoutEnabled =		GetConfigBool(CoreDepSect, L"HealthCoreEmptyBleedout", L"true"),
-		.AimStaminaEnabled =	GetConfigBool(CoreDepSect, L"AimingStaminaPenalty", L"false"),
-		.AimDeadeyeEnabled =	GetConfigBool(CoreDepSect, L"AimingDeadeyePenalty", L"false"),
-		.Natural =				GetConfigFloat(CoreDepSect, L"NaturalCoreDepletion", L"1.0"),
-		.Health =				GetConfigFloat(CoreDepSect, L"HealthCoreDepletion", L"0.9"),
-		.Stamina =				GetConfigFloat(CoreDepSect, L"StaminaCoreDepletion", L"1.0"),
-		.Deadeye =				GetConfigFloat(CoreDepSect, L"DeadeyeCoreDepletion", L"0.7"),
-		.ExtremeTemperature =	GetConfigFloat(CoreDepSect, L"ExtremeTemperatureDepletion", L"1.1"),
-		.HealthCoreEmpty =		GetConfigFloat(CoreDepSect, L"HealthCoreEmptyDepletion", L"2.0"),
-		.HealthCoreBleedout =	GetConfigFloat(CoreDepSect, L"HealthCoreBleedoutRate", L"1.0"),
-		.AimStamina =			GetConfigFloat(CoreDepSect, L"AimingStaminaDepletion", L"1.0"),
-		.AimDeadeye =			GetConfigFloat(CoreDepSect, L"AimingDeadeyeDepletion", L"1.0")
+		.Enabled =						GetConfigBool(CoreDepSect, L"CoreDepletion", L"true"),
+		.NaturalEnabled =				GetConfigBool(CoreDepSect, L"NaturalCoreDepletion", L"true"),
+		.TemperatureEnabled =			GetConfigBool(CoreDepSect, L"TemperatureDepletion", L"true"),
+		.HealthCoreEmptyEnabled =		GetConfigBool(CoreDepSect, L"HealthCoreEmptyDepletion", L"true"),
+		.HealthCoreEmptyDrainEnabled =	GetConfigBool(CoreDepSect, L"HealthCoreEmptyDrain", L"true"),
+		.AimStaminaDrainEnabled =		GetConfigBool(CoreDepSect, L"AimingStaminaDrain", L"false"),
+		.AimDeadeyeDrainEnabled =		GetConfigBool(CoreDepSect, L"AimingDeadeyeDrain", L"false"),
+		.Base =							GetConfigFloat(CoreDepSect, L"BaseDepletionRate", L"1.0"),
+		.Health =						GetConfigFloat(CoreDepSect, L"HealthCoreDepletionRate", L"0.9"),
+		.Stamina =						GetConfigFloat(CoreDepSect, L"StaminaCoreDepletionRate", L"1.0"),
+		.Deadeye =						GetConfigFloat(CoreDepSect, L"DeadeyeCoreDepletionRate", L"0.7"),
+		.Natural =						GetConfigFloat(CoreDepSect, L"NaturalCoreDepletionRate", L"1.0"),
+		.Temperature =					GetConfigFloat(CoreDepSect, L"TemperatureDepletionRate", L"1.1"),
+		.HealthCoreEmpty =				GetConfigFloat(CoreDepSect, L"HealthCoreEmptyDepletionRate", L"2.0"),
+		.HealthCoreDrain =				GetConfigFloat(CoreDepSect, L"HealthCoreDrainRate", L"1.0"),
+		.AimStaminaDrain =				GetConfigFloat(CoreDepSect, L"AimingStaminaDrainRate", L"1.0"),
+		.AimDeadeyeDrain =				GetConfigFloat(CoreDepSect, L"AimingDeadeyeDrainRate", L"1.0")
 	};
 
 	HorseDepletion = {
-		.Enabled =				GetConfigBool(HorseCoreDepSect, L"HorseCoreDepletion", L"true"),
-		.Natural =				GetConfigFloat(HorseCoreDepSect, L"HorseNaturalCoreDepletion", L"1.0"),
-		.Health =				GetConfigFloat(HorseCoreDepSect, L"HorseHealthCoreDepletion", L"0.9"),
-		.Stamina =				GetConfigFloat(HorseCoreDepSect, L"HorseStaminaCoreDepletion", L"1.0"),
-		.HealthCoreEmpty =		GetConfigFloat(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletion", L"2.0"),
+		.Enabled =					GetConfigBool(HorseCoreDepSect, L"HorseCoreDepletion", L"true"),
+		.NaturalEnabled =			GetConfigBool(HorseCoreDepSect, L"HorseNaturalCoreDepletion", L"true"),
+		.HealthCoreEmptyEnabled =	GetConfigBool(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletion", L"true"),
+		.Base =						GetConfigFloat(HorseCoreDepSect, L"HorseNaturalCoreDepletionRate", L"1.0"),
+		.Natural =					GetConfigFloat(HorseCoreDepSect, L"HorseHealthCoreDepletionRate", L"0.9"),
+		.Health =					GetConfigFloat(HorseCoreDepSect, L"HorseStaminaCoreDepletionRate", L"1.0"),
+		.Stamina =					GetConfigFloat(HorseCoreDepSect, L"HorseNaturalCoreDepletionRate", L"1.0"),
+		.HealthCoreEmpty =			GetConfigFloat(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletionRate", L"2.0"),
 	};
 
 	Temperature = {

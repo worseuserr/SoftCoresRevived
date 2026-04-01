@@ -41,23 +41,28 @@ namespace SoftCores
 		bool		Enabled;
 		bool		NaturalEnabled;
 		bool		TemperatureEnabled;
-		bool		BleedoutEnabled;
-		bool		AimStaminaEnabled;
-		bool		AimDeadeyeEnabled;
-		Multiplier	Natural;
+		bool		HealthCoreEmptyEnabled;
+		bool		HealthCoreEmptyDrainEnabled;
+		bool		AimStaminaDrainEnabled;
+		bool		AimDeadeyeDrainEnabled;
+		Multiplier	Base;
 		Multiplier	Health;
 		Multiplier	Stamina;
 		Multiplier	Deadeye;
-		Multiplier	ExtremeTemperature;
+		Multiplier	Natural;
+		Multiplier	Temperature;
 		Multiplier	HealthCoreEmpty;
-		Multiplier	HealthCoreBleedout;
-		Multiplier	AimStamina;
-		Multiplier	AimDeadeye;
+		Multiplier	HealthCoreDrain;
+		Multiplier	AimStaminaDrain;
+		Multiplier	AimDeadeyeDrain;
 	};
 
 	struct	HorseCoreDepletionConfig
 	{
 		bool		Enabled;
+		bool		NaturalEnabled;
+		bool		HealthCoreEmptyEnabled;
+		Multiplier	Base;
 		Multiplier	Natural;
 		Multiplier	Health;
 		Multiplier	Stamina;
