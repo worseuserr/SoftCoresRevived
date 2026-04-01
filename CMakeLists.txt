@@ -42,11 +42,11 @@ add_library(SoftCoresRevived SHARED
 		src/SoftCores/Util/Math.cpp
 		src/SoftCores/Util/Logger.cpp
 		src/SoftCores/Util/File.cpp
-		src/SoftCores/Util/Event.cpp
 )
 
 target_compile_options(SoftCoresRevived PRIVATE
 		/EHsc
+		/O2
 )
 
 target_link_libraries(SoftCoresRevived PRIVATE ScriptHookRDR2.lib)

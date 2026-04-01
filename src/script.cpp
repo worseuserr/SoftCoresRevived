@@ -24,12 +24,12 @@ using namespace std;
 using namespace SoftCores;
 using namespace SoftCores::Util;
 
-const char *const	LOG_FILE = "SoftCoresRevived.log";
-const char *const	INI_FILE = "SoftCoresRevived.ini";
+const char *const		LOG_FILE = ".\\SoftCoresRevived.log";
+const wchar_t *const	INI_FILE = L".\\SoftCoresRevived.ini";
 
 static Logger				LOGGER(LOG_FILE);
 static Plr					PLR;
-// static unique_ptr<Config>	CONFIG = make_unique<Config>(INI_FILE);
+static unique_ptr<Config>	CONFIG = make_unique<Config>(INI_FILE, LOGGER);
 // TODO: error handling
 
 // currently unused
