@@ -15,7 +15,7 @@ namespace SoftCores::Util
 		static bool			Exists(const char *filename);
 		static std::string	WideToUTF8(const wchar_t *wstr);
 		template	<typename T>
-		File&		operator<<(const T& data)
+		File		&operator<<(const T& data)
 		{
 			file << data;
 			return (*this);
