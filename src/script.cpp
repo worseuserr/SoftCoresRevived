@@ -9,6 +9,9 @@
 #include <Sdk/natives.h>
 #include <Sdk/types.h>
 #include "Script.h"
+
+#include <chrono>
+
 #include "SoftCores/Weapons.h"
 #include <SoftCores/Util/Logger.h>
 #include <SoftCores/Plr.h>
@@ -43,6 +46,13 @@ static unique_ptr<Config>	CONFIG = make_unique<Config>(INI_FILE, LOGGER);
 // prompt functions
 
 int main()
+{
+	LOGGER.Write("### SoftCores Mod by opsedar ###");
+	LOGGER.Write("### Reworked by worseuserr ###");
+	LOGGER.Write(File::Exists(".\\SoftCores.ini") ? "### SoftCores.ini found ###" : "### SoftCores.ini not found ###");
+}
+
+int oldmain()
 {
 	bool enableLogging = GetPrivateProfileInt("DEBUG", "ENABLE_LOGGING", 0, ".\\SoftCores.ini");
 	if (enableLogging)
@@ -1225,6 +1235,6 @@ int main()
 
 void ScriptMain()
 {
-	srand(static_cast<int>(GetTickCount64()));
+	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	main();
 }
