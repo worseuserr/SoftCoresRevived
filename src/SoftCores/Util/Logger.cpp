@@ -34,3 +34,27 @@ void Logger::Write(const char *message)
 		file_.Close();
 	}
 }
+
+void Logger::Write(const wchar_t *message)
+{
+	tm					newtime{};
+	time_t				now;
+	std::stringstream	text;
+
+	now = time(nullptr);
+	if (localtime_s(&newtime, &now) != 0)
+		throw (std::exception());
+	file_.Open(outputFile_, std::ios_base::app);
+	if (file_.IsOpen())
+	{
+		text << "[" << newtime.tm_mday
+			<< "/" << newtime.tm_mon + 1
+			<< "/" << newtime.tm_year + 1900
+			<< " " << newtime.tm_hour
+			<< ":" << newtime.tm_min
+			<< ":" << newtime.tm_sec
+			<< "] " << File::WideToUTF8(message);
+		file_ << text.str().c_str() << "\n";
+		file_.Close();
+	}
+}

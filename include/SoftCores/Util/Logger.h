@@ -11,5 +11,6 @@ namespace SoftCores::Util
 	public:
 		Logger(const char *outputFilename);
 		void	Write(const char *message);
+		void	Write(const wchar_t *message);
 	};
 }
