@@ -10,6 +10,7 @@ namespace SoftCores
 	{
 		static bool	LoopActive;
 		static void	Loop();
+
 	public:
 		// value: deltaTime
 		static Event<NO_SENDER, float>	OnTick;

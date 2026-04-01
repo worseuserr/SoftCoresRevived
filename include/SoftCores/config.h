@@ -121,7 +121,6 @@ namespace SoftCores
 	// Config values for SoftCoresRevived.
 	class	Config
 	{
-	private:
 		std::wstring	File;
 
 	public:

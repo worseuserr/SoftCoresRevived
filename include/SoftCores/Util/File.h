@@ -5,7 +5,6 @@ namespace SoftCores::Util
 {
 	class File
 	{
-	private:
 		std::ofstream	file;
 
 	public:
