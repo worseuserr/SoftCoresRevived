@@ -5,8 +5,8 @@ namespace SoftCores::Util
 {
 	class Logger
 	{
-		const char	*outputFile_;
-		File		file_;
+		const char	*OutputFile;
+		File		File;
 
 	public:
 		Logger(const char *outputFilename);

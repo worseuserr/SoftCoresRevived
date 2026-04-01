@@ -9,7 +9,7 @@ namespace SoftCores::Keys
 	class Key
 	{
 	public:
-		std::string	keyString;
+		std::string	KeyString;
 
 		Key(const std::string &str);
 		Key(const char *str);

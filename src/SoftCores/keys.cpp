@@ -7,12 +7,12 @@ using namespace SoftCores::Keys;
 
 Key::Key(const std::string &str)
 {
-	keyString = str;
+	KeyString = str;
 }
 
 Key::Key(const char *str)
 {
-	keyString = std::string(str);
+	KeyString = std::string(str);
 }
 
 Hash Key::Hash() const
@@ -22,7 +22,7 @@ Hash Key::Hash() const
 
 const char *Key::ToCString() const
 {
-	return (keyString.c_str());
+	return (KeyString.c_str());
 }
 
 Hash SoftCores::Keys::GetHash(const char *str)

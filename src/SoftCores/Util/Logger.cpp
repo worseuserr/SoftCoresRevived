@@ -6,9 +6,9 @@ using namespace SoftCores::Util;
 
 Logger::Logger(const char *outputFilename)
 {
-	outputFile_ = outputFilename;
-	file_.Open(outputFilename, std::ios_base::out);
-	file_.Close();
+	OutputFile = outputFilename;
+	File.Open(outputFilename, std::ios_base::out);
+	File.Close();
 }
 
 void Logger::Write(const char *message)
@@ -20,8 +20,8 @@ void Logger::Write(const char *message)
 	now = time(nullptr);
 	if (localtime_s(&newtime, &now) != 0)
 		throw (std::exception());
-	file_.Open(outputFile_, std::ios_base::app);
-	if (file_.IsOpen())
+	File.Open(OutputFile, std::ios_base::app);
+	if (File.IsOpen())
 	{
 		text << "[" << newtime.tm_mday
 			<< "/" << newtime.tm_mon + 1
@@ -30,8 +30,8 @@ void Logger::Write(const char *message)
 			<< ":" << newtime.tm_min
 			<< ":" << newtime.tm_sec
 			<< "] " << message;
-		file_ << text.str().c_str() << "\n";
-		file_.Close();
+		File << text.str().c_str() << "\n";
+		File.Close();
 	}
 }
 
@@ -44,8 +44,8 @@ void Logger::Write(const wchar_t *message)
 	now = time(nullptr);
 	if (localtime_s(&newtime, &now) != 0)
 		throw (std::exception());
-	file_.Open(outputFile_, std::ios_base::app);
-	if (file_.IsOpen())
+	File.Open(OutputFile, std::ios_base::app);
+	if (File.IsOpen())
 	{
 		text << "[" << newtime.tm_mday
 			<< "/" << newtime.tm_mon + 1
@@ -54,7 +54,7 @@ void Logger::Write(const wchar_t *message)
 			<< ":" << newtime.tm_min
 			<< ":" << newtime.tm_sec
 			<< "] " << File::WideToUTF8(message);
-		file_ << text.str().c_str() << "\n";
-		file_.Close();
+		File << text.str().c_str() << "\n";
+		File.Close();
 	}
 }

@@ -12,12 +12,12 @@ namespace SoftCores::Util
 	class Event
 	{
 	protected:
-		std::vector<void (*)(Sender, Value)>	Listeners_;
+		std::vector<void (*)(Sender, Value)>	Listeners;
 	public:
 		Event() = default;
 		void		Dispatch(Sender sender, Value value)
 		{
-			for (auto func : Listeners_)
+			for (auto func : Listeners)
 			{
 				func(sender, value);
 			}
@@ -25,13 +25,13 @@ namespace SoftCores::Util
 
 		Event		&operator+=(void (*func)(Sender sender, Value value))
 		{
-			Listeners_.push_back(func);
+			Listeners.push_back(func);
 			return (*this);
 		}
 
 		Event		&operator-=(void (*func)(Sender sender, Value value))
 		{
-			std::erase(Listeners_, func);
+			std::erase(Listeners, func);
 			return (*this);
 		}
 	};
