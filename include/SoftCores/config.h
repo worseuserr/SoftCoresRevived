@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+#include "Util/Logger.h"
+
 using Multiplier = float;
 
 namespace SoftCores
@@ -56,7 +58,6 @@ namespace SoftCores
 	struct	HorseCoreDepletionConfig
 	{
 		bool		Enabled;
-		bool		NaturalEnabled;
 		Multiplier	Natural;
 		Multiplier	Health;
 		Multiplier	Stamina;
@@ -120,14 +121,24 @@ namespace SoftCores
 	// Config values for SoftCoresRevived.
 	class	Config
 	{
+	private:
+		std::wstring	File;
+
 	public:
-		Config(std::string filename);
+		Util::Logger				*LOGGER;
+
+		Config(const std::wstring &filename, Util::Logger &logger);
+
+		unsigned int	GetConfigUInt(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
+		float			GetConfigFloat(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
+		bool			GetConfigBool(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
 
 		// Logging is always enabled, this enables in-game ui logging.
-		bool						LoggingEnabled;
+		bool						AdvancedLoggingEnabled;
 
 		// Toggles for base game effects.
 		FXConfig					FX;
+
 		// Toggles for additional immersive mod features.
 		ImmersionConfig				Immersion;
 
