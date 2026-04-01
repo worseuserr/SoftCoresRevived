@@ -26,13 +26,13 @@ namespace SoftCores::Util
 		Event		&operator+=(void (*func)(Sender sender, Value value))
 		{
 			Listeners_.push_back(func);
-			return (this);
+			return (*this);
 		}
 
 		Event		&operator-=(void (*func)(Sender sender, Value value))
 		{
 			std::erase(Listeners_, func);
-			return (this);
+			return (*this);
 		}
 	};
 }
