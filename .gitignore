@@ -347,3 +347,6 @@ sdk/
 
 # Mod test script
 test.bat
+
+# CLion run configuration
+.run
