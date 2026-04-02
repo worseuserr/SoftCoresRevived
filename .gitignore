@@ -339,8 +339,11 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
+# Filters and user file
+*.vcxproj.*
+
 # Script hook SDK
 sdk/
 
-# Filters and user file
-*.vcxproj.*
+# Mod test script
+test.bat
