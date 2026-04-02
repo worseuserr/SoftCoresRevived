@@ -129,7 +129,7 @@ namespace SoftCores
 		std::wstring	File;
 
 	public:
-		Util::Logger				*LOGGER;
+		Util::Logger				*Logger;
 
 		Config(const std::wstring &filename, Util::Logger &logger);
 

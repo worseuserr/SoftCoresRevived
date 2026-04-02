@@ -39,7 +39,6 @@ namespace SoftCores
 		static bool		IsSubmerged();
 		static bool		IsMoving();
 		static bool		IsInCampScenario();
-
 		static bool		IsInSleepScenario();
 		static float	GetClothingTemperaturePoints();
 		static float	GetSurroundingTemperature();

@@ -10,7 +10,7 @@ unsigned int Config::GetConfigUInt(const std::wstring &section, const std::wstri
 	wchar_t					buff[buffSize]{};
 
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
-	LOGGER->Write((std::wstring(
+	Logger->Write((std::wstring(
 		L"INI value for key \'") + key + L"\' = [" + buff + L"]"
 		).c_str());
 	try
@@ -19,7 +19,7 @@ unsigned int Config::GetConfigUInt(const std::wstring &section, const std::wstri
 	}
 	catch (std::exception)
 	{
-		LOGGER->Write(L"INI read failed, using default.");
+		Logger->Write(L"INI read failed, using default.");
 		return (static_cast<unsigned int>(std::stol(def)));
 	}
 }
@@ -30,7 +30,7 @@ float Config::GetConfigFloat(const std::wstring &section, const std::wstring &ke
 	wchar_t					buff[buffSize]{};
 
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
-	LOGGER->Write((std::wstring(
+	Logger->Write((std::wstring(
 		L"INI value for key \'") + key + L"\' = [" + buff + L"]"
 		).c_str());
 	try
@@ -39,7 +39,7 @@ float Config::GetConfigFloat(const std::wstring &section, const std::wstring &ke
 	}
 	catch (std::exception)
 	{
-		LOGGER->Write(L"INI read failed, using default.");
+		Logger->Write(L"INI read failed, using default.");
 		return (stof(def));
 	}
 }
@@ -51,7 +51,7 @@ bool Config::GetConfigBool(const std::wstring &section, const std::wstring &key,
 	unsigned char			i;
 
 	GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
-	LOGGER->Write((std::wstring(
+	Logger->Write((std::wstring(
 		L"INI value for key \'") + key + L"\' = [" + buff + L"]"
 		).c_str());
 	for (i = 0; i <= buffSize || !buff[i]; i++)
@@ -71,7 +71,7 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	const wchar_t	*PlayerTweaksSect =	L"PLAYER_COMBAT_TWEAKS";
 	const wchar_t	*AITweaksSect =		L"AI_COMBAT_TWEAKS";
 
-	LOGGER = &logger;
+	Logger = &logger;
 	File = filename;
 	// Default floats only have 1 decimal to identify them in the log.
 	AdvancedLoggingEnabled = GetConfigBool(DebugSect, L"DebugAdvancedLogging", L"false");
