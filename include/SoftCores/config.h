@@ -3,10 +3,10 @@
 
 #include "Util/Logger.h"
 
-using Multiplier = float;
-
 namespace SoftCores
 {
+	typedef float Multiplier;
+
 	struct	FXConfig
 	{
 		// Master control, if false, no base game effects are disabled.
