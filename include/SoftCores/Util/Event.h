@@ -1,4 +1,6 @@
 #pragma once
+
+#include <functional>
 #include <vector>
 
 namespace SoftCores::Util
@@ -6,33 +8,62 @@ namespace SoftCores::Util
 	using NO_SENDER = void*;
 
 	template	<typename Sender, typename Value>
+	struct		Listener
+	{
+		unsigned long									ID;
+		std::function<void(Sender sender, Value value)> Function;
+	};
+
+
+	template	<typename Sender, typename Value>
+	class		Connection
+	{
+	public:
+		unsigned long							ID;
+		std::vector<Listener<Sender, Value>>	*Listeners;
+
+		Connection(const unsigned long &id, std::vector<Listener<Sender, Value>> *listeners)
+		{
+			ID = id;
+			Listeners = listeners;
+		}
+
+		void	Disconnect()
+		{
+			if (Listeners == nullptr)
+				return ;
+			std::erase_if(*Listeners,
+				[this](Listener<Sender, Value> listener){ return (this->ID == listener.ID); });
+			delete (this);
+		}
+	};
+
+
 	// An event implementation that does not rely on inheritance.
 	// Con: Type safety and defining value names.
 	// Pro: Easy for creating a bunch of events for a bunch of values.
-	class Event
+	template	<typename Sender, typename Value>
+	class		Event
 	{
 	protected:
-		std::vector<void (*)(Sender, Value)>	Listeners;
+		std::vector<Listener<Sender, Value>>	Listeners;
 	public:
 		Event() = default;
-		void		Dispatch(Sender sender, Value value)
+		void	Dispatch(Sender sender, Value value)
 		{
-			for (auto func : Listeners)
+			for (auto listener : Listeners)
 			{
-				func(sender, value);
+				listener.Function(sender, value);
 			}
 		}
 
-		Event		&operator+=(void (*func)(Sender sender, Value value))
+		Connection<Sender, Value>	*operator+=(std::function<void(Sender sender, Value value)> func)
 		{
-			Listeners.push_back(func);
-			return (*this);
-		}
+			static unsigned long	id = 0;
 
-		Event		&operator-=(void (*func)(Sender sender, Value value))
-		{
-			std::erase(Listeners, func);
-			return (*this);
+			Listeners.push_back(Listener<Sender, Value>{ .ID = id, .Function = func });
+			id++;
+			return (new Connection<Sender, Value>(id, &Listeners));
 		}
 	};
 }
