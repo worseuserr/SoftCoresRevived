@@ -17,40 +17,41 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	Logger = &logger;
 	File = filename;
 	// Default floats only have 1 decimal to identify them in the log.
-	AdvancedLoggingEnabled = GetConfig<bool>(DebugSect, L"DebugAdvancedLogging", L"false");
+	// Default bools end with an uppercase letter to indentify those.
+	AdvancedLoggingEnabled = GetConfig<bool>(DebugSect, L"DebugAdvancedLogging", L"falsE");
 	FX = {
-		.Enabled =		GetConfig<bool>(FXSect, L"FXOverrideEnabled", L"true"),
-		.EmptyHealth =	GetConfig<bool>(FXSect, L"EmptyHealthCoreFX", L"true"),
-		.EmptyStamina =	GetConfig<bool>(FXSect, L"EmptyStaminaCoreFX", L"true"),
-		.EmptyDeadEye =	GetConfig<bool>(FXSect, L"EmptyDeadeyeCoreFX", L"true"),
-		.Overpower =	GetConfig<bool>(FXSect, L"OverpoweredCoreFX", L"true"),
-		.Duel =			GetConfig<bool>(FXSect, L"DuelFX", L"true"),
-		.Deadeye =		GetConfig<bool>(FXSect, L"DeadeyeFX", L"true"),
-		.Eagleeye =		GetConfig<bool>(FXSect, L"EagleeyeFX", L"true"),
-		.WeaponWheel =	GetConfig<bool>(FXSect, L"WeaponWheelFX", L"false"),
-		.KillCam =		GetConfig<bool>(FXSect, L"KillCamFX", L"false"),
-		.Death =		GetConfig<bool>(FXSect, L"DeathFX", L"false"),
-		.MissionFail =	GetConfig<bool>(FXSect, L"MissionFailFX", L"false")
+		.Enabled =		GetConfig<bool>(FXSect, L"FXOverrideEnabled", L"truE"),
+		.EmptyHealth =	GetConfig<bool>(FXSect, L"EmptyHealthCoreFX", L"truE"),
+		.EmptyStamina =	GetConfig<bool>(FXSect, L"EmptyStaminaCoreFX", L"truE"),
+		.EmptyDeadEye =	GetConfig<bool>(FXSect, L"EmptyDeadeyeCoreFX", L"truE"),
+		.Overpower =	GetConfig<bool>(FXSect, L"OverpoweredCoreFX", L"truE"),
+		.Duel =			GetConfig<bool>(FXSect, L"DuelFX", L"truE"),
+		.Deadeye =		GetConfig<bool>(FXSect, L"DeadeyeFX", L"truE"),
+		.Eagleeye =		GetConfig<bool>(FXSect, L"EagleeyeFX", L"truE"),
+		.WeaponWheel =	GetConfig<bool>(FXSect, L"WeaponWheelFX", L"falsE"),
+		.KillCam =		GetConfig<bool>(FXSect, L"KillCamFX", L"falsE"),
+		.Death =		GetConfig<bool>(FXSect, L"DeathFX", L"falsE"),
+		.MissionFail =	GetConfig<bool>(FXSect, L"MissionFailFX", L"falsE")
 	};
 
 	Immersion = {
-		.DisablePickupGlow =			GetConfig<bool>(ImmersionSect, L"DisablePickupGlow", L"true"),
-		.DisableObjectGlow =			GetConfig<bool>(ImmersionSect, L"DisableObjectGlow", L"true"),
-		.HideHostileBlips =				GetConfig<bool>(ImmersionSect, L"HideHostileBlipsOutOfView", L"true"),
-		.HideHostileBlipsInMissions =	GetConfig<bool>(ImmersionSect, L"HideHostileBlipsOutOfViewInMissions", L"false"),
-		.NoReloadInDeadeye =			GetConfig<bool>(ImmersionSect, L"NoReloadInDeadeye", L"true"),
-		.SleepOnlyRestoresStamina =		GetConfig<bool>(ImmersionSect, L"SleepOnlyRestoresStamina", L"true"),
-		.BathOnlyRestoresDeadeye =		GetConfig<bool>(ImmersionSect, L"BathOnlyRestoresDeadeye", L"true")
+		.DisablePickupGlow =			GetConfig<bool>(ImmersionSect, L"DisablePickupGlow", L"truE"),
+		.DisableObjectGlow =			GetConfig<bool>(ImmersionSect, L"DisableObjectGlow", L"truE"),
+		.HideHostileBlips =				GetConfig<bool>(ImmersionSect, L"HideHostileBlipsOutOfView", L"truE"),
+		.HideHostileBlipsInMissions =	GetConfig<bool>(ImmersionSect, L"HideHostileBlipsOutOfViewInMissions", L"falsE"),
+		.NoReloadInDeadeye =			GetConfig<bool>(ImmersionSect, L"NoReloadInDeadeye", L"truE"),
+		.SleepOnlyRestoresStamina =		GetConfig<bool>(ImmersionSect, L"SleepOnlyRestoresStamina", L"truE"),
+		.BathOnlyRestoresDeadeye =		GetConfig<bool>(ImmersionSect, L"BathOnlyRestoresDeadeye", L"truE")
 	};
 
 	PlayerDepletion = {
-		.Enabled =						GetConfig<bool>(CoreDepSect, L"CoreDepletion", L"true"),
-		.NaturalEnabled =				GetConfig<bool>(CoreDepSect, L"NaturalCoreDepletion", L"true"),
-		.TemperatureEnabled =			GetConfig<bool>(CoreDepSect, L"TemperatureDepletion", L"true"),
-		.HealthCoreEmptyEnabled =		GetConfig<bool>(CoreDepSect, L"HealthCoreEmptyDepletion", L"true"),
-		.HealthCoreEmptyDrainEnabled =	GetConfig<bool>(CoreDepSect, L"HealthCoreEmptyDrain", L"true"),
-		.AimStaminaDrainEnabled =		GetConfig<bool>(CoreDepSect, L"AimingStaminaDrain", L"false"),
-		.AimDeadeyeDrainEnabled =		GetConfig<bool>(CoreDepSect, L"AimingDeadeyeDrain", L"false"),
+		.Enabled =						GetConfig<bool>(CoreDepSect, L"CoreDepletion", L"truE"),
+		.NaturalEnabled =				GetConfig<bool>(CoreDepSect, L"NaturalCoreDepletion", L"truE"),
+		.TemperatureEnabled =			GetConfig<bool>(CoreDepSect, L"TemperatureDepletion", L"truE"),
+		.HealthCoreEmptyEnabled =		GetConfig<bool>(CoreDepSect, L"HealthCoreEmptyDepletion", L"truE"),
+		.HealthCoreEmptyDrainEnabled =	GetConfig<bool>(CoreDepSect, L"HealthCoreEmptyDrain", L"truE"),
+		.AimStaminaDrainEnabled =		GetConfig<bool>(CoreDepSect, L"AimingStaminaDrain", L"falsE"),
+		.AimDeadeyeDrainEnabled =		GetConfig<bool>(CoreDepSect, L"AimingDeadeyeDrain", L"falsE"),
 		.Base =							GetConfig<float>(CoreDepSect, L"BaseDepletionRate", L"1.0"),
 		.Health =						GetConfig<float>(CoreDepSect, L"HealthCoreDepletionRate", L"0.9"),
 		.Stamina =						GetConfig<float>(CoreDepSect, L"StaminaCoreDepletionRate", L"1.0"),
@@ -64,9 +65,9 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	};
 
 	HorseDepletion = {
-		.Enabled =					GetConfig<bool>(HorseCoreDepSect, L"HorseCoreDepletion", L"true"),
-		.NaturalEnabled =			GetConfig<bool>(HorseCoreDepSect, L"HorseNaturalCoreDepletion", L"true"),
-		.HealthCoreEmptyEnabled =	GetConfig<bool>(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletion", L"true"),
+		.Enabled =					GetConfig<bool>(HorseCoreDepSect, L"HorseCoreDepletion", L"truE"),
+		.NaturalEnabled =			GetConfig<bool>(HorseCoreDepSect, L"HorseNaturalCoreDepletion", L"truE"),
+		.HealthCoreEmptyEnabled =	GetConfig<bool>(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletion", L"truE"),
 		.Base =						GetConfig<float>(HorseCoreDepSect, L"HorseNaturalCoreDepletionRate", L"1.0"),
 		.Natural =					GetConfig<float>(HorseCoreDepSect, L"HorseHealthCoreDepletionRate", L"0.9"),
 		.Health =					GetConfig<float>(HorseCoreDepSect, L"HorseStaminaCoreDepletionRate", L"1.0"),
@@ -75,8 +76,8 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	};
 
 	Temperature = {
-		.ExtremeFX =			GetConfig<bool>(TempSect, L"ExtremeTemperatureFX", L"true"),
-		.ExtremeSprite =		GetConfig<bool>(TempSect, L"ExtremeTemperatureSprite", L"true"),
+		.ExtremeFX =			GetConfig<bool>(TempSect, L"ExtremeTemperatureFX", L"truE"),
+		.ExtremeSprite =		GetConfig<bool>(TempSect, L"ExtremeTemperatureSprite", L"truE"),
 		.WarmthFire =			GetConfig<float>(TempSect, L"WarmthFire", L"1.0"),
 		.WarmthCampfire =		GetConfig<float>(TempSect, L"WarmthCampfire", L"1.0"),
 		.WarmthIndoors =		GetConfig<float>(TempSect, L"WarmthIndoors", L"1.0"),
@@ -88,32 +89,32 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	};
 
 	DyingPenalty = {
-		.Enabled =				GetConfig<bool>(DyingPenaltySect, L"PenaltyOnDeath", L"true"),
-		.LoseHeldWeapon =		GetConfig<bool>(DyingPenaltySect, L"LoseHeldWeapon", L"false"),
-		.LoseHeldAmmo =			GetConfig<bool>(DyingPenaltySect, L"LoseHeldAmmo", L"false"),
-		.LoseBodyWeapons =		GetConfig<bool>(DyingPenaltySect, L"LoseBodyWeapons", L"false"),
-		.LoseBodyAmmo =			GetConfig<bool>(DyingPenaltySect, L"LoseBodyAmmo", L"false"),
-		.LoseExoticWeapons =	GetConfig<bool>(DyingPenaltySect, L"LoseExoticWeapons", L"false"),
-		.LoseMoney =			GetConfig<bool>(DyingPenaltySect, L"LoseMoney", L"true"),
+		.Enabled =				GetConfig<bool>(DyingPenaltySect, L"PenaltyOnDeath", L"truE"),
+		.LoseHeldWeapon =		GetConfig<bool>(DyingPenaltySect, L"LoseHeldWeapon", L"falsE"),
+		.LoseHeldAmmo =			GetConfig<bool>(DyingPenaltySect, L"LoseHeldAmmo", L"falsE"),
+		.LoseBodyWeapons =		GetConfig<bool>(DyingPenaltySect, L"LoseBodyWeapons", L"falsE"),
+		.LoseBodyAmmo =			GetConfig<bool>(DyingPenaltySect, L"LoseBodyAmmo", L"falsE"),
+		.LoseExoticWeapons =	GetConfig<bool>(DyingPenaltySect, L"LoseExoticWeapons", L"falsE"),
+		.LoseMoney =			GetConfig<bool>(DyingPenaltySect, L"LoseMoney", L"truE"),
 		.LoseMoneyMin =			GetConfig<float>(DyingPenaltySect, L"LoseMoneyMin", L"0.9"),
-		.LoseMoneyMax =			GetConfig<float>(DyingPenaltySect, L"LoseMoneyMax", L"0.98"),
+		.LoseMoneyMax =			GetConfig<float>(DyingPenaltySect, L"LoseMoneyMax", L"0.8"),
 		.LoseMoneyHardMin =		GetConfig<unsigned int>(DyingPenaltySect, L"LoseMoneyHardMax", L"1000000"),
 		.LoseMoneyHardMax =		GetConfig<unsigned int>(DyingPenaltySect, L"LoseMoneyHardMin", L"0")
 	};
 
 	PlayerTweaks = {
-		.Enabled =			GetConfig<bool>(PlayerTweaksSect, L"PlayerCombatTweaks", L"false"),
+		.Enabled =			GetConfig<bool>(PlayerTweaksSect, L"PlayerCombatTweaks", L"falsE"),
 		.DamageMaxHealth =	GetConfig<float>(PlayerTweaksSect, L"PlayerDamageMaxHealth", L"1.0"),
 		.DamageMinHealth =	GetConfig<float>(PlayerTweaksSect, L"PlayerDamageMinHealth", L"0.5")
 	};
 
 	AITweaks = {
-		.Enabled =						GetConfig<bool>(AITweaksSect, L"AICombatTweaks", L"false"),
-		.DamageEnabled =				GetConfig<bool>(AITweaksSect, L"AIDamageTweaks", L"false"),
-		.RegenEnabled =					GetConfig<bool>(AITweaksSect, L"AIHealthRegeneration", L"false"),
-		.AccuracyEnabled =				GetConfig<bool>(AITweaksSect, L"AIAccuracyTweaks", L"false"),
-		.AccuracyInMissionsEnabled =	GetConfig<bool>(AITweaksSect, L"AIAccuracyTweaksInMissions", L"false"),
-		.FirerateEnabled =				GetConfig<bool>(AITweaksSect, L"AIFirerateTweaks", L"false"),
+		.Enabled =						GetConfig<bool>(AITweaksSect, L"AICombatTweaks", L"falsE"),
+		.DamageEnabled =				GetConfig<bool>(AITweaksSect, L"AIDamageTweaks", L"falsE"),
+		.RegenEnabled =					GetConfig<bool>(AITweaksSect, L"AIHealthRegeneration", L"falsE"),
+		.AccuracyEnabled =				GetConfig<bool>(AITweaksSect, L"AIAccuracyTweaks", L"falsE"),
+		.AccuracyInMissionsEnabled =	GetConfig<bool>(AITweaksSect, L"AIAccuracyTweaksInMissions", L"falsE"),
+		.FirerateEnabled =				GetConfig<bool>(AITweaksSect, L"AIFirerateTweaks", L"falsE"),
 		.DamageMaxHealth =				GetConfig<float>(AITweaksSect, L"AIDamageMaxHealth", L"1.0"),
 		.DamageMinHealth =				GetConfig<float>(AITweaksSect, L"AIDamageMinHealth", L"1.0"),
 		.RegenMaxHealth =				GetConfig<float>(AITweaksSect, L"AIHealthRegenerationMaxHealth", L"1.0"),

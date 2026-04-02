@@ -48,6 +48,8 @@ void ScriptMain()
 {
 	Logger		logger(LOG_FILE);
 
+	logger.Write("### Original SoftCores Mod by opsedar ###");
+	logger.Write("### Revived by worseuserr ###");
 	logger.Write(File::Exists(File::WideToUTF8(INI_FILE).c_str())
 		? "### ini found ###"
 		: "#!# ini not found #!#");
@@ -56,9 +58,8 @@ void ScriptMain()
 
 	// Set random seed.
 	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
-	logger.Write("### Original SoftCores Mod by opsedar ###");
-	logger.Write("### Revived by worseuserr ###");
 	// Mod ends on Tick::StopLoop();
+	logger.Write("### Initializing mod loop. ###");
 	Tick::StartLoop();
 	delete (config);
 	delete (mod);
