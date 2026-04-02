@@ -1,6 +1,8 @@
 #pragma once
-#include <string>
 
+#include <string>
+#include <cwctype>
+#include <winbase.h>
 #include "Util/Logger.h"
 
 namespace SoftCores
@@ -129,13 +131,15 @@ namespace SoftCores
 		std::wstring	File;
 
 	public:
-		Util::Logger				*Logger;
+		Util::Logger	*Logger;
 
 		Config(const std::wstring &filename, Util::Logger &logger);
 
-		unsigned int	GetConfigUInt(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
-		float			GetConfigFloat(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
-		bool			GetConfigBool(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
+		template <typename T>
+		requires (std::same_as<T, bool>
+			|| std::same_as<T, unsigned int>
+			|| std::same_as<T, float>)
+		T							GetConfig(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
 
 		// Logging is always enabled, this enables in-game ui logging.
 		bool						AdvancedLoggingEnabled;
@@ -167,4 +171,52 @@ namespace SoftCores
 		// Range of peds to go through, lowerable for performance.
 		short						PedRange;
 	};
+
+	template <typename T>
+	requires (std::same_as<T, bool>
+	|| std::same_as<T, unsigned int>
+	|| std::same_as<T, float>)
+	T	Config::GetConfig(const std::wstring &section, const std::wstring &key, const std::wstring &def) const
+	{
+		constexpr unsigned char	buffSize = 32;
+		wchar_t					buff[buffSize]{};
+		unsigned char			i;
+
+		GetPrivateProfileStringW(section.c_str(), key.c_str(), def.c_str(), buff, buffSize, File.c_str());
+		Logger->Write((std::wstring(
+			L"INI value for key \'") + key + L"\' = [" + buff + L"]"
+			).c_str());
+		if constexpr (std::same_as<T, bool>)
+		{
+			for (i = 0; i < buffSize && buff[i]; i++)
+				buff[i] = std::towlower(buff[i]);
+			return (std::wstring(buff) == L"true");
+		}
+		if constexpr (std::same_as<T, unsigned int>)
+		{
+			try
+			{
+				return (static_cast<unsigned int>(std::stol(buff)));
+			}
+			catch (std::exception)
+			{
+				Logger->Write(L"INI read failed, using default.");
+				return (static_cast<unsigned int>(std::stol(def)));
+			}
+		}
+		if constexpr (std::same_as<T, float>)
+		{
+			try
+			{
+				return (stof(std::wstring(buff)));
+			}
+			catch (std::exception)
+			{
+				Logger->Write(L"INI read failed, using default.");
+				return (stof(def));
+			}
+		}
+		// All exceptions will eventually be replaced with a custom error function.
+		throw std::exception();
+	}
 }
