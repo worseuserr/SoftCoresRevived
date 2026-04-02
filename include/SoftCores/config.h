@@ -2,7 +2,7 @@
 
 #include <string>
 #include <cwctype>
-#include <winbase.h>
+#include <windows.h>
 #include "Util/Logger.h"
 
 namespace SoftCores
