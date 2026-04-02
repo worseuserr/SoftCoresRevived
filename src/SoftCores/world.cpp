@@ -44,3 +44,8 @@ int		World::GetGameTimer()
 {
 	return (MISC::GET_GAME_TIMER());
 }
+
+int World::GetAllPeds(int *arr, int arrSize)
+{
+	return (worldGetAllPeds(arr, arrSize));
+}

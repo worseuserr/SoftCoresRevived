@@ -9,4 +9,5 @@ namespace SoftCores::World
 	bool	IsPedFriendly(Ped ped);
 	bool	IsStoryFXPlaying();
 	int		GetGameTimer();
+	int		GetAllPeds(int *arr, int arrSize);
 }
