@@ -47,6 +47,8 @@ add_library(SoftCoresRevived SHARED
 		src/SoftCores/Mod/Mod.cpp
 		src/SoftCores/Mod/FXOverride.cpp
 		include/SoftCores/Mod/FXOverride.h
+		include/SoftCores/Mod/HostileBlip.h
+		src/SoftCores/Mod/HostileBlip.cpp
 )
 
 target_compile_options(SoftCoresRevived PRIVATE
