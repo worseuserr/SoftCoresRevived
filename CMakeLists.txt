@@ -42,6 +42,11 @@ add_library(SoftCoresRevived SHARED
 		src/SoftCores/Util/Math.cpp
 		src/SoftCores/Util/Logger.cpp
 		src/SoftCores/Util/File.cpp
+		include/SoftCores/Mod/Mod.h
+		src/SoftCores/Mod/Feature.cpp
+		src/SoftCores/Mod/Mod.cpp
+		src/SoftCores/Mod/FXOverride.cpp
+		include/SoftCores/Mod/FXOverride.h
 )
 
 target_compile_options(SoftCoresRevived PRIVATE

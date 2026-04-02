@@ -23,6 +23,9 @@
 #include <SoftCores/Temperature.h>
 #include <memory>
 
+#include "SoftCores/Tick.h"
+#include "SoftCores/Mod/Mod.h"
+
 using namespace std;
 using namespace SoftCores;
 using namespace SoftCores::Util;
@@ -30,9 +33,6 @@ using namespace SoftCores::Util;
 const char *const		LOG_FILE = ".\\SoftCoresRevived.log";
 const wchar_t *const	INI_FILE = L".\\SoftCoresRevived.ini";
 
-static Logger				LOGGER(LOG_FILE);
-static Plr					PLR;
-static unique_ptr<Config>	CONFIG = make_unique<Config>(INI_FILE, LOGGER);
 // TODO: error handling
 
 // currently unused
@@ -43,13 +43,25 @@ static unique_ptr<Config>	CONFIG = make_unique<Config>(INI_FILE, LOGGER);
 //	UILOG::_UILOG_CLEAR_CACHED_OBJECTIVE(); //
 //}
 
-// prompt functions
 
-int main()
+void ScriptMain()
 {
-	LOGGER.Write("### SoftCores Mod by opsedar ###");
-	LOGGER.Write("### Reworked by worseuserr ###");
-	LOGGER.Write(File::Exists(".\\SoftCores.ini") ? "### SoftCores.ini found ###" : "### SoftCores.ini not found ###");
+	Logger		logger(LOG_FILE);
+
+	logger.Write(File::Exists(File::WideToUTF8(INI_FILE).c_str())
+		? "### ini found ###"
+		: "#!# ini not found #!#");
+	Config		*config = new Config(INI_FILE, logger);
+	const Mod	*mod = new Mod(&logger, config);
+
+	// Set random seed.
+	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+	logger.Write("### Original SoftCores Mod by opsedar ###");
+	logger.Write("### Revived by worseuserr ###");
+	// Mod ends on Tick::StopLoop();
+	Tick::StartLoop();
+	delete (config);
+	delete (mod);
 }
 
 int oldmain()
@@ -1231,10 +1243,4 @@ int oldmain()
 		WAIT(0);
 	}
 	return (0);
-}
-
-void ScriptMain()
-{
-	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
-	main();
 }

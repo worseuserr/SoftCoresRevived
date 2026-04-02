@@ -1,4 +1,5 @@
 #include "SoftCores/Tick.h"
+#include "Sdk/main.h"
 
 using namespace SoftCores;
 
@@ -10,6 +11,7 @@ void	Tick::Loop()
 	while (LoopActive)
 	{
 		OnTick.Dispatch(nullptr, 0.0f);
+		WAIT(0);
 	}
 }
 
