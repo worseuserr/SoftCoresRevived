@@ -28,7 +28,9 @@ void FXOverride::Tick(void *_, float dTime) const
 
 void FXOverride::Initialize()
 {
+	Logger->Write("FXOverride initialized.");
 	if (!Config->FX.Enabled)
 		return ;
+	Logger->Write("FX.Enabled check passed.");
 	TickConnection = Tick::OnTick += [this](void *_, const float dTime){ Tick(_, dTime); };
 }
