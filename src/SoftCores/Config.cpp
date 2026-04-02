@@ -1,6 +1,4 @@
 #include "SoftCores/Config.h"
-#include "SoftCores/Enums.h"
-#include <cwctype>
 
 using namespace SoftCores;
 
