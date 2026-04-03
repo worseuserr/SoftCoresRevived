@@ -13,10 +13,3 @@ Mod::Mod(Util::Logger *logger, SoftCores::Config *config)
 	LoadFeature<FXOverride>();
 	LoadFeature<HostileBlip>();
 }
-
-Mod::~Mod() {
-	for (const Feature *feat : Features)
-	{
-		delete (feat);
-	}
-}

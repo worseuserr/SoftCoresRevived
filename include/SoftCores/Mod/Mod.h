@@ -20,20 +20,20 @@ namespace SoftCores
 
 	class Mod
 	{
-		std::vector<Feature*>	Features;
+		std::vector<std::unique_ptr<Feature>>	Features;
 
 	public:
 		Util::Logger	*Logger;
 		Config			*Config;
 
 		Mod(Util::Logger *logger, SoftCores::Config *config);
-		~Mod();
 		template <typename FeatureType>
 		void	LoadFeature()
 		{
-			Feature	*feat = new FeatureType(Logger, Config);
+			std::unique_ptr<FeatureType>	feat = std::make_unique<FeatureType>(Logger, Config);
+
 			feat->Initialize();
-			Features.push_back(feat);
+			Features.push_back(std::move(feat));
 		}
 	};
 
