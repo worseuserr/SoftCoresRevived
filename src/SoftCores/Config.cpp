@@ -18,7 +18,9 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	File = filename;
 	// Default floats only have 1 decimal to identify them in the log.
 	// Default bools end with an uppercase letter to indentify those.
-	AdvancedLoggingEnabled = GetConfig<bool>(DebugSect, L"DebugAdvancedLogging", L"falsE");
+	AdvancedLoggingEnabled =	GetConfig<bool>(DebugSect, L"DebugAdvancedLogging", L"falsE");
+	PedRange =					GetConfig<unsigned int>(DebugSect, L"PerfMaxPeds", L"1024");
+
 	FX = {
 		.Enabled =		GetConfig<bool>(FXSect, L"FXOverrideEnabled", L"truE"),
 		.EmptyHealth =	GetConfig<bool>(FXSect, L"EmptyHealthCoreFX", L"truE"),
