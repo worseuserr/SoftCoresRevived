@@ -3,26 +3,11 @@
 #include <SoftCores/Keys.h>
 #include <string>
 #include <Windows.h>
-#include <cmath>
-#include <cstdlib>
-#include <Sdk/main.h>
-#include <Sdk/natives.h>
-#include <Sdk/types.h>
 #include "Script.h"
-
 #include <chrono>
-
-#include "SoftCores/Weapons.h"
 #include <SoftCores/Util/Logger.h>
-#include <SoftCores/Plr.h>
-#include <SoftCores/Util/Math.h>
 #include <SoftCores/Util/File.h>
-#include <SoftCores/World.h>
-#include <SoftCores/UI.h>
 #include <SoftCores/Config.h>
-#include <SoftCores/Temperature.h>
-#include <memory>
-
 #include "SoftCores/Tick.h"
 #include "SoftCores/Mod/Mod.h"
 
@@ -59,7 +44,7 @@ void ScriptMain()
 	// Set random seed.
 	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	// Mod ends on Tick::StopLoop();
-	logger.Write("### Initializing mod loop. ###");
+	logger.Write("### Initializing mod loop ###");
 	Tick::StartLoop();
 	delete (config);
 	delete (mod);
