@@ -38,17 +38,18 @@ void ScriptMain()
 	logger.Write(File::Exists(File::WideToUTF8(INI_FILE).c_str())
 		? "### ini found ###"
 		: "#!# ini not found #!#");
-	Config		*config = new Config(INI_FILE, logger);
-	const Mod	*mod = new Mod(&logger, config);
+	const std::unique_ptr<Config>	config = std::make_unique<Config>(INI_FILE, logger);
+	const std::unique_ptr<Mod>		mod = std::make_unique<Mod>(&logger, config.get());
 
 	// Set random seed.
 	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
-	// Mod ends on Tick::StopLoop();
 	logger.Write("### Initializing mod loop ###");
+	// Mod ends on Tick::StopLoop();
 	Tick::StartLoop();
-	delete (config);
-	delete (mod);
+	logger.Write("### Mod loop ended ###");
+	logger.Write("### Freeing memory ###");
 }
+
 //
 // int oldmain()
 // {
