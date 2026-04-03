@@ -2,13 +2,13 @@
 #include <Sdk/types.h>
 
 namespace SoftCores {
-	enum class Core {
+	enum class	Core {
 		Health,
 		Stamina,
 		DeadEye
 	};
 
-	enum class ClothingType : uint {
+	enum class	ClothingType : uint {
 		Hats = 0x9925C067,
 		Shirts = 0x2026C46D,
 		Vests = 0x485EE834,

@@ -3,7 +3,7 @@
 
 namespace SoftCores::Util
 {
-	class File
+	class	File
 	{
 		std::ofstream	file;
 

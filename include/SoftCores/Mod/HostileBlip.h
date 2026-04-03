@@ -4,7 +4,7 @@
 
 namespace SoftCores
 {
-	class HostileBlip : public Feature
+	class	HostileBlip : public Feature
 	{
 		Util::Connection<void *, float>	*TickConnection;
 		// Counter for HasDurationPassed in ProcessBlip().

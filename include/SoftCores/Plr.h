@@ -4,7 +4,7 @@
 namespace SoftCores
 {
 	// Superclass containing all necessary player methods
-	class Plr
+	class	Plr
 	{
 	public:
 		static int		GetMaxOuterCore(Core core);

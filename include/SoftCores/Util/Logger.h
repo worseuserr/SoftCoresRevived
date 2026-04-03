@@ -3,7 +3,7 @@
 
 namespace SoftCores::Util
 {
-	class Logger
+	class	Logger
 	{
 		const char	*OutputFile;
 		File		File;

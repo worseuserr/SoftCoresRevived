@@ -6,7 +6,7 @@
 
 namespace SoftCores::Keys
 {
-	class Key
+	class	Key
 	{
 	public:
 		std::string	KeyString;

@@ -7,7 +7,7 @@
 
 namespace SoftCores
 {
-	class Feature
+	class	Feature
 	{
 	public:
 		Util::Logger	*Logger;
@@ -18,7 +18,7 @@ namespace SoftCores
 		virtual void	Initialize();
 	};
 
-	class Mod
+	class	Mod
 	{
 		std::vector<std::unique_ptr<Feature>>	Features;
 

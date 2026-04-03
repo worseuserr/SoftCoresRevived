@@ -4,7 +4,7 @@
 
 namespace SoftCores
 {
-	class FXOverride : public Feature
+	class	FXOverride : public Feature
 	{
 		Util::Connection<void *, float>	*TickConnection;
 
