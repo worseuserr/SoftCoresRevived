@@ -48,9 +48,9 @@ void HostileBlip::Tick(void *_, float dTime)
 	int		i;
 	// Feature seems to not work for some enemies. Needs investigation.
 
-	if (Plr::IsInMission() && !Config->Immersion.HideHostileBlipsInMissions)
+	if (!Config->Immersion.HideHostileBlips || !HasDurationPassed(100, &Counter)) // Only run logic every 100ms.
 		return ;
-	if (!HasDurationPassed(100, &Counter)) // Only run logic every 100ms.
+	if (Plr::IsInMission() && !Config->Immersion.HideHostileBlipsInMissions)
 		return ;
 	isInAHostileScenario = Plr::IsInCombat() || Plr::IsPursued() || Plr::IsInMission(); // From original mod, I'm unsure if this is actually needed.
 	playerPed = PLAYER::PLAYER_PED_ID();
@@ -62,7 +62,6 @@ void HostileBlip::Tick(void *_, float dTime)
 
 void HostileBlip::Initialize()
 {
-	if (!Config->Immersion.HideHostileBlips)
-		return ;
+	Logger->Write("HostileBlip initialized");
 	TickConnection = Tick::OnTick += [this](void *_, float dTime){ Tick(_, dTime); };
 }

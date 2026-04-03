@@ -11,6 +11,8 @@ void FXOverride::Tick(void *_, float dTime) const
 {
 	const FXConfig	&FX = Config->FX;
 
+	if (!Config->FX.Enabled)
+		return ;
 	if (!FX.EmptyHealth) GRAPHICS::ANIMPOSTFX_STOP("PlayerRPGEmptyCoreHealth");
 	if (!FX.EmptyStamina) GRAPHICS::ANIMPOSTFX_STOP("PlayerRPGEmptyCoreStamina");
 	if (!FX.Deadeye) GRAPHICS::ANIMPOSTFX_STOP("PlayerRPGEmptyCoreDeadEye");
@@ -28,9 +30,6 @@ void FXOverride::Tick(void *_, float dTime) const
 
 void FXOverride::Initialize()
 {
-	Logger->Write("FXOverride initialized.");
-	if (!Config->FX.Enabled)
-		return ;
-	Logger->Write("FX.Enabled check passed.");
+	Logger->Write("FXOverride initialized");
 	TickConnection = Tick::OnTick += [this](void *_, const float dTime){ Tick(_, dTime); };
 }
