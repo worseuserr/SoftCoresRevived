@@ -5,7 +5,7 @@
 using namespace SoftCores;
 
 FXOverride::FXOverride(Util::Logger *logger, SoftCores::Config *config)
-	: Feature(logger, config) {}
+	: Feature(logger, config), TickConnection(nullptr) {}
 
 void FXOverride::Tick(void *_, float dTime) const
 {
