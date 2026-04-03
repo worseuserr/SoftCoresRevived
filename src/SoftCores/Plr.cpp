@@ -131,7 +131,7 @@ bool Plr::IsPedHostileAndNearby(Ped ped)
 	Vector3	playerPos;
 
 	playerPos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, true);
-	return (PED::IS_ANY_HOSTILE_PED_NEAR_POINT(ped, playerPos.x, playerPos.y, playerPos.z, 100.0f));
+	return (PED::IS_ANY_HOSTILE_PED_NEAR_POINT(ped, playerPos.x, playerPos.y, playerPos.z, 200.0f));
 }
 
 bool Plr::IsIdle()
