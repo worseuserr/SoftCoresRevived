@@ -40,19 +40,18 @@ void ProcessBlip(Ped &ped, Ped &playerPed, Ped &horsePed, const bool &isInAHosti
 }
 
 // Actual logic only runs every 100 ms. This reduces jitteriness of blips and improves performance.
-void HostileBlip::Tick(void *_, float dTime) const
+void HostileBlip::Tick(void *_, float dTime)
 {
 	Ped                			pedArr[1024]; // Initialize at 1024, only index upto Config->PedRange
 	Ped                			playerPed;
 	Ped                			horsePed;
 	bool               			isInAHostileScenario;
 	int                			i;
-	static unsigned long long	counter = 0;
 	// Feature seems to not work for some enemies. Needs investigation.
 
 	if (Plr::IsInMission() && !Config->Immersion.HideHostileBlipsInMissions)
 		return ;
-	if (!HasDurationPassed(100, &counter)) // Only run logic every 100ms.
+	if (!HasDurationPassed(100, &Counter)) // Only run logic every 100ms.
 		return ;
 	isInAHostileScenario = Plr::IsInCombat() || Plr::IsPursued() || Plr::IsInMission(); // From original mod, I'm unsure if this is actually needed.
 	playerPed = PLAYER::PLAYER_PED_ID();
