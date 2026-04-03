@@ -48,7 +48,7 @@ void HostileBlip::Tick(void *_, float dTime) const
 	bool               			isInAHostileScenario;
 	int                			i;
 	static unsigned long long	counter = 0;
-	// Should consider moving logic, variable list is too large.
+	// Feature seems to not work for some enemies. Needs investigation.
 
 	if (Plr::IsInMission() && !Config->Immersion.HideHostileBlipsInMissions)
 		return ;
