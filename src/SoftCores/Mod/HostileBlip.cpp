@@ -1,5 +1,4 @@
 #include "SoftCores/Mod/HostileBlip.h"
-#include "Keyboard.h"
 #include "Sdk/natives.h"
 #include "Sdk/types.h"
 #include "SoftCores/Keys.h"
@@ -42,11 +41,11 @@ void ProcessBlip(Ped &ped, Ped &playerPed, Ped &horsePed, const bool &isInAHosti
 // Actual logic only runs every 100 ms. This reduces jitteriness of blips and improves performance.
 void HostileBlip::Tick(void *_, float dTime)
 {
-	Ped                			pedArr[1024]; // Initialize at 1024, only index upto Config->PedRange
-	Ped                			playerPed;
-	Ped                			horsePed;
-	bool               			isInAHostileScenario;
-	int                			i;
+	Ped		pedArr[1024]; // Initialize at 1024, only index upto Config->PedRange
+	Ped		playerPed;
+	Ped		horsePed;
+	bool	isInAHostileScenario;
+	int		i;
 	// Feature seems to not work for some enemies. Needs investigation.
 
 	if (Plr::IsInMission() && !Config->Immersion.HideHostileBlipsInMissions)
