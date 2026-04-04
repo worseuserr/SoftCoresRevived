@@ -6,6 +6,10 @@
 #include "SoftCores/Tick.h"
 #include "SoftCores/World.h"
 #include "SoftCores/Util/Time.h"
+#include <map>
+#include <algorithm>
+#include <set>
+#include <unordered_set>
 
 using namespace SoftCores;
 
@@ -13,38 +17,53 @@ HostileBlip::HostileBlip(Util::Logger *logger, SoftCores::Config *config)
 	: Feature(logger, config), TickConnection(nullptr) {}
 
 // Note: Regardless of what your compiler tells you, do NOT define Ped or any native types as const. It causes headaches.
-void ProcessBlip(Ped &ped, Ped &playerPed, Ped &horsePed, const bool &isInAHostileScenario)
+void ProcessBlip(Ped ped, Ped playerPed, Ped horsePed, const bool isInAHostileScenario, std::map<Ped, bool>	&VisiblityMap)
 {
-	Blip	pedBlip;
-	bool	isPedVisible;
+	static const Hash	ModifierVisible = Keys::GetHash("BLIP_MODIFIER_FADE_IN");
+	static const Hash	ModifierNotVisible = Keys::GetHash("BLIP_MODIFIER_FADE");
+	static const Hash	StyleVisible = Keys::GetHash("BLIP_MODIFIER_FADE");
+	static const Hash	StyleNotVisible = Keys::GetHash("BLIP_MODIFIER_FADE_OUT_SLOW");
+	Blip				pedBlip;
+	bool				isPedVisible;
 
-	if (!Plr::IsPedHostileAndNearby(ped) && !isInAHostileScenario)
+	if (ped == playerPed || ped == horsePed)
 		return ;
-	if (ped != playerPed
-		&& ped != horsePed
-		&& !World::IsPedFriendly(ped)
-		&& ENTITY::IS_ENTITY_A_PED(ped)
-		&& !PED::IS_PED_DEAD_OR_DYING(ped, true))
+	if (!isInAHostileScenario && !Plr::IsPedHostileAndNearby(ped))
+		return ;
+	if (World::IsPedFriendly(ped) || PED::IS_PED_DEAD_OR_DYING(ped, true))
+		// && ENTITY::IS_ENTITY_A_PED(ped) // From original mod, seems redundant.
+		return ;
+	PED::REQUEST_PED_VISIBILITY_TRACKING(ped); // This may be moved into the condition below if tracking persists internally.
+	if (!VisiblityMap.contains(ped))
 	{
-		PED::REQUEST_PED_VISIBILITY_TRACKING(ped);
-		pedBlip = MAP::GET_BLIP_FROM_ENTITY(ped);
 		isPedVisible = PED::IS_TRACKED_PED_VISIBLE(ped);
-		MAP::_BLIP_SET_MODIFIER(pedBlip, Keys::GetHash(isPedVisible ? "BLIP_MODIFIER_FADE_IN" : "BLIP_MODIFIER_FADE"));
-		MAP::_SET_BLIP_FLASH_STYLE(pedBlip, Keys::GetHash(isPedVisible ? "BLIP_MODIFIER_FADE" : "BLIP_MODIFIER_FADE_OUT_SLOW"));
-		// For any future devs:
-		//   I could not find a definition for _SET_BLIP_FLASH_STYLE in any NativeDB anywhere, in any dataset. Nor any documentation.
-		//   I'm still not sure what it exactly does, but this feature doesn't work properly without it.
-		//   If you can't find a natives header with it, the address is 0xB059D7BD3D78C16F. You're welcome.
+		VisiblityMap[ped] = isPedVisible;
 	}
+	else
+	{
+		isPedVisible = PED::IS_TRACKED_PED_VISIBLE(ped);
+		if (VisiblityMap[ped] == isPedVisible)
+			return ;
+	}
+	pedBlip = MAP::GET_BLIP_FROM_ENTITY(ped);
+	MAP::_BLIP_SET_MODIFIER(pedBlip, isPedVisible ? ModifierVisible : ModifierNotVisible);
+	MAP::_SET_BLIP_FLASH_STYLE(pedBlip, isPedVisible ? StyleVisible : StyleNotVisible);
+	VisiblityMap[ped] = isPedVisible;
+	// For any future devs:
+	//   I could not find a definition for _SET_BLIP_FLASH_STYLE in any NativeDB anywhere, in any dataset. Nor any documentation.
+	//   I only found a random text file in a repository with it and its associated address.
+	//   I'm still not sure what it exactly does, but this feature doesn't work properly without it.
+	//   If you can't find a natives header with it, the address is 0xB059D7BD3D78C16F. You're welcome.
 }
 
 // Actual logic only runs every 100 ms. This reduces jitteriness of blips and improves performance.
 void HostileBlip::Tick(void *_, float dTime)
 {
-	Ped		pedArr[1024]; // Initialize at 1024, only index upto Config->PedRange
+	Ped		pedArr[1024]{}; // Initialize at 1024, only index upto Config->PedRange
 	Ped		playerPed;
 	Ped		horsePed;
 	bool	isInAHostileScenario;
+	int		pedCount;
 	int		i;
 	// Feature seems to not work for some enemies. Needs investigation.
 
@@ -52,11 +71,20 @@ void HostileBlip::Tick(void *_, float dTime)
 		return ;
 	if (Plr::IsInMission() && !Config->Immersion.HideHostileBlipsInMissions)
 		return ;
+	pedCount = World::GetAllPeds(pedArr, Config->PedRange);
 	isInAHostileScenario = Plr::IsInCombat() || Plr::IsPursued() || Plr::IsInMission(); // From original mod, I'm unsure if this is actually needed.
 	playerPed = PLAYER::PLAYER_PED_ID();
 	horsePed = PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_ID());
-	for (i = 0; i < World::GetAllPeds(pedArr, Config->PedRange); i++)
-		ProcessBlip(pedArr[i], playerPed, horsePed, isInAHostileScenario);
+	if (HasDurationPassed(5000, &CleanupCounter))
+	{
+		std::unordered_set	pedSet(pedArr, pedArr + pedCount);
+		pedSet.reserve(pedCount);
+		std::erase_if(VisiblityMap, [&pedSet](const std::pair<Ped, bool>& pair) {
+			return (!pedSet.contains(pair.first));
+		});
+	}
+	for (i = 0; i < pedCount; i++)
+		ProcessBlip(pedArr[i], playerPed, horsePed, isInAHostileScenario, VisiblityMap);
 }
 
 
