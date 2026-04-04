@@ -16,6 +16,15 @@ using namespace SoftCores;
 HostileBlip::HostileBlip(Util::Logger *logger, SoftCores::Config *config)
 	: Feature(logger, config), TickConnection(nullptr) {}
 
+void CleanupMap(Ped *pedArr, int pedCount, std::map<Ped, bool> &visiblityMap)
+{
+	std::unordered_set	pedSet(pedArr, pedArr + pedCount);
+	pedSet.reserve(pedCount);
+	std::erase_if(visiblityMap, [&pedSet](const std::pair<Ped, bool>& pair) {
+		return (!pedSet.contains(pair.first));
+	});
+}
+
 // Note: Regardless of what your compiler tells you, do NOT define Ped or any native types as const. It causes headaches.
 void ProcessBlip(Ped ped, Ped playerPed, Ped horsePed, const bool isInAHostileScenario, std::map<Ped, bool>	&VisiblityMap)
 {
@@ -34,17 +43,11 @@ void ProcessBlip(Ped ped, Ped playerPed, Ped horsePed, const bool isInAHostileSc
 		// && ENTITY::IS_ENTITY_A_PED(ped) // From original mod, seems redundant.
 		return ;
 	PED::REQUEST_PED_VISIBILITY_TRACKING(ped); // This may be moved into the condition below if tracking persists internally.
+	isPedVisible = PED::IS_TRACKED_PED_VISIBLE(ped);
 	if (!VisiblityMap.contains(ped))
-	{
-		isPedVisible = PED::IS_TRACKED_PED_VISIBLE(ped);
 		VisiblityMap[ped] = isPedVisible;
-	}
-	else
-	{
-		isPedVisible = PED::IS_TRACKED_PED_VISIBLE(ped);
-		if (VisiblityMap[ped] == isPedVisible)
-			return ;
-	}
+	else if (VisiblityMap[ped] == isPedVisible)
+		return ;
 	pedBlip = MAP::GET_BLIP_FROM_ENTITY(ped);
 	MAP::_BLIP_SET_MODIFIER(pedBlip, isPedVisible ? ModifierVisible : ModifierNotVisible);
 	MAP::_SET_BLIP_FLASH_STYLE(pedBlip, isPedVisible ? StyleVisible : StyleNotVisible);
@@ -76,13 +79,7 @@ void HostileBlip::Tick(void *_, float dTime)
 	playerPed = PLAYER::PLAYER_PED_ID();
 	horsePed = PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_ID());
 	if (HasDurationPassed(5000, &CleanupCounter))
-	{
-		std::unordered_set	pedSet(pedArr, pedArr + pedCount);
-		pedSet.reserve(pedCount);
-		std::erase_if(VisiblityMap, [&pedSet](const std::pair<Ped, bool>& pair) {
-			return (!pedSet.contains(pair.first));
-		});
-	}
+		CleanupMap(pedArr, pedCount, VisiblityMap);
 	for (i = 0; i < pedCount; i++)
 		ProcessBlip(pedArr[i], playerPed, horsePed, isInAHostileScenario, VisiblityMap);
 }
