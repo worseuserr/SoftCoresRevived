@@ -66,4 +66,27 @@ namespace SoftCores::Util
 			return (new Connection<Sender, Value>(id, &Listeners));
 		}
 	};
+
+	// Tracks TrackedValue, dispatching the event if Update(), which has to be called every tick, finds it is changed.
+	template	<typename Sender, typename T>
+	class		ChangedEvent : public Event<Sender, T>
+	{
+		T	LastValue;
+		T	*TrackedValue;
+
+	public:
+		ChangedEvent(T* trackedValue)
+		{
+			LastValue = *trackedValue;
+			TrackedValue = trackedValue;
+		}
+
+		void Update(Sender sender)
+		{
+			if (*TrackedValue == LastValue)
+				return ;
+			Dispatch(sender, *TrackedValue);
+			LastValue = *TrackedValue;
+		}
+	};
 }
