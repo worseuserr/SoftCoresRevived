@@ -1,15 +1,16 @@
 #include "SoftCores/Mod/Mod.h"
 #include "SoftCores/Mod/FXOverride.h"
 #include "SoftCores/Mod/HostileBlip.h"
+#include "SoftCores/Mod/NerfedSleepAndBath.h"
 
 using namespace SoftCores;
 
-Mod::Mod(Util::Logger *logger, SoftCores::Config *config)
+Mod::Mod(ModContext *context)
 {
-	Logger = logger;
-	Config = config;
+	Context = context;
 
 	// All features must be added manually to this list.
 	LoadFeature<FXOverride>();
 	LoadFeature<HostileBlip>();
+	LoadFeature<NerfedSleepAndBath>();
 }

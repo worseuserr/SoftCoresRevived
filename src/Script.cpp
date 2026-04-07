@@ -8,6 +8,8 @@
 #include <SoftCores/Util/Logger.h>
 #include <SoftCores/Util/File.h>
 #include <SoftCores/Config.h>
+
+#include "SoftCores/ModContext.h"
 #include "SoftCores/Tick.h"
 #include "SoftCores/Mod/Mod.h"
 
@@ -32,6 +34,8 @@ const wchar_t *const	INI_FILE = L".\\SoftCoresRevived.ini";
 void ScriptMain()
 {
 	Logger		logger(LOG_FILE);
+	ModContext	context;
+	PlrEvents	events;
 
 	logger.Write("### Original SoftCores Mod by opsedar ###");
 	logger.Write("### Revived by worseuserr ###");
@@ -39,7 +43,8 @@ void ScriptMain()
 		? "### ini found ###"
 		: "#!# ini not found #!#");
 	const std::unique_ptr<Config>	config = std::make_unique<Config>(INI_FILE, logger);
-	const std::unique_ptr<Mod>		mod = std::make_unique<Mod>(&logger, config.get());
+	context = { .Logger = &logger, .Config = config.get(), .PlrEvents = &events };
+	const std::unique_ptr<Mod>		mod = std::make_unique<Mod>(&context);
 
 	// Set random seed.
 	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));

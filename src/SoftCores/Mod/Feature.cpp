@@ -2,13 +2,12 @@
 
 using namespace SoftCores;
 
-Feature::Feature(Util::Logger *logger, SoftCores::Config *config)
+Feature::Feature(ModContext *context)
 {
-	Logger = logger;
-	Config = config;
+	Context = context;
 }
 
 void Feature::Initialize()
 {
-	Logger->Write("Feature without initialize.");
+	Context->Logger->Write("Feature without initialize.");
 }

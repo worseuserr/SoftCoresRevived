@@ -15,7 +15,7 @@ namespace SoftCores
 		std::map<Ped, bool>				VisiblityMap; // Store ped by their visiblity (instance member)
 
 	public:
-		HostileBlip(Util::Logger *logger, SoftCores::Config *config);
+		HostileBlip(ModContext *context);
 		void	Tick(void *_, float dTime);
 		void	Initialize() override;
 	};

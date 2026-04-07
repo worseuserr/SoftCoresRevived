@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "SoftCores/Config.h"
+#include "SoftCores/ModContext.h"
 #include "SoftCores/Util/Logger.h"
 
 namespace SoftCores
@@ -10,10 +11,9 @@ namespace SoftCores
 	class	Feature
 	{
 	public:
-		Util::Logger	*Logger;
-		Config			*Config;
+		ModContext	*Context;
 
-		Feature(Util::Logger *logger, SoftCores::Config *config);
+		Feature(ModContext *context);
 		virtual			~Feature() = default;
 		virtual void	Initialize();
 	};
@@ -23,14 +23,13 @@ namespace SoftCores
 		std::vector<std::unique_ptr<Feature>>	Features;
 
 	public:
-		Util::Logger	*Logger;
-		Config			*Config;
+		ModContext	*Context;
 
-		Mod(Util::Logger *logger, SoftCores::Config *config);
+		Mod(ModContext *context);
 		template <typename FeatureType>
 		void	LoadFeature()
 		{
-			std::unique_ptr<FeatureType>	feat = std::make_unique<FeatureType>(Logger, Config);
+			std::unique_ptr<FeatureType>	feat = std::make_unique<FeatureType>(Context);
 
 			feat->Initialize();
 			Features.push_back(std::move(feat));

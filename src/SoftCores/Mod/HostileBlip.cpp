@@ -13,8 +13,8 @@
 
 using namespace SoftCores;
 
-HostileBlip::HostileBlip(Util::Logger *logger, SoftCores::Config *config)
-	: Feature(logger, config), TickConnection(nullptr) {}
+HostileBlip::HostileBlip(ModContext *context)
+	: Feature(context), TickConnection(nullptr) {}
 
 void CleanupMap(Ped *pedArr, int pedCount, std::map<Ped, bool> &visiblityMap)
 {
@@ -70,11 +70,11 @@ void HostileBlip::Tick(void *_, float dTime)
 	int		i;
 	// Feature seems to not work for some enemies. Needs investigation.
 
-	if (!Config->Immersion.HideHostileBlips || !HasDurationPassed(100, &Counter)) // Only run logic every 100ms.
+	if (!Context->Config->Immersion.HideHostileBlips || !HasDurationPassed(100, &Counter)) // Only run logic every 100ms.
 		return ;
-	if (Plr::IsInMission() && !Config->Immersion.HideHostileBlipsInMissions)
+	if (Plr::IsInMission() && !Context->Config->Immersion.HideHostileBlipsInMissions)
 		return ;
-	pedCount = World::GetAllPeds(pedArr, Config->PedRange);
+	pedCount = World::GetAllPeds(pedArr, Context->Config->PedRange);
 	isInAHostileScenario = Plr::IsInCombat() || Plr::IsPursued() || Plr::IsInMission(); // From original mod, I'm unsure if this is actually needed.
 	playerPed = PLAYER::PLAYER_PED_ID();
 	horsePed = PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_ID());
@@ -87,6 +87,6 @@ void HostileBlip::Tick(void *_, float dTime)
 
 void HostileBlip::Initialize()
 {
-	Logger->Write("HostileBlip initialized");
+	Context->Logger->Write("HostileBlip initialized");
 	TickConnection = Tick::OnTick += [this](void *_, float dTime){ Tick(_, dTime); };
 }

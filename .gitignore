@@ -350,3 +350,6 @@ test.bat
 
 # CLion run configuration
 .run
+
+# Cmake out
+out/

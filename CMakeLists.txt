@@ -51,6 +51,11 @@ add_library(SoftCoresRevived SHARED
 		src/SoftCores/Mod/HostileBlip.cpp
 		include/SoftCores/Util/Time.h
 		src/SoftCores/Util/Time.cpp
+		src/SoftCores/Mod/NerfedSleepAndBath.cpp
+		include/SoftCores/Mod/NerfedSleepAndBath.h
+		include/SoftCores/PlrEvents.h
+		include/SoftCores/ModContext.h
+		src/SoftCores/PlrEvents.cpp
 )
 
 target_compile_options(SoftCoresRevived PRIVATE

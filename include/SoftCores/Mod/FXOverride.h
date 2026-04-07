@@ -9,7 +9,7 @@ namespace SoftCores
 		Util::Connection<void *, float>	*TickConnection;
 
 	public:
-		FXOverride(Util::Logger *logger, SoftCores::Config *config);
+		FXOverride(ModContext *context);
 		void	Tick(void *_, float dTime) const;
 		void	Initialize() override;
 	};
