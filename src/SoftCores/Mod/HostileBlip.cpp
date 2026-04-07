@@ -17,7 +17,7 @@ using namespace SoftCores;
 HostileBlip::HostileBlip(ModContext *context)
 	: Feature(context), TickConnection(nullptr) {}
 
-void HostileBlip::CleanupMap(Ped *pedArr, int pedCount)
+void HostileBlip::CleanupMap(Ped *pedArr, const int pedCount)
 {
 	std::unordered_set	pedSet(pedArr, pedArr + pedCount);
 	pedSet.reserve(pedCount);
@@ -49,7 +49,7 @@ void HostileBlip::ProcessBlip(const Ped ped, const Ped playerPed, const Ped hors
 		return ;
 	if (VisiblityMap.contains(ped) && (VisiblityMap[ped] == BlipState::Disabled))
 		return ;
-	if (!isInAHostileScenario && !Plr::IsPedHostileAndNearby(ped))
+	if (!isInAHostileScenario && !Plr::IsPedHostileAndNearby(ped, 500.0f))
 		return ;
 	if (World::IsPedFriendly(ped))
 		// && ENTITY::IS_ENTITY_A_PED(ped) // From original mod, seems redundant.
