@@ -58,7 +58,7 @@ bool Plr::IsHorseCoreOverpowered(Core core)
 	return (ATTRIBUTE::_0x200373A8DF081F22(PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_PED_ID()), static_cast<int>(core)));
 }
 
-void SoftCores::Plr::SetDamageModifier(float melee, float weapon)
+void Plr::SetDamageModifier(float melee, float weapon)
 {
 	PLAYER::SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER(PLAYER::PLAYER_ID(), melee);
 	PLAYER::SET_PLAYER_WEAPON_DAMAGE_MODIFIER(PLAYER::PLAYER_ID(), weapon);
@@ -131,7 +131,7 @@ bool Plr::IsPedHostileAndNearby(Ped ped)
 	Vector3	playerPos;
 
 	playerPos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, true);
-	return (PED::IS_ANY_HOSTILE_PED_NEAR_POINT(ped, playerPos.x, playerPos.y, playerPos.z, 200.0f));
+	return (PED::IS_ANY_HOSTILE_PED_NEAR_POINT(ped, playerPos.x, playerPos.y, playerPos.z, 500.0f));
 }
 
 bool Plr::IsIdle()
@@ -152,7 +152,7 @@ bool Plr::IsInCover()
 	return (PED::IS_PED_IN_COVER(PLAYER::PLAYER_PED_ID(), true, true));
 }
 
-bool SoftCores::Plr::IsDeadeyeActivated()
+bool Plr::IsDeadeyeActivated()
 {
 	return (PAD::IS_CONTROL_JUST_PRESSED(0, Key("INPUT_SPECIAL_ABILITY").Hash())
 		|| PAD::IS_CONTROL_PRESSED(0, Key("INPUT_SPECIAL_ABILITY").Hash())
