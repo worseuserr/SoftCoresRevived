@@ -10,6 +10,8 @@ namespace SoftCores::Util
 
 	public:
 		Logger(const char *outputFilename);
+		void	Write(const std::string &message);
+		void	Write(const std::wstring &message);
 		void	Write(const char *message);
 		void	Write(const wchar_t *message);
 	};

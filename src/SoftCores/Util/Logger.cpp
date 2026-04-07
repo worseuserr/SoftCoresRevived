@@ -11,6 +11,16 @@ Logger::Logger(const char *outputFilename)
 	File.Close();
 }
 
+void Logger::Write(const std::string &message)
+{
+	return (Write(message.c_str()));
+}
+
+void Logger::Write(const std::wstring &message)
+{
+	return (Write(message.c_str()));
+}
+
 void Logger::Write(const char *message)
 {
 	tm					newtime{};
