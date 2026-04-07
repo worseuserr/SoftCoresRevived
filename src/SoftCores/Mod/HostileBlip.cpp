@@ -58,6 +58,8 @@ void HostileBlip::ProcessBlip(const Ped ped, const Ped playerPed, const Ped hors
 	blipState = BoolToState(PED::IS_TRACKED_PED_VISIBLE(ped));
 	if (!VisiblityMap.contains(ped))
 	{
+		// Force blip to update by causing VisiblityMap[ped] != blipState.
+		// The states HAVE to start as Visible to Invisible, otherwise the engine doesn't update the blips.
 		VisiblityMap[ped] = BlipState::Visible;
 		blipState = BlipState::Invisible;
 	}
