@@ -126,12 +126,12 @@ bool Plr::IsInCombat()
 	return (PED::IS_PED_IN_COMBAT(PLAYER::PLAYER_PED_ID(), NULL) || PED::IS_PED_IN_MELEE_COMBAT(PLAYER::PLAYER_PED_ID()));
 }
 
-bool Plr::IsPedHostileAndNearby(Ped ped)
+bool Plr::IsPedHostileAndNearby(const Ped ped, const float distance)
 {
 	Vector3	playerPos;
 
 	playerPos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, true);
-	return (PED::IS_ANY_HOSTILE_PED_NEAR_POINT(ped, playerPos.x, playerPos.y, playerPos.z, 500.0f));
+	return (PED::IS_ANY_HOSTILE_PED_NEAR_POINT(ped, playerPos.x, playerPos.y, playerPos.z, distance));
 }
 
 bool Plr::IsIdle()

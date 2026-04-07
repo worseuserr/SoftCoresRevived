@@ -30,7 +30,7 @@ namespace SoftCores
 		static bool		IsUsingAnyScenario();
 		static bool		IsBathing();
 		static bool		IsInCombat();
-		static bool		IsPedHostileAndNearby(Ped ped);
+		static bool		IsPedHostileAndNearby(Ped ped, float distance);
 		static bool		IsIdle();
 		static bool		IsMounted();
 		static bool		IsInCover();
