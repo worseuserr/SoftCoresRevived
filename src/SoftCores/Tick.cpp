@@ -3,9 +3,6 @@
 
 using namespace SoftCores;
 
-Event<void*, float>	Tick::OnTick;
-bool				Tick::LoopActive;
-
 void	Tick::Loop()
 {
 	while (LoopActive)

@@ -37,13 +37,14 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	};
 
 	Immersion = {
-		.DisablePickupGlow =			GetConfig<bool>(ImmersionSect, L"DisablePickupGlow", L"truE"),
-		.DisableObjectGlow =			GetConfig<bool>(ImmersionSect, L"DisableObjectGlow", L"truE"),
-		.HideHostileBlips =				GetConfig<bool>(ImmersionSect, L"HideHostileBlipsOutOfView", L"truE"),
-		.HideHostileBlipsInMissions =	GetConfig<bool>(ImmersionSect, L"HideHostileBlipsOutOfViewInMissions", L"falsE"),
-		.NoReloadInDeadeye =			GetConfig<bool>(ImmersionSect, L"NoReloadInDeadeye", L"truE"),
-		.SleepOnlyRestoresStamina =		GetConfig<bool>(ImmersionSect, L"SleepOnlyRestoresStamina", L"truE"),
-		.BathOnlyRestoresDeadeye =		GetConfig<bool>(ImmersionSect, L"BathOnlyRestoresDeadeye", L"truE")
+		.DisablePickupGlow =				GetConfig<bool>(ImmersionSect, L"DisablePickupGlow", L"truE"),
+		.DisableObjectGlow =				GetConfig<bool>(ImmersionSect, L"DisableObjectGlow", L"truE"),
+		.HideOutOfViewBlips =				GetConfig<bool>(ImmersionSect, L"HideOutOfViewBlips", L"truE"),
+		.HideOutOfViewBlipsOnlyHostile =	GetConfig<bool>(ImmersionSect, L"HideOutOfViewBlipsOnlyHostile", L"falsE"),
+		.HideOutOfViewBlipsInMissions =		GetConfig<bool>(ImmersionSect, L"HideOutOfViewBlipsInMissions", L"falsE"),
+		.NoReloadInDeadeye =				GetConfig<bool>(ImmersionSect, L"NoAutoReloadInDeadeye", L"truE"),
+		.SleepOnlyRestoresStamina =			GetConfig<bool>(ImmersionSect, L"SleepOnlyRestoresStamina", L"truE"),
+		.BathOnlyRestoresDeadeye =			GetConfig<bool>(ImmersionSect, L"BathOnlyRestoresDeadeye", L"truE")
 	};
 
 	PlayerDepletion = {

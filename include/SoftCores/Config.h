@@ -7,7 +7,7 @@
 
 namespace SoftCores
 {
-	typedef float Multiplier;
+	using	Multiplier = float;
 
 	struct	FXConfig
 	{
@@ -31,8 +31,9 @@ namespace SoftCores
 		bool	DisablePickupGlow;
 		bool	DisableObjectGlow;
 		// The feature that hides hostile blips outside of the player's view.
-		bool	HideHostileBlips;
-		bool	HideHostileBlipsInMissions;
+		bool	HideOutOfViewBlips;
+		bool	HideOutOfViewBlipsOnlyHostile;
+		bool	HideOutOfViewBlipsInMissions;
 		bool	NoReloadInDeadeye;
 		bool	SleepOnlyRestoresStamina;
 		bool	BathOnlyRestoresDeadeye;

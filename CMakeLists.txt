@@ -47,8 +47,8 @@ add_library(SoftCoresRevived SHARED
 		src/SoftCores/Mod/Mod.cpp
 		src/SoftCores/Mod/FXOverride.cpp
 		include/SoftCores/Mod/FXOverride.h
-		include/SoftCores/Mod/HostileBlip.h
-		src/SoftCores/Mod/HostileBlip.cpp
+		include/SoftCores/Mod/FOVBlips.h
+		src/SoftCores/Mod/FOVBlips.cpp
 		include/SoftCores/Util/Time.h
 		src/SoftCores/Util/Time.cpp
 		src/SoftCores/Mod/NerfedSleepAndBath.cpp

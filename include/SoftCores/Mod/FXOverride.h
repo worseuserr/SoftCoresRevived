@@ -6,7 +6,7 @@ namespace SoftCores
 {
 	class	FXOverride : public Feature
 	{
-		Util::Connection<void *, float>	*TickConnection;
+		Util::Connection<void *, float>	*TickConnection = nullptr;
 
 	public:
 		FXOverride(ModContext *context);
