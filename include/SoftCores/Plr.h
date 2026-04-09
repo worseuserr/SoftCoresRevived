@@ -7,6 +7,7 @@ namespace SoftCores
 	class	Plr
 	{
 	public:
+		static Ped		GetPed();
 		static int		GetMaxOuterCore(Core core);
 		static int		GetOuterCore(Core core);
 		static void		SetOuterCore(Core core, int value);

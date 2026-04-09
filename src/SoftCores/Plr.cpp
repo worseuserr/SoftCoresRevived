@@ -7,6 +7,11 @@ using namespace SoftCores;
 using namespace SoftCores::Util;
 using namespace Keys;
 
+Ped Plr::GetPed()
+{
+	return (PLAYER::GET_PLAYER_PED(PLAYER::PLAYER_ID()));
+}
+
 int Plr::GetMaxOuterCore(Core core)
 {
 	return (ATTRIBUTE::GET_MAX_ATTRIBUTE_POINTS(PLAYER::PLAYER_PED_ID(), static_cast<int>(core)));
