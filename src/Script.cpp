@@ -33,25 +33,29 @@ const wchar_t *const	INI_FILE = L".\\SoftCoresRevived.ini";
 
 void ScriptMain()
 {
-	Logger		logger(LOG_FILE);
 	ModContext	context;
-	PlrEvents	events;
 
+	Logger		logger(LOG_FILE);
 	logger.Write("### Original SoftCores Mod by opsedar ###");
 	logger.Write("### Revived by worseuserr ###");
 	logger.Write(File::Exists(File::WideToUTF8(INI_FILE).c_str())
 		? "### ini found ###"
 		: "#!# ini not found #!#");
-	const	std::unique_ptr<Config>	config = std::make_unique<Config>(INI_FILE, logger);
-	const	std::unique_ptr<Tick>	tick = std::make_unique<Tick>();
+	const std::unique_ptr<Config>		config = std::make_unique<Config>(INI_FILE, logger);
+	logger.Write("### Config loaded ###");
+	const std::unique_ptr<Tick>			tick = std::make_unique<Tick>();
+	logger.Write("### Tick system loaded ###");
+	const std::unique_ptr<PlrEvents>	plrEvents = std::make_unique<PlrEvents>(tick.get());
+	logger.Write("### Player events loaded ###");
 	context = {
 		.Logger = &logger,
 		.Config = config.get(),
-		.PlrEvents = &events,
-		.Tick = tick.get()
+		.PlrEvents = plrEvents.get(),
+		.Tick = tick.get(),
 	};
-	const std::unique_ptr<Mod>		mod = std::make_unique<Mod>(&context);
-
+	const std::unique_ptr<Mod>			mod = std::make_unique<Mod>(&context);
+	logger.Write("### Mod loaded ###");
+	logger.Write("### Context set ###");
 	// Set random seed.
 	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 	logger.Write("### Initializing mod loop ###");

@@ -7,7 +7,7 @@ using namespace SoftCores;
 FXOverride::FXOverride(ModContext *context)
 	: Feature(context) {}
 
-void FXOverride::Tick(void *_, float dTime) const
+void FXOverride::Tick(Util::NO_SENDER _, float dTime) const
 {
 	const FXConfig	&FX = Context->Config->FX;
 
@@ -31,5 +31,5 @@ void FXOverride::Tick(void *_, float dTime) const
 void FXOverride::Initialize()
 {
 	Context->Logger->Write("FXOverride initialized");
-	TickConnection = Context->Tick->OnTick += [this](void *_, const float dTime){ Tick(_, dTime); };
+	TickConnection = Context->Tick->OnTick += [this](Util::NO_SENDER _, const float dTime){ Tick(_, dTime); };
 }

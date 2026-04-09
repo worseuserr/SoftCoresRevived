@@ -9,9 +9,9 @@ namespace SoftCores
 {
 	struct ModContext
 	{
-		Logger		*Logger;
-		Config		*Config;
-		PlrEvents	*PlrEvents;
-		Tick		*Tick;
+		Util::Logger	*Logger;
+		Config			*Config;
+		PlrEvents		*PlrEvents;
+		Tick			*Tick;
 	};
 }

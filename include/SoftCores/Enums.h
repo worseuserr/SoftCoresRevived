@@ -5,7 +5,7 @@ namespace SoftCores {
 	enum class	Core {
 		Health,
 		Stamina,
-		DeadEye
+		Deadeye
 	};
 
 	enum class	ClothingType : uint {

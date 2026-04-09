@@ -8,12 +8,12 @@ namespace SoftCores
 {
 	class	FOVBlips : public Feature
 	{
-		Util::Connection<void *, float>	*TickConnection = nullptr;
+		Util::Connection<Util::NO_SENDER, float>	*TickConnection = nullptr;
 
 	public:
 		FOVBlips(ModContext *context);
 		void		Initialize() override;
-		void		Tick(void *_, float dTime);
+		void		Tick(Util::NO_SENDER _, float dTime);
 		void		ProcessBlip(Ped ped);
 	};
 }

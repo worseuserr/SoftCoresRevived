@@ -6,11 +6,11 @@ namespace SoftCores
 {
 	class	FXOverride : public Feature
 	{
-		Util::Connection<void *, float>	*TickConnection = nullptr;
+		Util::Connection<Util::NO_SENDER, float>	*TickConnection = nullptr;
 
 	public:
 		FXOverride(ModContext *context);
-		void	Tick(void *_, float dTime) const;
+		void	Tick(Util::NO_SENDER _, float dTime) const;
 		void	Initialize() override;
 	};
 }

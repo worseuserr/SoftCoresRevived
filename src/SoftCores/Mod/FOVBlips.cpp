@@ -41,7 +41,7 @@ void FOVBlips::ProcessBlip(const Ped ped)
 	//   If you can't find a natives header with it, the address is 0xB059D7BD3D78C16F. You're welcome.
 }
 
-void FOVBlips::Tick(void *_, float dTime)
+void FOVBlips::Tick(Util::NO_SENDER _, float dTime)
 {
 	const ImmersionConfig	&config = Context->Config->Immersion;
 	Ped	pedArr[1024]{}; // Initialize at 1024, only index upto Config->PedRange
@@ -71,5 +71,5 @@ void FOVBlips::Tick(void *_, float dTime)
 void FOVBlips::Initialize()
 {
 	Context->Logger->Write("FOVBlips initialized");
-	TickConnection = Context->Tick->OnTick += [this](void *_, float dTime){ Tick(_, dTime); };
+	TickConnection = Context->Tick->OnTick += [this](Util::NO_SENDER _, float dTime){ Tick(_, dTime); };
 }

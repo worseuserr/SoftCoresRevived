@@ -2,8 +2,6 @@
 
 #include <SoftCores/Util/Event.h>
 
-using namespace SoftCores::Util;
-
 namespace SoftCores
 {
 	class	Tick
@@ -13,8 +11,8 @@ namespace SoftCores
 
 	public:
 		// value: deltaTime
-		Event<NO_SENDER, float>	OnTick;
-		void					StartLoop();
-		void					StopLoop();
+		Util::Event<Util::NO_SENDER, float>	OnTick;
+		void								StartLoop();
+		void								StopLoop();
 	};
 }

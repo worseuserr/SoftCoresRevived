@@ -10,8 +10,8 @@ namespace SoftCores::Util
 	template	<typename Sender, typename Value>
 	struct		Listener
 	{
-		unsigned long									ID;
-		std::function<void(Sender sender, Value value)> Function;
+		unsigned long										ID;
+		std::function<void(Sender *sender, Value value)>	Function;
 	};
 
 
@@ -49,7 +49,7 @@ namespace SoftCores::Util
 		std::vector<Listener<Sender, Value>>	Listeners;
 	public:
 		Event() = default;
-		void	Dispatch(Sender sender, Value value)
+		void	Dispatch(Sender *sender, Value value)
 		{
 			for (auto listener : Listeners)
 			{
@@ -57,7 +57,7 @@ namespace SoftCores::Util
 			}
 		}
 
-		Connection<Sender, Value>	*operator+=(std::function<void(Sender sender, Value value)> func)
+		Connection<Sender, Value>	*operator+=(std::function<void(Sender *sender, Value value)> func)
 		{
 			static unsigned long	id = 0;
 
@@ -72,21 +72,19 @@ namespace SoftCores::Util
 	class		ChangedEvent : public Event<Sender, T>
 	{
 		T	LastValue;
-		T	*TrackedValue;
 
 	public:
-		ChangedEvent(T* trackedValue)
+		ChangedEvent(T initialValue)
 		{
-			LastValue = *trackedValue;
-			TrackedValue = trackedValue;
+			LastValue = initialValue;
 		}
 
-		void Update(Sender sender)
+		void Update(Sender *sender, T newValue)
 		{
-			if (*TrackedValue == LastValue)
+			if (newValue == LastValue)
 				return ;
-			Dispatch(sender, *TrackedValue);
-			LastValue = *TrackedValue;
+			this->Dispatch(sender, newValue);
+			LastValue = newValue;
 		}
 	};
 }

@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "SoftCores/Config.h"
 #include "SoftCores/ModContext.h"
 #include "SoftCores/Util/Logger.h"
 

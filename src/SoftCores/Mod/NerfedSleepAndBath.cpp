@@ -1,63 +1,76 @@
 #include "SoftCores/Mod/NerfedSleepAndBath.h"
 
+#include <format>
+
+#include "Sdk/natives.h"
+#include "SoftCores/Keys.h"
+#include "SoftCores/Plr.h"
+
 using namespace SoftCores;
 
 NerfedSleepAndBath::NerfedSleepAndBath(ModContext *context)
 	: Feature(context) {}
 
+void NerfedSleepAndBath::ResetCores()
+{
+	Plr::SetCore(Core::Deadeye, LastDeadeye);
+	Plr::SetCore(Core::Health, LastHealth);
+	HasControl = true;
+	HasRefilledDeadeye = false;
+}
 
-// if (sleepStaminaOnly)
-// 		{
-// 			bool isNotinControl;
-// 			bool isSleeping;
-//
-// 			isSleeping = false;
-// 			isNotinControl = false;
-// 			if (!PLR.IsInControl() && !isNotinControl) // get last health and deadeye core values when player is no longer in control (when using campfire from wheel or start of most scenario)
-// 			{
-// 				isNotinControl = true;
-// 				lastHealthCore = PLR.GetCore(Core::Health);
-// 				lastDeadEyeCore = PLR.GetCore(Core::DeadEye);
-// 			}
-// 			else if (PLR.IsInControl() && isNotinControl) // set back to false when player regain control
-// 			{
-// 				isNotinControl = false;
-// 			}
-//
-// 			if (isNotinControl && PLR.IsInSleepScenario() && !isSleeping) // once hooked the first entry point of scenario which is -1 while not in control, stop hooking at all
-// 			{
-// 				isSleeping = true;
-// 				stringstream text;
-// 				text << "hooked player is sleeping while not in control, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
-// 				LOGGER.Write(text.str().c_str());
-// 			}
-// 			else if (!isNotinControl && PLR.IsInSleepScenario() && !isSleeping) // once hooked the first entry point of scenario which is -1 while in control, stop hooking at all
-// 			{
-// 				isSleeping = true;
-// 				lastHealthCore = PLR.GetCore(Core::Health);
-// 				lastDeadEyeCore = PLR.GetCore(Core::DeadEye);
-// 				stringstream text;
-// 				text << "hooked player is sleeping while in control, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
-// 				LOGGER.Write(text.str().c_str());
-// 			}
-// 			else if (World::IsRaining() && PED::_IS_PED_USING_SCENARIO_HASH(playerPed, Keys::GetHash("PROP_PLAYER_SLEEP_TENT_A_FRAME")) && !isSleeping) // if player sets camp when its raining, will go directly to tent, hence not initiating -1 scenario point i reckon
-// 			{
-// 				isSleeping = true;
-// 				lastHealthCore = PLR.GetCore(Core::Health);
-// 				lastDeadEyeCore = PLR.GetCore(Core::DeadEye);
-// 				stringstream text;
-// 				text << "hooked player is sleeping while raining, lastHealthCore: " << lastHealthCore << " lastDeadEyeCore: " << lastDeadEyeCore;
-// 				LOGGER.Write(text.str().c_str());
-// 			}
-//
-// 			if (isSleeping) // keep setting player last health, deadeye until player starts moving or using campfire scenario
-// 			{
-// 				PLR.SetCore(Core::Health, lastHealthCore);
-// 				PLR.SetCore(Core::DeadEye, lastDeadEyeCore);
-// 			}
-// 		}
-// 		// END OF SLEEP STAMINA ONLY PART +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
+void NerfedSleepAndBath::OnControlChanged(Util::NO_SENDER _, const bool isInControl)
+{
+	HasControl = isInControl;
+	HasRefilledDeadeye = false;
+}
+
+void NerfedSleepAndBath::OnSleepingChanged(Util::NO_SENDER _, const bool isSleeping)
+{
+	if (!isSleeping)
+		return ;
+	if (HasRefilledDeadeye)
+		ResetCores();
+}
+
+void NerfedSleepAndBath::OnDeadeyeChanged(Util::NO_SENDER _, const int value)
+{
+	if (HasControl)
+		return ;
+	// This check is for when the player sets up a tent during rain, which for some reason doesn't set IsSleeping.
+	if (PED::_IS_PED_USING_SCENARIO_HASH(Plr::GetPed(), Keys::GetHash("PROP_PLAYER_SLEEP_TENT_A_FRAME")))
+		ResetCores();
+	else
+		HasRefilledDeadeye = true;
+}
+
+void NerfedSleepAndBath::Initialize()
+{
+	Context->Logger->Write("Initializing NerfedSleepAndBath");
+	LastDeadeye = Plr::GetCore(Core::Deadeye);
+	LastHealth = Plr::GetCore(Core::Health);
+	HasControl = true;
+	HasRefilledDeadeye = false;
+	Context->Logger->Write("Values set");
+	Context->PlrEvents->OnSleepingChanged += [this](Util::NO_SENDER _, const bool isSleeping)
+	{
+		Context->Logger->Write(std::format("isSleeping changed: value = {}", isSleeping));
+		OnSleepingChanged(_, isSleeping);
+	};
+	Context->PlrEvents->OnInControlChanged += [this](Util::NO_SENDER _, const bool isInControl)
+	{
+		Context->Logger->Write(std::format("isInControl changed: value = {}", isInControl));
+		OnControlChanged(_, isInControl);
+	};
+	Context->PlrEvents->OnDeadeyeCoreChanged += [this](Util::NO_SENDER _, const int value)
+	{
+		Context->Logger->Write(std::format("OnDeadeyeCoreChanged changed: value = {}", value));
+		OnDeadeyeChanged(_, value);
+	};
+	Context->Logger->Write("ChangedEvent connected");
+}
+
+
 // 		// START OF BATH DEADEYE ONLY PART ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // 		if (bathDeadEyeOnly)
 // 		{
