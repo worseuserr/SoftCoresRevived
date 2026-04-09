@@ -21,6 +21,11 @@ void NerfedSleepAndBath::ResetCores()
 
 void NerfedSleepAndBath::OnControlChanged(Util::NO_SENDER _, const bool isInControl)
 {
+	if (!isInControl)
+	{
+		LastDeadeye = Plr::GetCore(Core::Deadeye);
+		LastHealth = Plr::GetCore(Core::Health);
+	}
 	HasControl = isInControl;
 	HasRefilledDeadeye = false;
 }
