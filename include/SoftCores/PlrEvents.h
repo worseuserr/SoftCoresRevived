@@ -11,8 +11,11 @@ namespace SoftCores
 
 	public:
 		Util::ChangedEvent<PlrEvents, bool>	OnSleepingChanged;
-		Util::ChangedEvent<PlrEvents, bool>	OnInControlChanged;
+		Util::ChangedEvent<PlrEvents, bool>	OnControlChanged;
+		Util::ChangedEvent<PlrEvents, bool>	OnMovingChanged;
+		Util::ChangedEvent<PlrEvents, bool>	OnBathingChanged;
 		Util::ChangedEvent<PlrEvents, int>	OnDeadeyeCoreChanged;
+		Util::ChangedEvent<PlrEvents, int>	OnStaminaCoreChanged;
 
 		PlrEvents(SoftCores::Tick *tick);
 		void FTick(Util::NO_SENDER _, float dTime);
