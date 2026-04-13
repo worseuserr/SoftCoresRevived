@@ -43,14 +43,7 @@ public:
 	{
 		if (logLevel > LogLevel)
 			return ;
-		Log(static_cast<int>(logLevel), message, std::forward<Args>(args)...);
-	}
-	template <typename... Args>
-	static void	Log(const int logLevel, std::format_string<Args...> &&message, Args&&... args)
-	{
-		if (static_cast<enum LogLevel>(logLevel) > LogLevel)
-			return ;
-		return (Logger->Write(LogLevelStrings[logLevel] +
+		return (Logger->Write(LogLevelStrings[static_cast<int>(logLevel)] +
 			std::format(message, std::forward<Args>(args)...), true));
 	}
 	static void	SetLogger(SoftCores::Util::Logger &logger);
