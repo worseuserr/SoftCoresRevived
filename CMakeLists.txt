@@ -56,6 +56,8 @@ add_library(SoftCoresRevived SHARED
 		include/SoftCores/PlrEvents.h
 		include/SoftCores/ModContext.h
 		src/SoftCores/PlrEvents.cpp
+		include/Debug.h
+		src/Debug.cpp
 )
 
 target_compile_options(SoftCoresRevived PRIVATE

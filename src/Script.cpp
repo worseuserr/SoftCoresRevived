@@ -3,15 +3,16 @@
 #include <SoftCores/Keys.h>
 #include <string>
 #include <Windows.h>
-#include "Script.h"
 #include <chrono>
 #include <SoftCores/Util/Logger.h>
 #include <SoftCores/Util/File.h>
 #include <SoftCores/Config.h>
 
+#include "Script.h"
 #include "SoftCores/ModContext.h"
 #include "SoftCores/Tick.h"
 #include "SoftCores/Mod/Mod.h"
+#include "Debug.h"
 
 using namespace std;
 using namespace SoftCores;
