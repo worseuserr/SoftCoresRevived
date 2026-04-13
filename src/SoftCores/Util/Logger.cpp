@@ -12,7 +12,7 @@ Logger::Logger(const char *outputFilename)
 	File.Close();
 }
 
-void Logger::Write(const char *message)
+void Logger::Write(const char *message, bool appendDatetime)
 {
 	tm					newtime{};
 	time_t				now;
@@ -24,30 +24,30 @@ void Logger::Write(const char *message)
 	File.Open(OutputFile, std::ios_base::app);
 	if (File.IsOpen())
 	{
-		text << std::format("[{:02}/{:02}/{} {:02}:{:02}:{:02}] {}",
+		text << (appendDatetime ? std::format("[{:02}/{:02}/{} {:02}:{:02}:{:02}] {}",
 			newtime.tm_mday,
 			newtime.tm_mon + 1,
 			newtime.tm_year + 1900,
 			newtime.tm_hour,
 			newtime.tm_min,
 			newtime.tm_sec,
-			message);
+			message) : message);
 		File << text.str().c_str() << "\n";
 		File.Close();
 	}
 }
 
-void Logger::Write(const std::string &message)
+void Logger::Write(const std::string &message, bool appendDatetime)
 {
-	return (Write(message.c_str()));
+	return (Write(message.c_str(), appendDatetime));
 }
 
-void Logger::Write(const std::wstring &message)
+void Logger::Write(const std::wstring &message, bool appendDatetime)
 {
-	return (Write(message.c_str()));
+	return (Write(message.c_str(), appendDatetime));
 }
 
-void Logger::Write(const wchar_t *message)
+void Logger::Write(const wchar_t *message, bool appendDatetime)
 {
-	return (Write(File::WideToUTF8(message).c_str()));
+	return (Write(File::WideToUTF8(message).c_str(), appendDatetime));
 }
