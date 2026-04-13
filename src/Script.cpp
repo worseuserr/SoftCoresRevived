@@ -1,13 +1,9 @@
-#include <sstream>
-#include <map>
-#include <SoftCores/Keys.h>
 #include <string>
 #include <Windows.h>
 #include <chrono>
 #include <SoftCores/Util/Logger.h>
 #include <SoftCores/Util/File.h>
 #include <SoftCores/Config.h>
-
 #include "Script.h"
 #include "SoftCores/ModContext.h"
 #include "SoftCores/Tick.h"
@@ -20,6 +16,12 @@ using namespace SoftCores::Util;
 
 const char *const		LOG_FILE = ".\\SoftCoresRevived.log";
 const wchar_t *const	INI_FILE = L".\\SoftCoresRevived.ini";
+
+#ifndef NDEBUG
+	LogLevel Debug::LogLevel = LogLevel::Debug;
+#else
+	LogLevel Debug::LogLevel = LogLevel::Info;
+#endif
 
 // TODO: error handling
 
@@ -35,35 +37,35 @@ const wchar_t *const	INI_FILE = L".\\SoftCoresRevived.ini";
 void ScriptMain()
 {
 	ModContext	context;
-
 	Logger		logger(LOG_FILE);
-	logger.Write("### Original SoftCores Mod by opsedar ###");
+
+	Debug::SetLogger(logger);
+	logger.Write("### Original SoftCores Mod by opsedar ###", true);
 	logger.Write("### Revived by worseuserr ###");
 	logger.Write(File::Exists(File::WideToUTF8(INI_FILE).c_str())
 		? "### ini found ###"
 		: "#!# ini not found #!#");
 	const std::unique_ptr<Config>		config = std::make_unique<Config>(INI_FILE, logger);
-	logger.Write("### Config loaded ###");
+	logger.Write("### Config loaded ###", true);
 	const std::unique_ptr<Tick>			tick = std::make_unique<Tick>();
-	logger.Write("### Tick system loaded ###");
+	logger.Write("### Tick system loaded ###", true);
 	const std::unique_ptr<PlrEvents>	plrEvents = std::make_unique<PlrEvents>(tick.get());
-	logger.Write("### Player events loaded ###");
+	logger.Write("### Player events loaded ###", true);
 	context = {
-		.Logger = &logger,
 		.Config = config.get(),
 		.PlrEvents = plrEvents.get(),
 		.Tick = tick.get(),
 	};
 	const std::unique_ptr<Mod>			mod = std::make_unique<Mod>(&context);
-	logger.Write("### Mod loaded ###");
-	logger.Write("### Context set ###");
+	logger.Write("### Mod loaded ###", true);
+	logger.Write("### Context set ###", true);
 	// Set random seed.
 	srand(static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
-	logger.Write("### Initializing mod loop ###");
+	logger.Write("### Initializing mod loop ###", true);
 	// Mod ends on Tick->StopLoop();
 	context.Tick->StartLoop();
-	logger.Write("### Mod loop ended ###");
-	logger.Write("### Freeing memory ###");
+	logger.Write("### Mod loop ended ###", true);
+	logger.Write("### Freeing memory ###", true);
 }
 
 //
