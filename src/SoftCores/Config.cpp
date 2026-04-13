@@ -4,15 +4,15 @@ using namespace SoftCores;
 
 Config::Config(const std::wstring &filename, Util::Logger &logger)
 {
-	const wchar_t	*DebugSect =		L"DEBUG";
-	const wchar_t	*FXSect =			L"VANILLA_FX";
-	const wchar_t	*ImmersionSect =	L"IMMERSION";
-	const wchar_t	*CoreDepSect =		L"CORE_DEPLETION";
-	const wchar_t	*HorseCoreDepSect =	L"HORSE_CORE_DEPLETION";
-	const wchar_t	*TempSect =			L"TEMPERATURE";
-	const wchar_t	*DyingPenaltySect =	L"PENALTY_ON_DEATH";
-	const wchar_t	*PlayerTweaksSect =	L"PLAYER_COMBAT_TWEAKS";
-	const wchar_t	*AITweaksSect =		L"AI_COMBAT_TWEAKS";
+	static constexpr const wchar_t	*DebugSect =		L"DEBUG";
+	static constexpr const wchar_t	*FXSect =			L"VANILLA_FX";
+	static constexpr const wchar_t	*ImmersionSect =	L"IMMERSION";
+	static constexpr const wchar_t	*CoreDepSect =		L"CORE_DEPLETION";
+	static constexpr const wchar_t	*HorseCoreDepSect =	L"HORSE_CORE_DEPLETION";
+	static constexpr const wchar_t	*TempSect =			L"TEMPERATURE";
+	static constexpr const wchar_t	*DyingPenaltySect =	L"PENALTY_ON_DEATH";
+	static constexpr const wchar_t	*PlayerTweaksSect =	L"PLAYER_COMBAT_TWEAKS";
+	static constexpr const wchar_t	*AITweaksSect =		L"AI_COMBAT_TWEAKS";
 
 	Logger = &logger;
 	File = filename;
