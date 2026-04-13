@@ -5,7 +5,7 @@
 
 using namespace SoftCores;
 
-bool Weapons::IsItem(Hash weapon)
+bool Weapons::IsItem(const Hash weapon)
 {
 	for (Keys::Key key : Keys::ItemWeapons)
 	{
@@ -15,7 +15,7 @@ bool Weapons::IsItem(Hash weapon)
 	return (false);
 }
 
-bool Weapons::IsExotic(Hash weapon)
+bool Weapons::IsExotic(const Hash weapon)
 {
 	for (Keys::Key key : Keys::ExoticWeapons)
 	{
@@ -25,7 +25,7 @@ bool Weapons::IsExotic(Hash weapon)
 	return (false);
 }
 
-bool Weapons::IsThrowableOnly(Hash weapon)
+bool Weapons::IsThrowableOnly(const Hash weapon)
 {
 
 
@@ -37,7 +37,7 @@ bool Weapons::IsThrowableOnly(Hash weapon)
 	return (false);
 }
 
-bool Weapons::IsMelee(Hash weapon)
+bool Weapons::IsMelee(const Hash weapon)
 {
 
 	for (Keys::Key key : Keys::MeleeWeapons)

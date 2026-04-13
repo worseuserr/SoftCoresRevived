@@ -14,13 +14,13 @@ bool	World::IsSnowing()
 	return (MISC::GET_SNOW_LEVEL() > 0.0f);
 }
 
-void	World::SetAIDamageModifier(float melee, float weapon)
+void	World::SetAIDamageModifier(const float melee, const float weapon)
 {
 	PED::SET_AI_MELEE_WEAPON_DAMAGE_MODIFIER(melee);
 	PED::SET_AI_WEAPON_DAMAGE_MODIFIER(weapon);
 }
 
-bool	World::IsPedFriendly(Ped ped)
+bool	World::IsPedFriendly(const Ped ped)
 {
 	for (Keys::Key key : Keys::FriendlyPeds)
 	{
@@ -45,7 +45,7 @@ int		World::GetGameTimer()
 	return (MISC::GET_GAME_TIMER());
 }
 
-int World::GetAllPeds(int *arr, int arrSize)
+int World::GetAllPeds(int *arr, const int arrSize)
 {
 	return (worldGetAllPeds(arr, arrSize));
 }

@@ -6,7 +6,7 @@
 using namespace SoftCores::Util;
 
 
-void File::Open(const char *filename, std::ios_base::openmode mode)
+void File::Open(const char *filename, const std::ios_base::openmode mode)
 {
 	file.open(filename, mode);
 }

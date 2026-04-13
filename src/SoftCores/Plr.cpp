@@ -12,75 +12,75 @@ Ped Plr::GetPed()
 	return (PLAYER::GET_PLAYER_PED(PLAYER::PLAYER_ID()));
 }
 
-int Plr::GetMaxOuterCore(Core core)
+int Plr::GetMaxOuterCore(const Core core)
 {
 	return (ATTRIBUTE::GET_MAX_ATTRIBUTE_POINTS(PLAYER::PLAYER_PED_ID(), static_cast<int>(core)));
 }
 
-int Plr::GetOuterCore(Core core)
+int Plr::GetOuterCore(const Core core)
 {
 	return (ATTRIBUTE::GET_ATTRIBUTE_POINTS(PLAYER::PLAYER_PED_ID(), static_cast<int>(core)));
 }
 
-void Plr::SetOuterCore(Core core, int value)
+void Plr::SetOuterCore(const Core core, int value)
 {
 	ATTRIBUTE::SET_ATTRIBUTE_POINTS(PLAYER::PLAYER_PED_ID(), static_cast<int>(core), value);
 }
 
-int Plr::GetCore(Core core)
+int Plr::GetCore(const Core core)
 {
 	return (ATTRIBUTE::_GET_ATTRIBUTE_CORE_VALUE(PLAYER::PLAYER_PED_ID(), static_cast<int>(core)));
 }
 
-void Plr::SetCore(Core core, int value)
+void Plr::SetCore(const Core core, int value)
 {
 	ATTRIBUTE::_SET_ATTRIBUTE_CORE_VALUE(PLAYER::PLAYER_PED_ID(), static_cast<int>(core), value);
 }
 
-int Plr::GetHorseCore(Core core)
+int Plr::GetHorseCore(const Core core)
 {
 	return (ATTRIBUTE::_GET_ATTRIBUTE_CORE_VALUE(PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_ID()), static_cast<int>(core)));
 }
 
 
-void Plr::SetHorseCore(Core core, int value)
+void Plr::SetHorseCore(const Core core, const int value)
 {
 	ATTRIBUTE::_SET_ATTRIBUTE_CORE_VALUE(PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_ID()), static_cast<int>(core), value);
 }
 
-bool Plr::IsCoreOverpowered(Core core)
+bool Plr::IsCoreOverpowered(const Core core)
 {
 	return (ATTRIBUTE::_0x200373A8DF081F22(PLAYER::PLAYER_PED_ID(), static_cast<int>(core)));
 }
 
-bool Plr::IsOuterCoreOverpowered(Core core)
+bool Plr::IsOuterCoreOverpowered(const Core core)
 {
 	return (ATTRIBUTE::_IS_ATTRIBUTE_OVERPOWERED(PLAYER::PLAYER_PED_ID(), static_cast<int>(core)));
 }
 
-bool Plr::IsHorseCoreOverpowered(Core core)
+bool Plr::IsHorseCoreOverpowered(const Core core)
 {
 	return (ATTRIBUTE::_0x200373A8DF081F22(PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_PED_ID()), static_cast<int>(core)));
 }
 
-void Plr::SetDamageModifier(float melee, float weapon)
+void Plr::SetDamageModifier(const float melee, const float weapon)
 {
 	PLAYER::SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER(PLAYER::PLAYER_ID(), melee);
 	PLAYER::SET_PLAYER_WEAPON_DAMAGE_MODIFIER(PLAYER::PLAYER_ID(), weapon);
 }
 
-void Plr::SetHealthRegen(float multiplier)
+void Plr::SetHealthRegen(const float multiplier)
 {
 	PLAYER::SET_PLAYER_HEALTH_RECHARGE_MULTIPLIER(PLAYER::PLAYER_ID(), multiplier);
 }
 
-void Plr::UnequipClothes(ClothingType type)
+void Plr::UnequipClothes(const ClothingType type)
 {
 	PED::_SET_PED_COMPONENT_DISABLED(PLAYER::PLAYER_PED_ID(), static_cast<uint>(type), 1);
 	PED::_UPDATE_PED_VARIATION(PLAYER::PLAYER_PED_ID(), false, true, true, true, false);
 }
 
-bool Plr::IsWearing(ClothingType type)
+bool Plr::IsWearing(const ClothingType type)
 {
 	return (PED::_IS_METAPED_USING_COMPONENT(PLAYER::PLAYER_PED_ID(), static_cast<uint>(type)));
 }
@@ -239,8 +239,8 @@ float Plr::GetClothingTemperaturePoints()
 
 float Plr::GetSurroundingTemperature()
 {
-	Vector3 playerPos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, true);
-	float temperature = MISC::_GET_TEMPERATURE_AT_COORDS(playerPos.x, playerPos.y, playerPos.z); // this function return in celcius
+	Vector3		playerPos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), true, true);
+	float		temperature = MISC::_GET_TEMPERATURE_AT_COORDS(playerPos.x, playerPos.y, playerPos.z); // this function return in celcius
 
 	return (MISC::_SHOULD_USE_METRIC_TEMPERATURE()) ? temperature: Math::CelciusToFarenheit(temperature);
 }

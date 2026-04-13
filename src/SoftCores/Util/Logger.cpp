@@ -12,7 +12,7 @@ Logger::Logger(const char *outputFilename)
 	File.Close();
 }
 
-void Logger::Write(const char *message, bool appendDatetime)
+void Logger::Write(const char *message, const bool appendDatetime)
 {
 	tm					newtime{};
 	time_t				now;
@@ -37,17 +37,17 @@ void Logger::Write(const char *message, bool appendDatetime)
 	}
 }
 
-void Logger::Write(const std::string &message, bool appendDatetime)
+void Logger::Write(const std::string &message, const bool appendDatetime)
 {
 	return (Write(message.c_str(), appendDatetime));
 }
 
-void Logger::Write(const std::wstring &message, bool appendDatetime)
+void Logger::Write(const std::wstring &message, const bool appendDatetime)
 {
 	return (Write(message.c_str(), appendDatetime));
 }
 
-void Logger::Write(const wchar_t *message, bool appendDatetime)
+void Logger::Write(const wchar_t *message, const bool appendDatetime)
 {
 	return (Write(File::WideToUTF8(message).c_str(), appendDatetime));
 }
