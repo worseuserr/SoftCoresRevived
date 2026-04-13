@@ -1,4 +1,6 @@
 #include "SoftCores/Mod/FOVBlips.h"
+
+#include "Debug.h"
 #include "Sdk/natives.h"
 #include "Sdk/types.h"
 #include "SoftCores/Keys.h"
@@ -70,6 +72,6 @@ void FOVBlips::Tick(Util::NO_SENDER _, float dTime)
 
 void FOVBlips::Initialize()
 {
-	Context->Logger->Write("FOVBlips initialized");
+	Debug::Log(LogLevel::Info, "FOVBlips initialized");
 	TickConnection = Context->Tick->OnTick += [this](Util::NO_SENDER _, float dTime){ Tick(_, dTime); };
 }

@@ -1,4 +1,6 @@
 #include "SoftCores/Mod/FXOverride.h"
+
+#include "Debug.h"
 #include "Sdk/natives.h"
 #include "SoftCores/Tick.h"
 
@@ -30,6 +32,6 @@ void FXOverride::Tick(Util::NO_SENDER _, float dTime) const
 
 void FXOverride::Initialize()
 {
-	Context->Logger->Write("FXOverride initialized");
+	Debug::Log(LogLevel::Info, "FXOverride initialized");
 	TickConnection = Context->Tick->OnTick += [this](Util::NO_SENDER _, const float dTime){ Tick(_, dTime); };
 }

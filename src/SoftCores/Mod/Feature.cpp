@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "SoftCores/Mod/Mod.h"
 
 using namespace SoftCores;
@@ -9,5 +10,5 @@ Feature::Feature(ModContext *context)
 
 void Feature::Initialize()
 {
-	Context->Logger->Write("Feature without initialize.");
+	Debug::Log(LogLevel::Warn, "Feature without initialize.");
 }

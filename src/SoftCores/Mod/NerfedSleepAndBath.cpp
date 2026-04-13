@@ -2,6 +2,7 @@
 
 #include <format>
 
+#include "Debug.h"
 #include "Sdk/natives.h"
 #include "SoftCores/Keys.h"
 #include "SoftCores/Plr.h"
@@ -9,7 +10,10 @@
 using namespace SoftCores;
 
 NerfedSleepAndBath::NerfedSleepAndBath(ModContext *context)
-	: Feature(context) {}
+	: Feature(context), LastDeadeye(0), LastHealth(0), LastStamina(0),
+	HasControl(false), HasRefilledDeadeye(false), IsBathing(false)
+{
+}
 
 void NerfedSleepAndBath::ResetSleepCores()
 {
@@ -74,68 +78,43 @@ void NerfedSleepAndBath::OnStaminaChanged(Util::NO_SENDER _, int value)
 
 void NerfedSleepAndBath::Initialize()
 {
-	Context->Logger->Write("Initializing NerfedSleepAndBath");
+	Debug::Log(LogLevel::Info, "Initializing NerfedSleepAndBath");
 	LastDeadeye = Plr::GetCore(Core::Deadeye);
 	LastHealth = Plr::GetCore(Core::Health);
 	LastStamina = Plr::GetCore(Core::Stamina);
 	HasControl = true;
 	IsBathing = false;
 	HasRefilledDeadeye = false;
-	Context->Logger->Write("Values set");
+	Debug::Log(LogLevel::Debug, "Values set");
 	Context->PlrEvents->OnSleepingChanged += [this](Util::NO_SENDER _, const bool isSleeping)
 	{
-		Context->Logger->Write(std::format("isSleeping changed: value = {}", isSleeping));
+		Debug::Log(LogLevel::Debug, "isSleeping changed: value = {}", isSleeping);
 		OnSleepingChanged(_, isSleeping);
 	};
 	Context->PlrEvents->OnControlChanged += [this](Util::NO_SENDER _, const bool isInControl)
 	{
-		Context->Logger->Write(std::format("isInControl changed: value = {}", isInControl));
+		Debug::Log(LogLevel::Debug, "isInControl changed: value = {}", isInControl);
 		OnControlChanged(_, isInControl);
 	};
 	Context->PlrEvents->OnBathingChanged += [this](Util::NO_SENDER _, const bool isBathing)
 	{
-		Context->Logger->Write(std::format("OnBathingChanged changed: value = {}", isBathing));
+		Debug::Log(LogLevel::Debug, "OnBathingChanged changed: value = {}", isBathing);
 		OnBathingChanged(_, isBathing);
 	};
 	Context->PlrEvents->OnDeadeyeCoreChanged += [this](Util::NO_SENDER _, const int value)
 	{
-		Context->Logger->Write(std::format("OnDeadeyeCoreChanged changed: value = {}", value));
+		Debug::Log(LogLevel::Debug, "OnDeadeyeCoreChanged changed: value = {}", value);
 		OnDeadeyeChanged(_, value);
 	};
 	Context->PlrEvents->OnStaminaCoreChanged += [this](Util::NO_SENDER _, const int value)
 	{
-		Context->Logger->Write(std::format("OnStaminaCoreChanged changed: value = {}", value));
+		Debug::Log(LogLevel::Debug, "OnStaminaCoreChanged changed: value = {}", value);
 		OnStaminaChanged(_, value);
 	};
 	Context->PlrEvents->OnMovingChanged += [this](Util::NO_SENDER _, const bool isMoving)
 	{
-		Context->Logger->Write(std::format("OnMovingChanged changed: value = {}", isMoving));
+		Debug::Log(LogLevel::Debug, "OnMovingChanged changed: value = {}", isMoving);
 		OnMovingChanged(_, isMoving);
 	};
-	Context->Logger->Write("ChangedEvent connected");
+	Debug::Log(LogLevel::Debug, "ChangedEvents connected");
 }
-
-
-// 		// START OF BATH DEADEYE ONLY PART ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// 		if (bathDeadEyeOnly)
-// 		{
-// 			static bool isBathing = false;
-//
-// 			if (PLR.IsBathing() && !isBathing) // hook bath here & get last health, stamina core
-// 			{
-// 				lastHealthCore = PLR.GetCore(Core::Health);
-// 				lastStaminaCore = PLR.GetCore(Core::Stamina);
-// 				isBathing = true;
-// 				stringstream text;
-// 				text << "hooked player is bathing, lastHealthCore: " << lastHealthCore << " lastStaminaCore: " << lastStaminaCore;
-// 				LOGGER.Write(text.str().c_str());
-// 			}
-//
-// 			if (isBathing) // keep setting player last health, stamina until player starts moving
-// 			{
-// 				PLR.SetCore(Core::Health, lastHealthCore);
-// 				PLR.SetCore(Core::Stamina, lastStaminaCore);
-//
-// 				isBathing = (PLR.IsMoving()) ? false : true;
-// 			}
-// 		}
