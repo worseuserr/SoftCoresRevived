@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SoftCores/Util/Logger.h"
-#include <string>
 #include <format>
 
 enum class	LogLevel
@@ -39,14 +38,18 @@ public:
 	static constexpr int	LogLevelCount = 3;
 	static LogLevel			LogLevel;
 
-	template <typename Msg, typename... Args>
-	static void	Log(enum LogLevel logLevel, Msg&& message, Args&&... args)
+	template <typename... Args>
+	static void	Log(enum LogLevel logLevel, std::format_string<Args...> &&message, Args&&... args)
 	{
+		if (logLevel > LogLevel)
+			return ;
 		Log(static_cast<int>(logLevel), message, std::forward<Args>(args)...);
 	}
-	template <typename Msg, typename... Args>
-	static void	Log(const int logLevel, Msg&& message, Args&&... args)
+	template <typename... Args>
+	static void	Log(const int logLevel, std::format_string<Args...> &&message, Args&&... args)
 	{
+		if (static_cast<enum LogLevel>(logLevel) > LogLevel)
+			return ;
 		return (Logger->Write(LogLevelStrings[logLevel] +
 			std::format(message, std::forward<Args>(args)...), true));
 	}
