@@ -13,6 +13,7 @@ using namespace SoftCores;
 FOVBlips::FOVBlips(ModContext *context)
 	: Feature(context) {}
 
+// Seems to not work properly while wanted and on some enemies.
 void FOVBlips::ProcessBlip(const Ped ped)
 {
 	static const Hash	ModifierVisible = Keys::GetHash("BLIP_MODIFIER_FADE_IN");
@@ -24,14 +25,9 @@ void FOVBlips::ProcessBlip(const Ped ped)
 	Ped		pedIndex;
 
 	// GET_PED_INDEX_FROM_ENTITY_INDEX is required or the feature won't work. Have no fucking idea why.
-	if (PED::IS_PED_DEAD_OR_DYING(ped, true))
-		isVisible = false; // Fade out blip when ped dies.
-	else
-	{
-		pedIndex = ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(ped);
-		PED::REQUEST_PED_VISIBILITY_TRACKING(pedIndex);
-		isVisible = PED::IS_TRACKED_PED_VISIBLE(pedIndex);
-	}
+	pedIndex = ENTITY::GET_PED_INDEX_FROM_ENTITY_INDEX(ped);
+	PED::REQUEST_PED_VISIBILITY_TRACKING(pedIndex);
+	isVisible = PED::IS_TRACKED_PED_VISIBLE(pedIndex);
 	pedBlip = MAP::GET_BLIP_FROM_ENTITY(ped);
 	// These have to be called every time, as tracking the ped's blip state in the script will lose sync with the game.
 	MAP::_BLIP_SET_MODIFIER(pedBlip, isVisible ? ModifierVisible : ModifierNotVisible);
@@ -61,9 +57,11 @@ void FOVBlips::Tick(Util::NO_SENDER _, float dTime)
 	horsePed = PLAYER::_GET_SADDLE_HORSE_FOR_PLAYER(PLAYER::PLAYER_ID());
 	for (i = 0; i < pedCount; i++)
 	{
-		if (pedArr[i] == playerPed || pedArr[i] == horsePed || World::IsPedFriendly(pedArr[i]))
+		if (pedArr[i] == playerPed || pedArr[i] == horsePed)// || World::IsPedFriendly(pedArr[i])) // Problematic.
 			continue ;
-		if (config.HideOutOfViewBlipsOnlyHostile && !Plr::IsPedHostileAndNearby(pedArr[i], 200.0f))
+		if (config.HideOutOfViewBlipsOnlyHostile && !Plr::IsPedHostileAndNearby(pedArr[i], 100.0f))
+			continue ;
+		if (!config.HideOutOfViewBlipsForCorpses && PED::IS_PED_DEAD_OR_DYING(pedArr[i], true))
 			continue ;
 		ProcessBlip(pedArr[i]);
 	}
@@ -73,5 +71,9 @@ void FOVBlips::Tick(Util::NO_SENDER _, float dTime)
 void FOVBlips::Initialize()
 {
 	Debug::Log(LogLevel::Info, "FOVBlips initialized");
-	TickConnection = Context->Tick->OnTick += [this](Util::NO_SENDER _, float dTime){ Tick(_, dTime); };
+	Debug::Log(LogLevel::Debug, "FOVBlips config:");
+	Debug::Log(LogLevel::Debug, "   HideOutOfViewBlips: {}", Context->Config->Immersion.HideOutOfViewBlips);
+	Debug::Log(LogLevel::Debug, "   HideOutOfViewBlipsInMissions: {}", Context->Config->Immersion.HideOutOfViewBlipsInMissions);
+	Debug::Log(LogLevel::Debug, "   HideOutOfViewBlipsOnlyHostile: {}", Context->Config->Immersion.HideOutOfViewBlipsOnlyHostile);
+	TickConnection = Context->Tick->OnTick += [this](Util::NO_SENDER _, const float dTime){ Tick(_, dTime); };
 }

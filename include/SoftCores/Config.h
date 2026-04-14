@@ -30,10 +30,10 @@ namespace SoftCores
 	{
 		bool	DisablePickupGlow;
 		bool	DisableObjectGlow;
-		// The feature that hides hostile blips outside of the player's view.
 		bool	HideOutOfViewBlips;
 		bool	HideOutOfViewBlipsOnlyHostile;
 		bool	HideOutOfViewBlipsInMissions;
+		bool	HideOutOfViewBlipsForCorpses;
 		bool	NoReloadInDeadeye;
 		bool	SleepOnlyRestoresStamina;
 		bool	BathOnlyRestoresDeadeye;
@@ -142,9 +142,6 @@ namespace SoftCores
 			|| std::same_as<T, float>)
 		T							GetConfig(const std::wstring &section, const std::wstring &key, const std::wstring &def) const;
 
-		// Logging is always enabled, this enables in-game ui logging.
-		bool						AdvancedLoggingEnabled;
-
 		// Toggles for base game effects.
 		FXConfig					FX;
 
@@ -171,6 +168,10 @@ namespace SoftCores
 
 		// Range of peds to go through, lowerable for performance.
 		short						PedRange;
+
+		// Force set loglevel to debug + toggle ingame logging.
+		bool						ForceDebugLogging;
+		bool						IngameDebugLogging;
 	};
 
 	template <typename T>

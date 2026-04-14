@@ -37,6 +37,7 @@ public:
 	// Keep up to date with amount of LogLevels, start at 0.
 	static constexpr int	LogLevelCount = 3;
 	static LogLevel			LogLevel;
+	static bool				IngameLogging;
 
 	template <typename... Args>
 	static void	Log(enum LogLevel logLevel, std::format_string<Args...> &&message, Args&&... args)

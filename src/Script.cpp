@@ -18,9 +18,11 @@ const char *const		LOG_FILE = ".\\SoftCoresRevived.log";
 const wchar_t *const	INI_FILE = L".\\SoftCoresRevived.ini";
 
 #ifndef NDEBUG
-	LogLevel Debug::LogLevel = LogLevel::Debug;
+	LogLevel	Debug::LogLevel = LogLevel::Debug;
+	bool		Debug::IngameLogging = true;
 #else
-	LogLevel Debug::LogLevel = LogLevel::Info;
+	LogLevel	Debug::LogLevel = LogLevel::Info;
+	bool		Debug::IngameLogging = false;
 #endif
 
 // TODO: error handling
@@ -46,6 +48,9 @@ void ScriptMain()
 		? "### ini found ###"
 		: "#!# ini not found #!#");
 	const std::unique_ptr<Config>		config = std::make_unique<Config>(INI_FILE, logger);
+	Debug::IngameLogging = config->IngameDebugLogging;
+	if (config->ForceDebugLogging)
+		Debug::LogLevel = LogLevel::Debug;
 	logger.Write("### Config loaded ###", true);
 	const std::unique_ptr<Tick>			tick = std::make_unique<Tick>();
 	logger.Write("### Tick system loaded ###", true);

@@ -78,7 +78,7 @@ void NerfedSleepAndBath::OnStaminaChanged(Util::NO_SENDER _, int value)
 
 void NerfedSleepAndBath::Initialize()
 {
-	Debug::Log(LogLevel::Info, "Initializing NerfedSleepAndBath");
+	Debug::Log(LogLevel::Info, "NerfedSleepAndBath initialized");
 	LastDeadeye = Plr::GetCore(Core::Deadeye);
 	LastHealth = Plr::GetCore(Core::Health);
 	LastStamina = Plr::GetCore(Core::Stamina);
