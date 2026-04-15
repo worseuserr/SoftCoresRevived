@@ -4,23 +4,23 @@
 
 using namespace SoftCores;
 
-bool	World::IsRaining()
+bool World::IsRaining()
 {
 	return (MISC::GET_RAIN_LEVEL() > 0.0f);
 }
 
-bool	World::IsSnowing()
+bool World::IsSnowing()
 {
 	return (MISC::GET_SNOW_LEVEL() > 0.0f);
 }
 
-void	World::SetAIDamageModifier(const float melee, const float weapon)
+void World::SetAIDamageModifier(const float melee, const float weapon)
 {
 	PED::SET_AI_MELEE_WEAPON_DAMAGE_MODIFIER(melee);
 	PED::SET_AI_WEAPON_DAMAGE_MODIFIER(weapon);
 }
 
-bool	World::IsPedFriendly(const Ped ped)
+bool World::IsPedFriendly(const Ped ped)
 {
 	for (Keys::Key key : Keys::FriendlyPeds)
 	{
@@ -30,7 +30,7 @@ bool	World::IsPedFriendly(const Ped ped)
 	return (false);
 }
 
-bool	World::IsStoryFXPlaying()
+bool World::IsStoryFXPlaying()
 {
 	for (Keys::Key key : Keys::StoryPostFXs)
 	{
@@ -40,7 +40,7 @@ bool	World::IsStoryFXPlaying()
 	return (false);
 }
 
-int		World::GetGameTimer()
+int World::GetGameTimer()
 {
 	return (MISC::GET_GAME_TIMER());
 }
