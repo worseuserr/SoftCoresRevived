@@ -4,6 +4,7 @@
 
 namespace SoftCores
 {
+	// Single feature class for both DisableWeaponGlow and DisablePickupGlow.
 	class	DisableItemGlow : public Feature
 	{
 		unsigned long long	Counter = 0;
