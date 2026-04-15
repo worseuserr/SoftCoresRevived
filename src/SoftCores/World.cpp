@@ -49,3 +49,18 @@ int World::GetAllPeds(int *arr, const int arrSize)
 {
 	return (worldGetAllPeds(arr, arrSize));
 }
+
+int GetAllVehicles(int *arr, const int arrSize)
+{
+	return (worldGetAllVehicles(arr, arrSize));
+}
+
+int GetAllObjects(int *arr, const int arrSize)
+{
+	return (worldGetAllObjects(arr, arrSize));
+}
+
+int GetAllPickups(int *arr, const int arrSize)
+{
+	return (worldGetAllPickups(arr, arrSize));
+}
