@@ -58,6 +58,8 @@ add_library(SoftCoresRevived SHARED
 		src/SoftCores/PlrEvents.cpp
 		include/Debug.h
 		src/Debug.cpp
+		include/SoftCores/Mod/DisableItemGlow.h
+		src/SoftCores/Mod/DisableItemGlow.cpp
 )
 
 target_compile_options(SoftCoresRevived PRIVATE

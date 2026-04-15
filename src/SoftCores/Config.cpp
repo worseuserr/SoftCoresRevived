@@ -35,8 +35,10 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 	};
 
 	Immersion = {
-		.DisablePickupGlow =				GetConfig<bool>(ImmersionSect, L"DisablePickupGlow", L"truE"),
-		.DisableObjectGlow =				GetConfig<bool>(ImmersionSect, L"DisableObjectGlow", L"truE"),
+		// Config setting is DisableWeaponGlow for mod users to understand the config.
+		.DisablePickupGlow =				GetConfig<bool>(ImmersionSect, L"DisableWeaponGlow", L"truE"),
+		// Config setting is DisablePickupGlow for mod users to understand the config.
+		.DisableObjectGlow =				GetConfig<bool>(ImmersionSect, L"DisablePickupGlow", L"truE"),
 		.HideOutOfViewBlips =				GetConfig<bool>(ImmersionSect, L"HideOutOfViewBlips", L"truE"),
 		.HideOutOfViewBlipsOnlyHostile =	GetConfig<bool>(ImmersionSect, L"HideOutOfViewBlipsOnlyHostile", L"falsE"),
 		.HideOutOfViewBlipsInMissions =		GetConfig<bool>(ImmersionSect, L"HideOutOfViewBlipsInMissions", L"falsE"),

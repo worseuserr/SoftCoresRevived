@@ -10,10 +10,7 @@
 using namespace SoftCores;
 
 NerfedSleepAndBath::NerfedSleepAndBath(ModContext *context)
-	: Feature(context), LastDeadeye(0), LastHealth(0), LastStamina(0),
-	HasControl(false), HasRefilledDeadeye(false), IsBathing(false)
-{
-}
+	: Feature(context) {}
 
 void NerfedSleepAndBath::ResetSleepCores()
 {

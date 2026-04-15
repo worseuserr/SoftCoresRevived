@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-
 #include "SoftCores/ModContext.h"
 #include "SoftCores/Util/Logger.h"
 

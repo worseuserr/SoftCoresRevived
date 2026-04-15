@@ -16,10 +16,10 @@ FOVBlips::FOVBlips(ModContext *context)
 // Seems to not work properly while wanted and on some enemies.
 void FOVBlips::ProcessBlip(const Ped ped)
 {
-	static const Hash	ModifierVisible = Keys::GetHash("BLIP_MODIFIER_FADE_IN");
-	static const Hash	ModifierNotVisible = Keys::GetHash("BLIP_MODIFIER_FADE");
-	static const Hash	StyleVisible = Keys::GetHash("BLIP_MODIFIER_FADE");
-	static const Hash	StyleNotVisible = Keys::GetHash("BLIP_MODIFIER_FADE_OUT_SLOW");
+	static const Hash	MODIFIER_VISIBLE = Keys::GetHash("BLIP_MODIFIER_FADE_IN");
+	static const Hash	MODIFIER_NOT_VISIBLE = Keys::GetHash("BLIP_MODIFIER_FADE");
+	static const Hash	STYLE_VISIBLE = Keys::GetHash("BLIP_MODIFIER_FADE");
+	static const Hash	STYLE_NOT_VISIBLE = Keys::GetHash("BLIP_MODIFIER_FADE_OUT_SLOW");
 	Blip	pedBlip;
 	bool	isVisible;
 	Ped		pedIndex;
@@ -30,8 +30,8 @@ void FOVBlips::ProcessBlip(const Ped ped)
 	isVisible = PED::IS_TRACKED_PED_VISIBLE(pedIndex);
 	pedBlip = MAP::GET_BLIP_FROM_ENTITY(ped);
 	// These have to be called every time, as tracking the ped's blip state in the script will lose sync with the game.
-	MAP::_BLIP_SET_MODIFIER(pedBlip, isVisible ? ModifierVisible : ModifierNotVisible);
-	MAP::_SET_BLIP_FLASH_STYLE(pedBlip, isVisible ? StyleVisible : StyleNotVisible);
+	MAP::_BLIP_SET_MODIFIER(pedBlip, isVisible ? MODIFIER_VISIBLE : MODIFIER_NOT_VISIBLE);
+	MAP::_SET_BLIP_FLASH_STYLE(pedBlip, isVisible ? STYLE_VISIBLE : STYLE_NOT_VISIBLE);
 	// For any future devs:
 	//   I could not find a definition for _SET_BLIP_FLASH_STYLE in any NativeDB anywhere, in any dataset. Nor any documentation.
 	//   I only found a random text file in a repository with it and its associated address.

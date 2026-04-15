@@ -1,16 +1,17 @@
 #pragma once
+
 #include "Mod.h"
 
 namespace SoftCores
 {
 	class	NerfedSleepAndBath : public Feature
 	{
-		float	LastDeadeye;
-		float	LastHealth;
-		float	LastStamina;
-		bool	HasControl;
-		bool	HasRefilledDeadeye;
-		bool	IsBathing;
+		float	LastDeadeye = 0.0f;
+		float	LastHealth = 0.0f;
+		float	LastStamina = 0.0f;
+		bool	HasControl = false;
+		bool	HasRefilledDeadeye = false;
+		bool	IsBathing = false;
 
 	public:
 		NerfedSleepAndBath(ModContext *context);

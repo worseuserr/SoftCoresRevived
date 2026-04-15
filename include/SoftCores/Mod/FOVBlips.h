@@ -1,7 +1,7 @@
 #pragma once
+
 #include "Mod.h"
 #include "SoftCores/Util/Event.h"
-#include <map>
 #include "Sdk/types.h"
 
 namespace SoftCores
