@@ -14,15 +14,16 @@ namespace SoftCores
 		bool	IsBathing = false;
 
 	public:
-		NerfedSleepAndBath(ModContext *context);
-		void	Initialize() override;
-		void	OnControlChanged(Util::NO_SENDER _, bool isInControl);
-		void	OnBathingChanged(Util::NO_SENDER _, bool isBathing);
-		void	OnMovingChanged(Util::NO_SENDER _, bool isMoving);
-		void	OnSleepingChanged(Util::NO_SENDER _, bool isSleeping);
-		void	OnDeadeyeChanged(Util::NO_SENDER _, int value);
-		void	OnStaminaChanged(Util::NO_SENDER _, int value);
-		void	ResetSleepCores();
-		void	ResetBathCores();
+		explicit	NerfedSleepAndBath(ModContext *context)
+			: Feature(context) {}
+		void		Initialize() override;
+		void		OnControlChanged(Util::NO_SENDER _, bool isInControl);
+		void		OnBathingChanged(Util::NO_SENDER _, bool isBathing);
+		void		OnMovingChanged(Util::NO_SENDER _, bool isMoving);
+		void		OnSleepingChanged(Util::NO_SENDER _, bool isSleeping);
+		void		OnDeadeyeChanged(Util::NO_SENDER _, int value);
+		void		OnStaminaChanged(Util::NO_SENDER _, int value);
+		void		ResetSleepCores();
+		void		ResetBathCores();
 	};
 }

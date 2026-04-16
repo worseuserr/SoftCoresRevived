@@ -10,9 +10,6 @@
 
 using namespace SoftCores;
 
-FOVBlips::FOVBlips(ModContext *context)
-	: Feature(context) {}
-
 // Seems to not work properly while wanted and on some enemies.
 void FOVBlips::ProcessBlip(const Ped ped)
 {

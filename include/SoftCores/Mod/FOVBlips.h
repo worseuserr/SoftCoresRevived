@@ -11,7 +11,8 @@ namespace SoftCores
 		Util::Connection<Util::NO_SENDER, float>	*TickConnection = nullptr;
 
 	public:
-		FOVBlips(ModContext *context);
+		explicit	FOVBlips(ModContext *context)
+			: Feature(context) {}
 		void		Initialize() override;
 		void		Tick(Util::NO_SENDER _, float dTime);
 		void		ProcessBlip(Ped ped);

@@ -7,9 +7,6 @@
 
 using namespace SoftCores;
 
-DisableItemGlow::DisableItemGlow(ModContext *context)
-	: Feature(context) {}
-
 // Note: perhaps there's no need to call the native more than once, needs testing.
 void DisableItemGlow::OnTick(Util::NO_SENDER _, const float dTime)
 {

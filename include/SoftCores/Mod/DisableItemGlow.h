@@ -12,8 +12,9 @@ namespace SoftCores
 	public:
 		unsigned long long	Interval = 250;
 
-		DisableItemGlow(ModContext *context);
+		explicit	DisableItemGlow(ModContext *context)
+			: Feature(context) {}
 		void	Initialize() override;
-		void	OnTick(Util::NO_SENDER _, const float dTime);
+		void	OnTick(Util::NO_SENDER _, float dTime);
 	};
 }

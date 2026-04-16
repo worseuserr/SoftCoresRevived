@@ -9,9 +9,6 @@
 
 using namespace SoftCores;
 
-NerfedSleepAndBath::NerfedSleepAndBath(ModContext *context)
-	: Feature(context) {}
-
 void NerfedSleepAndBath::ResetSleepCores()
 {
 	Plr::SetCore(Core::Deadeye, LastDeadeye);

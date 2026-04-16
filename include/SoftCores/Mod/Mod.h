@@ -11,7 +11,7 @@ namespace SoftCores
 	public:
 		ModContext	*Context;
 
-		Feature(ModContext *context);
+		explicit		Feature(ModContext *context);
 		virtual			~Feature() = default;
 		virtual void	Initialize();
 	};
@@ -23,9 +23,9 @@ namespace SoftCores
 	public:
 		ModContext	*Context;
 
-		Mod(ModContext *context);
+		explicit	Mod(ModContext *context);
 		template <typename FeatureType>
-		void	LoadFeature()
+		void		LoadFeature()
 		{
 			std::unique_ptr<FeatureType>	feat = std::make_unique<FeatureType>(Context);
 
