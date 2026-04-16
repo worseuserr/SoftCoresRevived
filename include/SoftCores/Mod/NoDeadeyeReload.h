@@ -9,5 +9,6 @@ namespace SoftCores
 		explicit	NoDeadeyeReload(ModContext *context)
 			: Feature(context) {}
 		void		Initialize() override;
+		void		OnDeadeyeChanged(PlrEvents *plrEvents, bool isInDeadeye);
 	};
 }

@@ -1,10 +1,20 @@
 #include "SoftCores/Mod/NoDeadeyeReload.h"
+#include "Debug.h"
 
 using namespace SoftCores;
 
+void NoDeadeyeReload::OnDeadeyeChanged(PlrEvents *plrEvents, const bool isInDeadeye)
+{
+}
+
 void NoDeadeyeReload::Initialize()
 {
-
+	Debug::Log(LogLevel::Info, "NoDeadeyeReload initialized");
+	Context->PlrEvents->OnDeadeyeChanged += [this](PlrEvents *plrEvents, const bool isInDeadeye)
+	{
+		Debug::Log(LogLevel::Debug, "Deadeye changed: {}", isInDeadeye);
+		OnDeadeyeChanged(plrEvents, isInDeadeye);
+	};
 }
 
 // START OF DEADEYE NO RELOAD PART ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
