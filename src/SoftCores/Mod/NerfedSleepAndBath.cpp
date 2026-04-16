@@ -1,7 +1,5 @@
-#include "SoftCores/Mod/NerfedSleepAndBath.h"
-
 #include <format>
-
+#include "SoftCores/Mod/NerfedSleepAndBath.h"
 #include "Debug.h"
 #include "Sdk/natives.h"
 #include "SoftCores/Keys.h"
@@ -24,7 +22,7 @@ void NerfedSleepAndBath::ResetBathCores()
 	IsBathing = false;
 }
 
-void NerfedSleepAndBath::OnControlChanged(Util::NO_SENDER _, const bool isInControl)
+void NerfedSleepAndBath::OnControlChanged(PlrEvents *plrEvents, const bool isInControl)
 {
 	if (!isInControl)
 	{
@@ -35,25 +33,25 @@ void NerfedSleepAndBath::OnControlChanged(Util::NO_SENDER _, const bool isInCont
 	HasRefilledDeadeye = false;
 }
 
-void NerfedSleepAndBath::OnBathingChanged(Util::NO_SENDER _, bool isBathing)
+void NerfedSleepAndBath::OnBathingChanged(PlrEvents *plrEvents, const bool isBathing)
 {
 	if (isBathing)
 		IsBathing = true;
 }
 
-void NerfedSleepAndBath::OnMovingChanged(Util::NO_SENDER _, bool isMoving)
+void NerfedSleepAndBath::OnMovingChanged(PlrEvents *plrEvents, const bool isMoving)
 {
 	if (IsBathing && isMoving)
 		IsBathing = false;
 }
 
-void NerfedSleepAndBath::OnSleepingChanged(Util::NO_SENDER _, const bool isSleeping)
+void NerfedSleepAndBath::OnSleepingChanged(PlrEvents *plrEvents, const bool isSleeping)
 {
 	if (isSleeping && HasRefilledDeadeye)
 		ResetSleepCores();
 }
 
-void NerfedSleepAndBath::OnDeadeyeChanged(Util::NO_SENDER _, const int value)
+void NerfedSleepAndBath::OnDeadeyeChanged(PlrEvents *plrEvents, const int value)
 {
 	if (HasControl)
 		return ;
@@ -64,7 +62,7 @@ void NerfedSleepAndBath::OnDeadeyeChanged(Util::NO_SENDER _, const int value)
 		HasRefilledDeadeye = true;
 }
 
-void NerfedSleepAndBath::OnStaminaChanged(Util::NO_SENDER _, int value)
+void NerfedSleepAndBath::OnStaminaChanged(PlrEvents *plrEvents, const int value)
 {
 	if (IsBathing)
 		ResetBathCores();
@@ -80,35 +78,35 @@ void NerfedSleepAndBath::Initialize()
 	IsBathing = false;
 	HasRefilledDeadeye = false;
 	Debug::Log(LogLevel::Debug, "Values set");
-	Context->PlrEvents->OnSleepingChanged += [this](Util::NO_SENDER _, const bool isSleeping)
+	Context->PlrEvents->OnSleepingChanged += [this](PlrEvents *plrEvents, const bool isSleeping)
 	{
 		Debug::Log(LogLevel::Debug, "isSleeping changed: value = {}", isSleeping);
-		OnSleepingChanged(_, isSleeping);
+		OnSleepingChanged(plrEvents, isSleeping);
 	};
-	Context->PlrEvents->OnControlChanged += [this](Util::NO_SENDER _, const bool isInControl)
+	Context->PlrEvents->OnControlChanged += [this](PlrEvents *plrEvents, const bool isInControl)
 	{
 		Debug::Log(LogLevel::Debug, "isInControl changed: value = {}", isInControl);
-		OnControlChanged(_, isInControl);
+		OnControlChanged(plrEvents, isInControl);
 	};
-	Context->PlrEvents->OnBathingChanged += [this](Util::NO_SENDER _, const bool isBathing)
+	Context->PlrEvents->OnBathingChanged += [this](PlrEvents *plrEvents, const bool isBathing)
 	{
 		Debug::Log(LogLevel::Debug, "OnBathingChanged changed: value = {}", isBathing);
-		OnBathingChanged(_, isBathing);
+		OnBathingChanged(plrEvents, isBathing);
 	};
-	Context->PlrEvents->OnDeadeyeCoreChanged += [this](Util::NO_SENDER _, const int value)
+	Context->PlrEvents->OnDeadeyeCoreChanged += [this](PlrEvents *plrEvents, const int value)
 	{
 		Debug::Log(LogLevel::Debug, "OnDeadeyeCoreChanged changed: value = {}", value);
-		OnDeadeyeChanged(_, value);
+		OnDeadeyeChanged(plrEvents, value);
 	};
-	Context->PlrEvents->OnStaminaCoreChanged += [this](Util::NO_SENDER _, const int value)
+	Context->PlrEvents->OnStaminaCoreChanged += [this](PlrEvents *plrEvents, const int value)
 	{
 		Debug::Log(LogLevel::Debug, "OnStaminaCoreChanged changed: value = {}", value);
-		OnStaminaChanged(_, value);
+		OnStaminaChanged(plrEvents, value);
 	};
-	Context->PlrEvents->OnMovingChanged += [this](Util::NO_SENDER _, const bool isMoving)
+	Context->PlrEvents->OnMovingChanged += [this](PlrEvents *plrEvents, const bool isMoving)
 	{
 		Debug::Log(LogLevel::Debug, "OnMovingChanged changed: value = {}", isMoving);
-		OnMovingChanged(_, isMoving);
+		OnMovingChanged(plrEvents, isMoving);
 	};
 	Debug::Log(LogLevel::Debug, "ChangedEvents connected");
 }

@@ -17,12 +17,12 @@ namespace SoftCores
 		explicit	NerfedSleepAndBath(ModContext *context)
 			: Feature(context) {}
 		void		Initialize() override;
-		void		OnControlChanged(Util::NO_SENDER _, bool isInControl);
-		void		OnBathingChanged(Util::NO_SENDER _, bool isBathing);
-		void		OnMovingChanged(Util::NO_SENDER _, bool isMoving);
-		void		OnSleepingChanged(Util::NO_SENDER _, bool isSleeping);
-		void		OnDeadeyeChanged(Util::NO_SENDER _, int value);
-		void		OnStaminaChanged(Util::NO_SENDER _, int value);
+		void		OnControlChanged(PlrEvents *plrEvents, bool isInControl);
+		void		OnBathingChanged(PlrEvents *plrEvents, bool isBathing);
+		void		OnMovingChanged(PlrEvents *plrEvents, bool isMoving);
+		void		OnSleepingChanged(PlrEvents *plrEvents, bool isSleeping);
+		void		OnDeadeyeChanged(PlrEvents *plrEvents, int value);
+		void		OnStaminaChanged(PlrEvents *plrEvents, int value);
 		void		ResetSleepCores();
 		void		ResetBathCores();
 	};
