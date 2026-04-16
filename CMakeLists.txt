@@ -3,14 +3,7 @@ project(SoftCoresRevived)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(
-		include
-		sdk/inc
-)
-
-link_directories(
-		sdk/lib
-)
+add_subdirectory(external/RedUI)
 
 add_library(SoftCoresRevived SHARED
 		src/Main.cpp
@@ -63,16 +56,26 @@ add_library(SoftCoresRevived SHARED
 		src/SoftCores/Mod/NoDeadeyeReload.cpp
 )
 
+target_include_directories(SoftCoresRevived PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+		${CMAKE_CURRENT_SOURCE_DIR}/sdk/inc
+)
+
+target_link_directories(SoftCoresRevived PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib
+)
+
 target_compile_options(SoftCoresRevived PRIVATE
 		/EHsc
 		/O2
 )
 
-target_link_libraries(SoftCoresRevived PRIVATE ScriptHookRDR2.lib)
+target_link_libraries(SoftCoresRevived PRIVATE ScriptHookRDR2.lib RedUI)
 
 set_target_properties(SoftCoresRevived PROPERTIES
-		RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin
+		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 		SUFFIX ".asi"
 )
 
-configure_file(config/SoftCoresRevived.ini ${PROJECT_SOURCE_DIR}/bin COPYONLY)
+configure_file(config/SoftCoresRevived.ini ${CMAKE_CURRENT_SOURCE_DIR}/bin COPYONLY)

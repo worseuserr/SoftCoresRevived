@@ -1,0 +1,3 @@
+[submodule "external/RedUI"]
+	path = external/RedUI
+	url = git@github.com:worseuserr/RedUI.git
