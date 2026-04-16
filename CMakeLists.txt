@@ -60,6 +60,8 @@ add_library(SoftCoresRevived SHARED
 		src/Debug.cpp
 		include/SoftCores/Mod/DisableItemGlow.h
 		src/SoftCores/Mod/DisableItemGlow.cpp
+		include/SoftCores/Mod/NoDeadeyeReload.h
+		src/SoftCores/Mod/NoDeadeyeReload.cpp
 )
 
 target_compile_options(SoftCoresRevived PRIVATE
