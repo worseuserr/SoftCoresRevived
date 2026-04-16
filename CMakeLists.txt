@@ -55,7 +55,6 @@ add_library(SoftCoresRevived SHARED
 		include/SoftCores/Mod/NerfedSleepAndBath.h
 		include/SoftCores/PlrEvents.h
 		include/SoftCores/ModContext.h
-		src/SoftCores/PlrEvents.cpp
 		include/Debug.h
 		src/Debug.cpp
 		include/SoftCores/Mod/DisableItemGlow.h
