@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Plr.h"
 #include "Tick.h"
 #include "Util/Event.h"
 
@@ -10,16 +11,27 @@ namespace SoftCores
 		Tick	*Tick;
 
 	public:
-		Util::ChangedEvent<PlrEvents, bool>	OnSleepingChanged;
-		Util::ChangedEvent<PlrEvents, bool>	OnControlChanged;
-		Util::ChangedEvent<PlrEvents, bool>	OnMovingChanged;
-		Util::ChangedEvent<PlrEvents, bool>	OnBathingChanged;
-		Util::ChangedEvent<PlrEvents, int>	OnDeadeyeCoreChanged;
-		Util::ChangedEvent<PlrEvents, int>	OnStaminaCoreChanged;
+		Util::ChangedEvent<PlrEvents, bool>	OnSleepingChanged = false;
+		Util::ChangedEvent<PlrEvents, bool>	OnControlChanged = false;
+		Util::ChangedEvent<PlrEvents, bool>	OnMovingChanged = false;
+		Util::ChangedEvent<PlrEvents, bool>	OnBathingChanged = false;
+		Util::ChangedEvent<PlrEvents, int>	OnDeadeyeCoreChanged = 0;
+		Util::ChangedEvent<PlrEvents, int>	OnStaminaCoreChanged = 0;
 
-		PlrEvents(SoftCores::Tick *tick);
-		void FTick(Util::NO_SENDER _, float dTime);
+		void FTick(Util::NO_SENDER _, float dTime)
+		{
+			OnSleepingChanged.Update(this, Plr::IsInSleepScenario());
+			OnControlChanged.Update(this, Plr::IsInControl());
+			OnBathingChanged.Update(this, Plr::IsBathing());
+			OnMovingChanged.Update(this, Plr::IsMoving());
+			OnDeadeyeCoreChanged.Update(this, Plr::GetCore(Core::Deadeye));
+			OnStaminaCoreChanged.Update(this, Plr::GetCore(Core::Stamina));
+		}
+
+		PlrEvents(SoftCores::Tick *tick)
+		{
+				Tick = tick;
+				Tick->OnTick += [this](Util::NO_SENDER _, const float dTime) { FTick(_, dTime); };
+		}
 	};
-
-
 }
