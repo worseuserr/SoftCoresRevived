@@ -16,7 +16,7 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 
 	Logger = &logger;
 	File = filename;
-	// Default floats only have 1 decimal to identify them in the log.
+	// Default floats have 3 decimals to identify them in the log.
 	// Default bools end with an uppercase letter to indentify those.
 
 	FX = {
@@ -56,40 +56,42 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 		.HealthCoreEmptyDrainEnabled =	GetConfig<bool>(CoreDepSect, L"HealthCoreEmptyDrain", L"truE"),
 		.AimStaminaDrainEnabled =		GetConfig<bool>(CoreDepSect, L"AimingStaminaDrain", L"falsE"),
 		.AimDeadeyeDrainEnabled =		GetConfig<bool>(CoreDepSect, L"AimingDeadeyeDrain", L"falsE"),
-		.Base =							GetConfig<float>(CoreDepSect, L"BaseDepletionRate", L"1.0"),
-		.Health =						GetConfig<float>(CoreDepSect, L"HealthCoreDepletionRate", L"0.9"),
-		.Stamina =						GetConfig<float>(CoreDepSect, L"StaminaCoreDepletionRate", L"1.0"),
-		.Deadeye =						GetConfig<float>(CoreDepSect, L"DeadeyeCoreDepletionRate", L"0.7"),
-		.Natural =						GetConfig<float>(CoreDepSect, L"NaturalCoreDepletionRate", L"1.0"),
-		.Temperature =					GetConfig<float>(CoreDepSect, L"TemperatureDepletionRate", L"1.1"),
-		.HealthCoreEmpty =				GetConfig<float>(CoreDepSect, L"HealthCoreEmptyDepletionRate", L"2.0"),
-		.HealthCoreDrain =				GetConfig<float>(CoreDepSect, L"HealthCoreDrainRate", L"1.0"),
-		.AimStaminaDrain =				GetConfig<float>(CoreDepSect, L"AimingStaminaDrainRate", L"1.0"),
-		.AimDeadeyeDrain =				GetConfig<float>(CoreDepSect, L"AimingDeadeyeDrainRate", L"1.0")
+		.Base =							GetConfig<float>(CoreDepSect, L"BaseDepletionRate", L"1.000"),
+		.Health =						GetConfig<float>(CoreDepSect, L"HealthCoreDepletionRate", L"0.900"),
+		.Stamina =						GetConfig<float>(CoreDepSect, L"StaminaCoreDepletionRate", L"1.000"),
+		.Deadeye =						GetConfig<float>(CoreDepSect, L"DeadeyeCoreDepletionRate", L"0.700"),
+		.Natural =						GetConfig<float>(CoreDepSect, L"NaturalCoreDepletionRate", L"1.000"),
+		.Temperature =					GetConfig<float>(CoreDepSect, L"TemperatureDepletionRate", L"1.100"),
+		.HealthCoreEmpty =				GetConfig<float>(CoreDepSect, L"HealthCoreEmptyDepletionRate", L"2.000"),
+		.HealthCoreDrain =				GetConfig<float>(CoreDepSect, L"HealthCoreDrainRate", L"1.000"),
+		.AimStaminaDrain =				GetConfig<float>(CoreDepSect, L"AimingStaminaDrainRate", L"1.000"),
+		.AimDeadeyeDrain =				GetConfig<float>(CoreDepSect, L"AimingDeadeyeDrainRate", L"1.000")
 	};
 
 	HorseDepletion = {
 		.Enabled =					GetConfig<bool>(HorseCoreDepSect, L"HorseCoreDepletion", L"truE"),
 		.NaturalEnabled =			GetConfig<bool>(HorseCoreDepSect, L"HorseNaturalCoreDepletion", L"truE"),
 		.HealthCoreEmptyEnabled =	GetConfig<bool>(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletion", L"truE"),
-		.Base =						GetConfig<float>(HorseCoreDepSect, L"HorseNaturalCoreDepletionRate", L"1.0"),
-		.Natural =					GetConfig<float>(HorseCoreDepSect, L"HorseHealthCoreDepletionRate", L"0.9"),
-		.Health =					GetConfig<float>(HorseCoreDepSect, L"HorseStaminaCoreDepletionRate", L"1.0"),
-		.Stamina =					GetConfig<float>(HorseCoreDepSect, L"HorseNaturalCoreDepletionRate", L"1.0"),
-		.HealthCoreEmpty =			GetConfig<float>(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletionRate", L"2.0"),
+		.Base =						GetConfig<float>(HorseCoreDepSect, L"HorseNaturalCoreDepletionRate", L"1.000"),
+		.Natural =					GetConfig<float>(HorseCoreDepSect, L"HorseHealthCoreDepletionRate", L"0.900"),
+		.Health =					GetConfig<float>(HorseCoreDepSect, L"HorseStaminaCoreDepletionRate", L"1.000"),
+		.Stamina =					GetConfig<float>(HorseCoreDepSect, L"HorseNaturalCoreDepletionRate", L"1.000"),
+		.HealthCoreEmpty =			GetConfig<float>(HorseCoreDepSect, L"HorseHealthCoreEmptyDepletionRate", L"2.000"),
 	};
 
 	Temperature = {
 		.ExtremeFX =			GetConfig<bool>(TempSect, L"ExtremeTemperatureFX", L"truE"),
 		.ExtremeSprite =		GetConfig<bool>(TempSect, L"ExtremeTemperatureSprite", L"truE"),
-		.WarmthFire =			GetConfig<float>(TempSect, L"WarmthFire", L"1.0"),
-		.WarmthCampfire =		GetConfig<float>(TempSect, L"WarmthCampfire", L"1.0"),
-		.WarmthIndoors =		GetConfig<float>(TempSect, L"WarmthIndoors", L"1.0"),
-		.ColdSubmerged =		GetConfig<float>(TempSect, L"ColdSubmerged", L"1.0"),
-		.ColdRaining =			GetConfig<float>(TempSect, L"ColdRaining", L"1.0"),
-		.ColdSnowing =			GetConfig<float>(TempSect, L"ColdSnowing", L"1.2"),
-		.FreezingThreshold =	GetConfig<float>(TempSect, L"FreezingThreshold", L"1.0"),
-		.HotThreshold =			GetConfig<float>(TempSect, L"HotThreshold", L"1.0")
+		.ClothingAffects =		GetConfig<bool>(TempSect, L"ClothingAffectsTemperature", L"truE"),
+		.ClothingStrength =		GetConfig<float>(TempSect, L"ClothingStrength", L"1.000"),
+		.WarmthFire =			GetConfig<float>(TempSect, L"WarmthFire", L"1.000"),
+		.WarmthCampfire =		GetConfig<float>(TempSect, L"WarmthCampfire", L"1.000"),
+		.WarmthIndoors =		GetConfig<float>(TempSect, L"WarmthIndoors", L"1.000"),
+		.ColdSubmerged =		GetConfig<float>(TempSect, L"ColdSubmerged", L"1.000"),
+		.ColdRaining =			GetConfig<float>(TempSect, L"ColdRaining", L"1.000"),
+		.ColdSnowing =			GetConfig<float>(TempSect, L"ColdSnowing", L"1.200"),
+		.FreezingThreshold =	GetConfig<float>(TempSect, L"FreezingThreshold", L"1.000"),
+		.HotThreshold =			GetConfig<float>(TempSect, L"HotThreshold", L"1.000")
 	};
 
 	DyingPenalty = {
@@ -100,16 +102,16 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 		.LoseBodyAmmo =			GetConfig<bool>(DyingPenaltySect, L"LoseBodyAmmo", L"falsE"),
 		.LoseExoticWeapons =	GetConfig<bool>(DyingPenaltySect, L"LoseExoticWeapons", L"falsE"),
 		.LoseMoney =			GetConfig<bool>(DyingPenaltySect, L"LoseMoney", L"truE"),
-		.LoseMoneyMin =			GetConfig<float>(DyingPenaltySect, L"LoseMoneyMin", L"0.9"),
-		.LoseMoneyMax =			GetConfig<float>(DyingPenaltySect, L"LoseMoneyMax", L"0.8"),
+		.LoseMoneyMin =			GetConfig<float>(DyingPenaltySect, L"LoseMoneyMin", L"0.900"),
+		.LoseMoneyMax =			GetConfig<float>(DyingPenaltySect, L"LoseMoneyMax", L"0.800"),
 		.LoseMoneyHardMin =		GetConfig<unsigned int>(DyingPenaltySect, L"LoseMoneyHardMax", L"1000000"),
 		.LoseMoneyHardMax =		GetConfig<unsigned int>(DyingPenaltySect, L"LoseMoneyHardMin", L"0")
 	};
 
 	PlayerTweaks = {
 		.Enabled =			GetConfig<bool>(PlayerTweaksSect, L"PlayerCombatTweaks", L"falsE"),
-		.DamageMaxHealth =	GetConfig<float>(PlayerTweaksSect, L"PlayerDamageMaxHealth", L"1.0"),
-		.DamageMinHealth =	GetConfig<float>(PlayerTweaksSect, L"PlayerDamageMinHealth", L"0.5")
+		.DamageMaxHealth =	GetConfig<float>(PlayerTweaksSect, L"PlayerDamageMaxHealth", L"1.000"),
+		.DamageMinHealth =	GetConfig<float>(PlayerTweaksSect, L"PlayerDamageMinHealth", L"0.500")
 	};
 
 	AITweaks = {
@@ -119,14 +121,14 @@ Config::Config(const std::wstring &filename, Util::Logger &logger)
 		.AccuracyEnabled =				GetConfig<bool>(AITweaksSect, L"AIAccuracyTweaks", L"falsE"),
 		.AccuracyInMissionsEnabled =	GetConfig<bool>(AITweaksSect, L"AIAccuracyTweaksInMissions", L"falsE"),
 		.FirerateEnabled =				GetConfig<bool>(AITweaksSect, L"AIFirerateTweaks", L"falsE"),
-		.DamageMaxHealth =				GetConfig<float>(AITweaksSect, L"AIDamageMaxHealth", L"1.0"),
-		.DamageMinHealth =				GetConfig<float>(AITweaksSect, L"AIDamageMinHealth", L"1.0"),
-		.RegenMaxHealth =				GetConfig<float>(AITweaksSect, L"AIHealthRegenerationMaxHealth", L"1.0"),
-		.RegenMinHealth =				GetConfig<float>(AITweaksSect, L"AIHealthRegenerationMinHealth", L"1.0"),
-		.AccuracyMaxHealth =			GetConfig<float>(AITweaksSect, L"AIAccuracyMaxHealth", L"1.0"),
-		.AccuracyMinHealth =			GetConfig<float>(AITweaksSect, L"AIAccuracyMinHealth", L"1.0"),
-		.FirerateMaxHealth =			GetConfig<float>(AITweaksSect, L"AIFirerateMaxHealth", L"1.0"),
-		.FirerateMinHealth =			GetConfig<float>(AITweaksSect, L"AIFirerateMinHealth", L"1.0")
+		.DamageMaxHealth =				GetConfig<float>(AITweaksSect, L"AIDamageMaxHealth", L"1.000"),
+		.DamageMinHealth =				GetConfig<float>(AITweaksSect, L"AIDamageMinHealth", L"1.000"),
+		.RegenMaxHealth =				GetConfig<float>(AITweaksSect, L"AIHealthRegenerationMaxHealth", L"1.000"),
+		.RegenMinHealth =				GetConfig<float>(AITweaksSect, L"AIHealthRegenerationMinHealth", L"1.000"),
+		.AccuracyMaxHealth =			GetConfig<float>(AITweaksSect, L"AIAccuracyMaxHealth", L"1.000"),
+		.AccuracyMinHealth =			GetConfig<float>(AITweaksSect, L"AIAccuracyMinHealth", L"1.000"),
+		.FirerateMaxHealth =			GetConfig<float>(AITweaksSect, L"AIFirerateMaxHealth", L"1.000"),
+		.FirerateMinHealth =			GetConfig<float>(AITweaksSect, L"AIFirerateMinHealth", L"1.000")
 	};
 
 	PedRange =				GetConfig<unsigned int>(DebugSect, L"PerfMaxPeds", L"1024");

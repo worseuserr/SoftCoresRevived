@@ -76,6 +76,8 @@ namespace SoftCores
 	{
 		bool		ExtremeFX;
 		bool		ExtremeSprite;
+		bool		ClothingAffects;
+		Multiplier	ClothingStrength;
 		Multiplier	WarmthFire;
 		Multiplier	WarmthCampfire;
 		Multiplier	WarmthIndoors;
