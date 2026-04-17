@@ -1,8 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 #include "SoftCores/ModContext.h"
-#include "SoftCores/Util/Logger.h"
 
 namespace SoftCores
 {
